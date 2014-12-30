@@ -1,0 +1,5 @@
+#Git Ignore list#
+build
+.gradle
+.idea
+*.iml
