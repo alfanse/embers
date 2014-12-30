@@ -7,13 +7,20 @@ apply plugin: 'java'
 version = 'DEV-SNAPSHOT'
 sourceCompatibility = 1.8
 
+test {
+    systemProperty "yatspec.output.dir", "${buildDir}/reports/acceptance"
+}
+
 repositories {
     mavenCentral()
+    maven {
+        url 'http://repo.bodar.com/'
+    }
 }
 
 dependencies {
-    compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    testCompile 'junit:junit:4.+',
+                'com.googlecode.yatspec:yatspec:217'
 }
 
 jar {
