@@ -1,38 +1,45 @@
 package adf.embers.acceptance;
 
+import adf.embers.query.QueryHandler;
+import adf.embers.query.impl.QueryProcessor;
+import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecRunner;
 import com.googlecode.yatspec.state.givenwhenthen.*;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import org.hamcrest.CustomTypeSafeMatcher;
+
+import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.ws.rs.core.Response;
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.*;
 import java.nio.charset.Charset;
 import java.util.concurrent.Executor;
 
-import static org.fest.assertions.api.Assertions.assertThat;
+import static java.net.HttpURLConnection.HTTP_NOT_IMPLEMENTED;
+import static java.net.HttpURLConnection.HTTP_OK;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.is;
 
 @RunWith(SpecRunner.class)
+@Notes("Hosted on com.sun.net.httpserver.HttpServer")
 public class QueryApiTest extends TestState {
 
     public static final String CONTEXT_PATH = "embers";
-    public static final String PATH_TO_QUERY = "/" + CONTEXT_PATH + "/query";
     public static final int PORT = 9000;
     private HttpServer server;
 
     @Before
     public void startHttpServer() throws IOException {
         server = HttpServer.create(new InetSocketAddress(PORT), 0);
-        server.createContext(PATH_TO_QUERY, handlerForQuery());
+        server.createContext("/" + CONTEXT_PATH, embersHandler());
         Executor useDefaultExecutor = null;
         server.setExecutor(useDefaultExecutor);
         server.start();
@@ -44,15 +51,25 @@ public class QueryApiTest extends TestState {
     }
 
     @Test
-    public void querySingleTable() throws Exception {
-        when(userGetsQuery());
+    @Ignore("In development")
+    public void queryMissing() throws Exception {
+        when(userMakesHttpGetRequestFor("/missingQuery"));
 
-        then(theResponse(), isValid());
+        then(theResponseCode(), isExpectedToBe(HTTP_NOT_IMPLEMENTED));
+        then(theResponseBody(), containsString("Query not found: missingQuery"));
     }
 
-    private ActionUnderTest userGetsQuery() throws IOException {
+    @Test
+    public void queryValidWithNoParameters() throws Exception {
+        when(userMakesHttpGetRequestFor("/validQuery"));
+
+        then(theResponseCode(), isExpectedToBe(HTTP_OK));
+        then(theResponseBody(), containsString("validQuery"));
+    }
+
+    private ActionUnderTest userMakesHttpGetRequestFor(String queryToMake) throws IOException {
         return (givens, capturedInputAndOutputs) -> {
-            URL u = new URL("http://localhost:9000"+PATH_TO_QUERY);
+            URL u = new URL("http://localhost:"+PORT+ "/" + CONTEXT_PATH + queryToMake);
             givens.add("Url", u.toExternalForm());
 
             URLConnection conn = u.openConnection();
@@ -63,47 +80,47 @@ public class QueryApiTest extends TestState {
                     sb.append(line);
                 }
             }
-            log("Response Body", sb);
+            log("Response Body", sb.toString());
             log("Response Content-Type", conn.getContentType());
             log("Response Content Length", conn.getContentLengthLong());
             log("Response Code", ((HttpURLConnection )conn).getResponseCode());
 
             //todo httpUrlConnection renderer
-            log("HttpUrlConnection", (HttpURLConnection )conn);
+            log("HttpUrlConnection", (HttpURLConnection) conn);
             ((HttpURLConnection) conn).disconnect();
             return capturedInputAndOutputs;
         };
     }
 
-    private CustomTypeSafeMatcher<HttpURLConnection> isValid() {
-        return new CustomTypeSafeMatcher<HttpURLConnection>("description") {
-            @Override
-            protected boolean matchesSafely(HttpURLConnection item) {
-                assertThat(item.getContentType()).isEqualTo("text/plain");
-                try {
-                    assertThat(item.getResponseCode()).isEqualTo(200);
-                } catch (IOException e) {
-                    throw new RuntimeException("Unexpected response code", e);
-                }
-
-                return true;
-            }
-        };
+    private StateExtractor<Integer> theResponseCode() {
+        return inputAndOutputs -> inputAndOutputs.getType("Response Code", Integer.class);
     }
 
-    private StateExtractor<HttpURLConnection> theResponse() {
-        return inputAndOutputs -> inputAndOutputs.getType("HttpUrlConnection", HttpURLConnection.class);
+    private StateExtractor<String> theResponseBody() {
+        return inputAndOutput-> inputAndOutput.getType("Response Body", String.class);
     }
 
-    private HttpHandler handlerForQuery() {
+    private Matcher<Integer> isExpectedToBe(int expectedHttpResponseCode) {
+        interestingGivens.add("Expected Response Code", expectedHttpResponseCode);
+        return is(expectedHttpResponseCode);
+    }
+
+    private HttpHandler embersHandler() {
         return httpExchange -> {
-            //todo use production code to build Response and Content-Type
-            String response = "hello world";
+
+            URI requestURI = httpExchange.getRequestURI();
+            String requestMethod = requestURI.getPath();
+            String[] split = requestMethod.split("/");
+            int length = split.length;
+
+            Response response1 = new QueryHandler(new QueryProcessor()).executeQuery(split[length - 1]);
+
+            String response = response1.getEntity().toString();
             String contentType = "text/plain";
             Headers responseHeaders = httpExchange.getResponseHeaders();
             responseHeaders.set("Content-Type", contentType);
             byte[] responseBytes = response.getBytes(Charset.forName("UTF-8"));
-            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, responseBytes.length);
+            httpExchange.sendResponseHeaders(HTTP_OK, responseBytes.length);
             OutputStream responseBody = httpExchange.getResponseBody();
             responseBody.write(responseBytes);
             responseBody.close();
