@@ -31,8 +31,9 @@ dependencies {
             'org.glassfish.jersey.core:jersey-server:2.2',
             'org.glassfish.jersey.containers:jersey-container-servlet:2.2',
             'org.eclipse.jetty:jetty-server:9.3.0.M1',
-            'org.eclipse.jetty:jetty-servlet:9.3.0.M1'
+            'org.eclipse.jetty:jetty-servlet:9.3.0.M1',
 
+            'org.hsqldb:hsqldb:2.3.2'
 }
 
 jar {

@@ -1,5 +1,6 @@
 package adf.embers.acceptance;
 
+import adf.embers.EmbersDatabase;
 import adf.embers.acceptance.client.ActionUnderTestHttpCaller;
 import adf.embers.query.QueryHandler;
 import adf.embers.query.impl.QueryProcessor;
@@ -24,16 +25,23 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 
 @RunWith(SpecRunner.class)
-@Notes("Hosted on jetty, in a jersey ServletContainer, IOP via ResourceConfig")
+@Notes("Hosted on jetty, in a jersey ServletContainer, IOP via ResourceConfig\n" +
+        "Using Hsqldb for relational database")
 public class QueryWithWsrsTest extends TestState {
 
+    private EmbersDatabase embersDatabase;
     private Server server;
+
+    @Before
+    public void startDatabase() throws Exception {
+        embersDatabase = new EmbersDatabase();
+        embersDatabase.startInmemoryDatabase();
+    }
 
     @Before
     public void startHttpServer() throws Exception {
         ResourceConfig resourceConfig = new ResourceConfig();
         resourceConfig.register(new QueryHandler(new QueryProcessor()));
-
 
         server = new Server(8001);
         ServletContextHandler handler = new ServletContextHandler();
@@ -49,9 +57,14 @@ public class QueryWithWsrsTest extends TestState {
 
     @Test
     public void makeCall() throws Exception {
-        when(userMakesHttpGetRequestFor("/queryNameHere"));
+        givenEmbersHasAQueryToShowAllItsQueries();
+        when(userMakesHttpGetRequestFor("/allQueries"));
         then(theResponseCode(), is(200));
-        then(theResponseBody(), containsString("queryNameHere"));
+        then(theResponseBody(), containsString("allQueries"));
+    }
+
+    private void givenEmbersHasAQueryToShowAllItsQueries() {
+
     }
 
     private StateExtractor<Integer> theResponseCode() {

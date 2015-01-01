@@ -7,6 +7,10 @@ public class QueryProcessor implements adf.embers.query.QueryProcessor {
 
     @Override
     public QueryResult placeQuery(QueryRequest queryRequest) {
+
+
+
+
         return new QueryResult() {
             @Override
             public String getResult() {
