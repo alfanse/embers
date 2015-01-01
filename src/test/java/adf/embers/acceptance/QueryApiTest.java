@@ -1,5 +1,6 @@
 package adf.embers.acceptance;
 
+import adf.embers.acceptance.client.ActionUnderTestHttpCaller;
 import adf.embers.query.QueryHandler;
 import adf.embers.query.impl.QueryProcessor;
 import com.googlecode.yatspec.junit.Notes;
@@ -68,28 +69,7 @@ public class QueryApiTest extends TestState {
     }
 
     private ActionUnderTest userMakesHttpGetRequestFor(String queryToMake) throws IOException {
-        return (givens, capturedInputAndOutputs) -> {
-            URL u = new URL("http://localhost:"+PORT+ "/" + CONTEXT_PATH + queryToMake);
-            givens.add("Url", u.toExternalForm());
-
-            URLConnection conn = u.openConnection();
-            InputStream inputStream = conn.getInputStream();
-            StringBuilder sb = new StringBuilder();
-            try( BufferedReader br = new BufferedReader((new InputStreamReader(inputStream)))) {
-                for ( String line; (line = br.readLine()) != null; ) {
-                    sb.append(line);
-                }
-            }
-            log("Response Body", sb.toString());
-            log("Response Content-Type", conn.getContentType());
-            log("Response Content Length", conn.getContentLengthLong());
-            log("Response Code", ((HttpURLConnection )conn).getResponseCode());
-
-            //todo httpUrlConnection renderer
-            log("HttpUrlConnection", (HttpURLConnection) conn);
-            ((HttpURLConnection) conn).disconnect();
-            return capturedInputAndOutputs;
-        };
+        return new ActionUnderTestHttpCaller(this).getRequestFor("http://localhost:"+PORT+ "/" + CONTEXT_PATH + queryToMake);
     }
 
     private StateExtractor<Integer> theResponseCode() {
