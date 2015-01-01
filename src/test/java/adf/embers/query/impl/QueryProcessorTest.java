@@ -1,8 +1,9 @@
 package adf.embers.query.impl;
 
+import adf.embers.query.QueryFormatter;
 import adf.embers.query.QueryResult;
+import adf.embers.query.QueryRunner;
 import adf.embers.query.persistence.QueryDao;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.Test;
 
 import static org.fest.assertions.api.Assertions.assertThat;
@@ -12,16 +13,16 @@ import static org.mockito.Mockito.when;
 public class QueryProcessorTest {
 
     private final QueryDao queriesDao = mock(QueryDao.class);
-    private final QueryProcessor queryProcessor = new QueryProcessor(queriesDao);
+    private final QueryRunner queryRunner = mock(QueryRunner.class);
+    private final QueryFormatter queryFormatter = mock(QueryFormatter.class);
+    private final QueryProcessor queryProcessor = new QueryProcessor(queriesDao, queryRunner, queryFormatter);
 
     @Test
     public void requestedQueryNotFound() {
         final String queryName = "notFoundName";
         when(queriesDao.findQueryByName(queryName)).thenReturn(null);
 
-        QueryResult queryResult = queryProcessor.placeQuery(() -> {
-            return queryName;
-        });
+        QueryResult queryResult = whenPlaceQueryIsCalled(queryName);
 
         assertThat(queryResult.hasErrors()).isTrue();
         assertThat(queryResult.getErrors()).contains("Query not found: notFoundName");
@@ -32,15 +33,13 @@ public class QueryProcessorTest {
         final String queryName = "someName";
         when(queriesDao.findQueryByName(queryName)).thenThrow(new RuntimeException("user lacks privilege or object not found: QUERIES"));
 
-        QueryResult queryResult = queryProcessor.placeQuery(() -> queryName);
+        QueryResult queryResult = whenPlaceQueryIsCalled(queryName);
         assertThat(queryResult.hasErrors()).isTrue();
         assertThat(queryResult.getErrors()).contains("user lacks privilege or object not found: QUERIES");
     }
 
-    @Test
-    @Ignore
-    public void findAndRunQueryReturningResult() {
-        //todo
+    private QueryResult whenPlaceQueryIsCalled(String queryName) {
+        return queryProcessor.placeQuery(() -> queryName);
     }
 
 }

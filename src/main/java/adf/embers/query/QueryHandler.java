@@ -13,7 +13,7 @@ import java.util.Optional;
 @Path("/" + QueryHandler.PATH)
 public class QueryHandler {
 
-    public static final String PATH = "query";
+    public static final String PATH = "embers";
 
     private final QueryProcessor queryProcessor;
 
