@@ -16,6 +16,7 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -31,13 +32,14 @@ import static org.hamcrest.CoreMatchers.is;
         "Using Hsqldb as database")
 public class QueryHandlerHostedOnJettyTest extends TestState {
 
-    private EmbersDatabase embersDatabase;
+    private static EmbersDatabase embersDatabase;
     private Server server;
 
-    @Before
-    public void startDatabase() throws Exception {
+    @BeforeClass
+    public static void startDatabase() throws Exception {
         embersDatabase = new EmbersDatabase(EmbersDatabase.JDBC_URL);
         embersDatabase.startInmemoryDatabase();
+        embersDatabase.createTableQueries();
     }
 
     @Before
@@ -62,7 +64,7 @@ public class QueryHandlerHostedOnJettyTest extends TestState {
 
     @Test
     public void queryNotFound() throws Exception {
-        when(userMakesHttpGetRequestFor("/unknownQuery"));
+        when(userMakesHttpGetRequestFor("unknownQuery"));
         then(theResponseCode(), is(HTTP_NOT_FOUND));
         then(theErrorResponse(), containsString("Query not found: unknownQuery"));
     }
@@ -71,14 +73,13 @@ public class QueryHandlerHostedOnJettyTest extends TestState {
     @Notes("Embers has a query to show all available queries")
     public void showAllAvailableQueries() throws Exception {
         givenEmbersHasAQueryToShowAllItsQueries();
-        when(userMakesHttpGetRequestFor("/allQueries"));
+        when(userMakesHttpGetRequestFor("allQueries"));
         then(theResponseCode(), is(200));
         then(theResponseBody(), containsString("allQueries"));
     }
 
     private void givenEmbersHasAQueryToShowAllItsQueries() throws SQLException {
-        embersDatabase.createTableQueries();
-        embersDatabase.insertAllQueries();
+        embersDatabase.insertQueryAll();
     }
 
     private StateExtractor<Integer> theResponseCode() {
@@ -94,6 +95,6 @@ public class QueryHandlerHostedOnJettyTest extends TestState {
     }
 
     private ActionUnderTest userMakesHttpGetRequestFor(String queryToMake) throws IOException {
-        return new ActionUnderTestHttpCaller(this).getRequestFor("http://localhost:8001/" + QueryHandler.PATH + queryToMake);
+        return new ActionUnderTestHttpCaller(this).getRequestFor("http://localhost:8001/" + QueryHandler.PATH +"/"+ queryToMake);
     }
 }

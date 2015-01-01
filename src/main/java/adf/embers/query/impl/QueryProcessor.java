@@ -2,39 +2,37 @@ package adf.embers.query.impl;
 
 import adf.embers.query.QueryRequest;
 import adf.embers.query.QueryResult;
-import adf.embers.query.persistence.QueriesDao;
 import adf.embers.query.persistence.Query;
+import adf.embers.query.persistence.QueryDao;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public class QueryProcessor implements adf.embers.query.QueryProcessor {
 
-    private final QueriesDao queriesDao;
+    private final QueryDao queriesDao;
 
-    public QueryProcessor(QueriesDao queriesDao) {
-        this.queriesDao = queriesDao;
+    public QueryProcessor(QueryDao queryDao) {
+        this.queriesDao = queryDao;
     }
 
     @Override
     public QueryResult placeQuery(final QueryRequest queryRequest) {
         QueryResultBuilder queryResultBuilder = new QueryResultBuilder();
-        List<Query> all;
+        Query queryOptional;
         try {
-            //todo use findQueryByName
-            all = queriesDao.findAll();
+            queryOptional = queriesDao.findQueryByName(queryRequest.getQueryName());
         } catch (Exception e) {
             return queryResultBuilder.addError(e.getMessage()).build();
         }
 
-        Optional<Query> theRequiredQuery = all.stream()
-                .filter(query -> query.getName().equals(queryRequest.getQueryName()))
-                .findFirst();
-
-        if (!theRequiredQuery.isPresent()) {
-            return queryResultBuilder.addError("Query not found: " + queryRequest.getQueryName()).build();
+        if(queryOptional==null){
+            queryResultBuilder.addError("Query not found: " + queryRequest.getQueryName());
+        } else {
+            queryResultBuilder.withResult(queryRequest.getQueryName());
         }
 
-        return queryResultBuilder.withResult(queryRequest.getQueryName()).build();
+        return queryResultBuilder.build();
     }
 }

@@ -1,7 +1,7 @@
 package adf.embers;
 
-import adf.embers.query.persistence.QueriesDao;
 import adf.embers.query.persistence.Query;
+import adf.embers.query.persistence.QueryDao;
 import org.hsqldb.jdbc.JDBCDataSource;
 import org.hsqldb.jdbcDriver;
 import org.skife.jdbi.v2.DBI;
@@ -43,11 +43,15 @@ public class EmbersDatabase {
         handle.close();
     }
 
-    public void insertAllQueries() throws SQLException {
+    public void insertQueryAll() throws SQLException {
         DBI dbi = new DBI(dataSource);
-        QueriesDao open = dbi.open(QueriesDao.class);
-        open.save(new Query("allQueries", "Shows all the available queries", "select name, description from queries order by name"));
+        QueryDao open = dbi.open(QueryDao.class);
+        open.save(getQueryAll());
         dbi.close(open);
+    }
+
+    public Query getQueryAll() {
+        return new Query("allQueries", "Shows all the available queries", "select id, name, description, sql from queries order by name");
     }
 
     public DataSource getDataSource() {

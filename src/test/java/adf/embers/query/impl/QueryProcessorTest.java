@@ -1,12 +1,9 @@
 package adf.embers.query.impl;
 
 import adf.embers.query.QueryResult;
-import adf.embers.query.impl.QueryProcessor;
-import adf.embers.query.persistence.QueriesDao;
-import adf.embers.query.persistence.Query;
+import adf.embers.query.persistence.QueryDao;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.Test;
-
-import java.util.Collections;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -14,14 +11,17 @@ import static org.mockito.Mockito.when;
 
 public class QueryProcessorTest {
 
-    private final QueriesDao queriesDao = mock(QueriesDao.class);
+    private final QueryDao queriesDao = mock(QueryDao.class);
     private final QueryProcessor queryProcessor = new QueryProcessor(queriesDao);
 
     @Test
     public void requestedQueryNotFound() {
-        when(queriesDao.findAll()).thenReturn(Collections.<Query>emptyList());
+        final String queryName = "notFoundName";
+        when(queriesDao.findQueryByName(queryName)).thenReturn(null);
 
-        QueryResult queryResult = queryProcessor.placeQuery(() -> "notFoundName");
+        QueryResult queryResult = queryProcessor.placeQuery(() -> {
+            return queryName;
+        });
 
         assertThat(queryResult.hasErrors()).isTrue();
         assertThat(queryResult.getErrors()).contains("Query not found: notFoundName");
@@ -29,14 +29,16 @@ public class QueryProcessorTest {
 
     @Test
     public void daoExceptionHandledAsError() {
-        when(queriesDao.findAll()).thenThrow(new RuntimeException("user lacks privilege or object not found: QUERIES"));
+        final String queryName = "someName";
+        when(queriesDao.findQueryByName(queryName)).thenThrow(new RuntimeException("user lacks privilege or object not found: QUERIES"));
 
-        QueryResult queryResult = queryProcessor.placeQuery(() -> "aQuery");
+        QueryResult queryResult = queryProcessor.placeQuery(() -> queryName);
         assertThat(queryResult.hasErrors()).isTrue();
         assertThat(queryResult.getErrors()).contains("user lacks privilege or object not found: QUERIES");
     }
 
     @Test
+    @Ignore
     public void findAndRunQueryReturningResult() {
         //todo
     }

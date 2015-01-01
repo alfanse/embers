@@ -1,5 +1,6 @@
 package adf.embers.query.persistence;
 
+/** Entity for the Queries Table */
 public class Query {
     Long id;
     String name, description, sql;
