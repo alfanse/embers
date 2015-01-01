@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 
 public class ActionUnderTestHttpCaller {
 
@@ -24,25 +23,41 @@ public class ActionUnderTestHttpCaller {
             URL u = new URL(url);
             givens.add("Url", u.toExternalForm());
 
-            URLConnection conn = u.openConnection();
-            InputStream inputStream = conn.getInputStream();
-            StringBuilder sb = new StringBuilder();
-            try (BufferedReader br = new BufferedReader((new InputStreamReader(inputStream)))) {
-                for (String line; (line = br.readLine()) != null; ) {
-                    sb.append(line);
+            HttpURLConnection conn = (HttpURLConnection)u.openConnection();
+            try {
+                int responseCode = conn.getResponseCode();
+                testLogger.log("Response Code", responseCode);
+                testLogger.log("Response Content-Type", conn.getContentType());
+                testLogger.log("Response Content Length", conn.getContentLengthLong());
+
+                if(responseCode == HttpURLConnection.HTTP_OK) {
+                    try (InputStream inputStream = conn.getInputStream()) {
+                        captureInputStream(inputStream, "Response Body");
+                    }
+                } else {
+                    try (InputStream inputStream = conn.getErrorStream()) {
+                        captureInputStream(inputStream, "Error Response Body");
+                    }
                 }
+            } finally {
+                conn.disconnect();
             }
 
-            testLogger.log("Response Body", sb.toString());
-            testLogger.log("Response Content-Type", conn.getContentType());
-            testLogger.log("Response Content Length", conn.getContentLengthLong());
-
-            HttpURLConnection httpURLConnection = (HttpURLConnection) conn;
-            testLogger.log("Response Code", httpURLConnection.getResponseCode());
-            testLogger.log("HttpUrlConnection", httpURLConnection);//todo build renderer
-
-            httpURLConnection.disconnect();
             return capturedInputAndOutputs;
         };
+    }
+
+    private void captureInputStream(InputStream inputStream, String logKey) throws IOException {
+        testLogger.log(logKey, readInputStream(inputStream));
+    }
+
+    private String readInputStream(InputStream inputStream) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        try (BufferedReader br = new BufferedReader((new InputStreamReader(inputStream)))) {
+            for (String line; (line = br.readLine()) != null; ) {
+                sb.append(line).append("\n");
+            }
+        }
+        return sb.toString();
     }
 }

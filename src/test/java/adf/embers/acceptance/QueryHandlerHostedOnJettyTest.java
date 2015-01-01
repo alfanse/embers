@@ -2,8 +2,8 @@ package adf.embers.acceptance;
 
 import adf.embers.EmbersDatabase;
 import adf.embers.acceptance.client.ActionUnderTestHttpCaller;
+import adf.embers.configuration.EmbersConfiguration;
 import adf.embers.query.QueryHandler;
-import adf.embers.query.impl.QueryProcessor;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecRunner;
 import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
@@ -20,28 +20,33 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
+import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 
 @RunWith(SpecRunner.class)
 @Notes("Hosted on jetty, in a jersey ServletContainer, IOP via ResourceConfig\n" +
-        "Using Hsqldb for relational database")
-public class QueryWithWsrsTest extends TestState {
+        "Using Hsqldb as database")
+public class QueryHandlerHostedOnJettyTest extends TestState {
 
     private EmbersDatabase embersDatabase;
     private Server server;
 
     @Before
     public void startDatabase() throws Exception {
-        embersDatabase = new EmbersDatabase();
+        embersDatabase = new EmbersDatabase(EmbersDatabase.JDBC_URL);
         embersDatabase.startInmemoryDatabase();
     }
 
     @Before
     public void startHttpServer() throws Exception {
+        EmbersConfiguration embersConfiguration = new EmbersConfiguration(embersDatabase.getDataSource());
+        QueryHandler queryHandler = embersConfiguration.getQueryHandler();
+
         ResourceConfig resourceConfig = new ResourceConfig();
-        resourceConfig.register(new QueryHandler(new QueryProcessor()));
+        resourceConfig.register(queryHandler);
 
         server = new Server(8001);
         ServletContextHandler handler = new ServletContextHandler();
@@ -56,19 +61,32 @@ public class QueryWithWsrsTest extends TestState {
     }
 
     @Test
-    public void makeCall() throws Exception {
+    public void queryNotFound() throws Exception {
+        when(userMakesHttpGetRequestFor("/unknownQuery"));
+        then(theResponseCode(), is(HTTP_NOT_FOUND));
+        then(theErrorResponse(), containsString("Query not found: unknownQuery"));
+    }
+
+    @Test
+    @Notes("Embers has a query to show all available queries")
+    public void showAllAvailableQueries() throws Exception {
         givenEmbersHasAQueryToShowAllItsQueries();
         when(userMakesHttpGetRequestFor("/allQueries"));
         then(theResponseCode(), is(200));
         then(theResponseBody(), containsString("allQueries"));
     }
 
-    private void givenEmbersHasAQueryToShowAllItsQueries() {
-
+    private void givenEmbersHasAQueryToShowAllItsQueries() throws SQLException {
+        embersDatabase.createTableQueries();
+        embersDatabase.insertAllQueries();
     }
 
     private StateExtractor<Integer> theResponseCode() {
         return inputAndOutput -> inputAndOutput.getType("Response Code", Integer.class);
+    }
+
+    private StateExtractor<String> theErrorResponse() {
+        return inputAndOutput -> inputAndOutput.getType("Error Response Body", String.class);
     }
 
     private StateExtractor<String> theResponseBody() {

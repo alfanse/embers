@@ -20,7 +20,8 @@ repositories {
 
 dependencies {
     compile 'javax.ws.rs:javax.ws.rs-api:2.0.1',
-            'javax.inject:javax.inject:1'
+            'javax.inject:javax.inject:1',
+            'org.jdbi:jdbi:2.56'
 
     testCompile 'junit:junit:4.+',
             'org.hamcrest:hamcrest-core:1.3',
