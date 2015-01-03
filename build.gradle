@@ -12,6 +12,7 @@ test {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
     maven {
         url 'http://repo.bodar.com/'
