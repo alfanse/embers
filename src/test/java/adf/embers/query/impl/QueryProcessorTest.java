@@ -1,8 +1,8 @@
 package adf.embers.query.impl;
 
+import adf.embers.query.QueryExecutor;
 import adf.embers.query.QueryFormatter;
 import adf.embers.query.QueryResult;
-import adf.embers.query.QueryRunner;
 import adf.embers.query.persistence.QueryDao;
 import org.junit.Test;
 
@@ -13,9 +13,9 @@ import static org.mockito.Mockito.when;
 public class QueryProcessorTest {
 
     private final QueryDao queriesDao = mock(QueryDao.class);
-    private final QueryRunner queryRunner = mock(QueryRunner.class);
+    private final QueryExecutor queryExecutor = mock(adf.embers.query.QueryExecutor.class);
     private final QueryFormatter queryFormatter = mock(QueryFormatter.class);
-    private final QueryProcessor queryProcessor = new QueryProcessor(queriesDao, queryRunner, queryFormatter);
+    private final QueryProcessor queryProcessor = new QueryProcessor(queriesDao, queryExecutor, queryFormatter);
 
     @Test
     public void requestedQueryNotFound() {

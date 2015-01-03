@@ -30,7 +30,7 @@ import static org.hamcrest.CoreMatchers.is;
 @RunWith(SpecRunner.class)
 @Notes("Hosted on jetty, in a jersey ServletContainer, IOP via ResourceConfig\n" +
         "Using Hsqldb as database")
-public class QueryHandlerHostedOnJettyTest extends TestState {
+public class QueryExecutorHostedOnJettyTest extends TestState {
 
     private static EmbersDatabase embersDatabase;
     private Server server;

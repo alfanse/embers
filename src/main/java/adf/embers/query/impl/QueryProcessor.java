@@ -1,23 +1,24 @@
 package adf.embers.query.impl;
 
+import adf.embers.query.QueryExecutor;
 import adf.embers.query.QueryFormatter;
 import adf.embers.query.QueryRequest;
 import adf.embers.query.QueryResult;
-import adf.embers.query.QueryRunner;
 import adf.embers.query.persistence.Query;
 import adf.embers.query.persistence.QueryDao;
 
+import java.util.List;
 import java.util.Map;
 
 public class QueryProcessor implements adf.embers.query.QueryProcessor {
 
     private final QueryDao queriesDao;
-    private QueryRunner queryRunner;
+    private QueryExecutor queryExecutor;
     private QueryFormatter queryFormatter;
 
-    public QueryProcessor(QueryDao queryDao, QueryRunner queryRunner, QueryFormatter queryFormatter) {
+    public QueryProcessor(QueryDao queryDao, adf.embers.query.QueryExecutor queryExecutor, QueryFormatter queryFormatter) {
         this.queriesDao = queryDao;
-        this.queryRunner = queryRunner;
+        this.queryExecutor = queryExecutor;
         this.queryFormatter = queryFormatter;
     }
 
@@ -34,7 +35,7 @@ public class QueryProcessor implements adf.embers.query.QueryProcessor {
             return queryResultBuilder.addError(e.getMessage()).build();
         }
 
-        Map<String, Object> result = queryRunner.runQuery(queryOptional);
+        List<Map<String, Object>> result = queryExecutor.runQuery(queryOptional);
         final String formattedResult = queryFormatter.format(result, queryRequest);
         queryResultBuilder.withResult(formattedResult);
 

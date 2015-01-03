@@ -3,6 +3,7 @@ Embeddable servlet that exposes a restricted set of queries for an sql database.
 Hosted on github: https://github.com/alfanse/embers.git"""
 
 apply plugin: 'java'
+apply plugin: 'idea'
 
 version = 'DEV-SNAPSHOT'
 sourceCompatibility = 1.8
