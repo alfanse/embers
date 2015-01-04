@@ -20,7 +20,7 @@ public class QueryDaoIntegrationTest {
         embersDatabase = new EmbersDatabase("jdbc:hsqldb:mem:daoTest");
         embersDatabase.startInmemoryDatabase();
         embersDatabase.createTableQueries();
-        embersDatabase.insertQueryAll();
+        embersDatabase.insertQuery(embersDatabase.getQueryAll());
     }
 
     @Before

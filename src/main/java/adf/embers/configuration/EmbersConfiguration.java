@@ -1,7 +1,6 @@
 package adf.embers.configuration;
 
 import adf.embers.query.QueryExecutor;
-import adf.embers.query.QueryFormatter;
 import adf.embers.query.QueryHandler;
 import adf.embers.query.impl.QueryProcessor;
 import adf.embers.query.persistence.QueryDao;
@@ -34,7 +33,7 @@ public class EmbersConfiguration {
     }
 
     private QueryProcessor queryProcessor() {
-        return new QueryProcessor(queryDao(dbi), queryRunner(), queryFormatter());
+        return new QueryProcessor(queryDao(dbi), queryRunner());
     }
 
     private QueryDao queryDao(DBI dbi) {
@@ -47,10 +46,6 @@ public class EmbersConfiguration {
 
     private DbiFactory dbiFactory() {
         return new DbiFactory(dbi);
-    }
-
-    private QueryFormatter queryFormatter() {
-        return (result, queryRequest) -> queryRequest.getQueryName();
     }
 
 

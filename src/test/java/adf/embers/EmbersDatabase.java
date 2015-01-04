@@ -33,6 +33,10 @@ public class EmbersDatabase {
         this.dataSource.setLoginTimeout(5);
     }
 
+    public DataSource getDataSource() {
+        return dataSource;
+    }
+
     public void createTableQueries() throws SQLException {
         Handle handle = new DBI(dataSource).open();
         handle.execute("CREATE TABLE queries(" +
@@ -43,18 +47,14 @@ public class EmbersDatabase {
         handle.close();
     }
 
-    public void insertQueryAll() throws SQLException {
-        DBI dbi = new DBI(dataSource);
-        QueryDao open = dbi.open(QueryDao.class);
-        open.save(getQueryAll());
-        dbi.close(open);
-    }
-
     public Query getQueryAll() {
         return new Query("allQueries", "Shows all the available queries", "select id, name, description, sql from queries order by name");
     }
 
-    public DataSource getDataSource() {
-        return dataSource;
+    public void insertQuery(Query query) {
+        DBI dbi = new DBI(dataSource);
+        QueryDao open = dbi.open(QueryDao.class);
+        open.save(query);
+        dbi.close(open);
     }
 }

@@ -4,6 +4,7 @@ import adf.embers.EmbersDatabase;
 import adf.embers.acceptance.client.ActionUnderTestHttpCaller;
 import adf.embers.configuration.EmbersConfiguration;
 import adf.embers.query.QueryHandler;
+import adf.embers.query.persistence.Query;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecRunner;
 import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
@@ -14,6 +15,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
+import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -72,14 +74,31 @@ public class QueryExecutorHostedOnJettyTest extends TestState {
     @Test
     @Notes("Embers has a query to show all available queries")
     public void showAllAvailableQueries() throws Exception {
-        givenEmbersHasAQueryToShowAllItsQueries();
+        givenEmbersHasAQueryThatShowsAllQueries();
         when(userMakesHttpGetRequestFor("allQueries"));
         then(theResponseCode(), is(200));
-        then(theResponseBody(), containsString("allQueries"));
+        then(theResponseBody(), CoreMatchers.allOf(containsString("name"), containsString("description"), containsString("sql"), containsString("allQueries")));
     }
 
-    private void givenEmbersHasAQueryToShowAllItsQueries() throws SQLException {
-        embersDatabase.insertQueryAll();
+    @Test
+    public void queryRunsWithNoRowsOfData() throws Exception {
+        givenEmbersHasAQueryThatReturnsNoRows();
+        when(userMakesHttpGetRequestFor("noRows"));
+        then(theResponseCode(), is(200));
+        then(theResponseBody(), is(""));
+    }
+
+    private void givenEmbersHasAQueryThatShowsAllQueries() throws SQLException {
+        givenQuery(embersDatabase.getQueryAll());
+    }
+
+    private void givenEmbersHasAQueryThatReturnsNoRows() throws SQLException {
+        givenQuery(new Query("noRows", "Show what happens when query runs but no data is selected", "select * from queries where name = 'missing'"));
+    }
+
+    private void givenQuery(Query noRows) {
+        interestingGivens.add("Expected Query To Run", noRows);
+        embersDatabase.insertQuery(noRows);
     }
 
     private StateExtractor<Integer> theResponseCode() {
