@@ -2,48 +2,56 @@ description = """Embers - Embedded Sql Reporting.
 Embeddable servlet that exposes a restricted set of queries for an sql database.
 Hosted on github: https://github.com/alfanse/embers.git"""
 
-apply plugin: 'java'
-apply plugin: 'idea'
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
 
-version = 'DEV-SNAPSHOT'
-sourceCompatibility = 1.8
+    sourceCompatibility = 1.8
 
-test {
-    systemProperty "yatspec.output.dir", "${buildDir}/reports/acceptance"
-}
+    repositories {
+        mavenCentral()
+        mavenLocal()
 
-repositories {
-    mavenLocal()
-    mavenCentral()
-    maven {
-        url 'http://repo.bodar.com/'
+        maven { url 'http://repo.bodar.com/' }
     }
-}
 
-dependencies {
-    compile 'javax.ws.rs:javax.ws.rs-api:2.0.1',
-            'javax.inject:javax.inject:1',
-            'org.jdbi:jdbi:2.56'
-
-    testCompile 'junit:junit:4.+',
-            'org.hamcrest:hamcrest-core:1.3',
-            'org.mockito:mockito-core:1.10.17',
-            'org.easytesting:fest-assert-core:2.0M10',
-            'com.googlecode.yatspec:yatspec:217',
-
-            'org.glassfish.jersey.core:jersey-server:2.2',
-            'org.glassfish.jersey.containers:jersey-container-servlet:2.2',
-            'org.eclipse.jetty:jetty-server:9.3.0.M1',
-            'org.eclipse.jetty:jetty-servlet:9.3.0.M1',
-
-            'org.hsqldb:hsqldb:2.3.2'
-}
-
-jar {
-    manifest {
-        attributes 'Implementation-Title': 'Embers',
-                   'Implementation-Version': version
+    ext {
+        appName = "Embers"
     }
+
+    version = System.getProperty('build.number', 'DEV-SNAPSHOT')
+    group = 'adf.embers'
+}
+
+subprojects {
+
+    ext.libs = [
+            core: [
+                'javax.ws.rs:javax.ws.rs-api:2.0.1',
+                'javax.inject:javax.inject:1',
+                'org.jdbi:jdbi:2.56'
+            ],
+            unit_tests: [
+                'junit:junit:4.11',
+                'org.easytesting:fest-assert-core:2.0M10',
+                'org.hamcrest:hamcrest-core:1.3',
+                'org.mockito:mockito-core:1.10.17'
+            ],
+            acceptance_tests: [
+                'com.googlecode.yatspec:yatspec:217'
+            ],
+            jersey: [
+                'org.glassfish.jersey.core:jersey-server:2.2',
+                'org.glassfish.jersey.containers:jersey-container-servlet:2.2'
+            ],
+            jetty: [
+                'org.eclipse.jetty:jetty-server:9.3.0.M1',
+                'org.eclipse.jetty:jetty-servlet:9.3.0.M1'
+            ],
+            database: [
+                'org.hsqldb:hsqldb:2.3.2'
+            ]
+    ]
 }
 
 task wrapper(type: Wrapper) {

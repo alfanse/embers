@@ -1,0 +1,15 @@
+description = """The Acceptance Tests for Embers.
+Demonstrating hosting embers services on jetty, with jersey and in-memory database"""
+
+test {
+    systemProperty "yatspec.output.dir", "${buildDir}/reports/acceptance"
+}
+
+dependencies {
+    compile project(":embers-services")
+    testCompile libs.unit_tests
+    testCompile libs.acceptance_tests
+    testCompile libs.jersey
+    testCompile libs.jetty
+    testCompile libs.database
+}
