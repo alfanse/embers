@@ -5,6 +5,8 @@ test {
     systemProperty "yatspec.output.dir", "${buildDir}/reports/acceptance"
 }
 
+test.mustRunAfter ":embers-services:build"
+
 dependencies {
     compile project(":embers-services")
     testCompile libs.unit_tests
