@@ -46,7 +46,7 @@ public class EmbersDatabase {
         handle.close();
     }
 
-    public Query getQueryAll() {
+    public Query allQueries() {
         return new Query("allQueries", "Shows all the available queries", "select id, name, description, sql from queries order by name");
     }
 

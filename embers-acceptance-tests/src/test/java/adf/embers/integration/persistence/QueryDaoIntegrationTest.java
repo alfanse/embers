@@ -20,7 +20,7 @@ public class QueryDaoIntegrationTest {
         embersDatabase = new EmbersDatabase("jdbc:hsqldb:mem:daoTest");
         embersDatabase.startInMemoryDatabase();
         embersDatabase.createTableQueries();
-        embersDatabase.insertQuery(embersDatabase.getQueryAll());
+        embersDatabase.insertQuery(embersDatabase.allQueries());
     }
 
     @Before
@@ -31,7 +31,7 @@ public class QueryDaoIntegrationTest {
 
     @Test
     public void saveAndFindQueryByName() throws Exception {
-        Query expectedQuery = embersDatabase.getQueryAll();
+        Query expectedQuery = embersDatabase.allQueries();
         queryDao.save(expectedQuery);
 
         final Query queryByName = queryDao.findQueryByName(expectedQuery.getName());
