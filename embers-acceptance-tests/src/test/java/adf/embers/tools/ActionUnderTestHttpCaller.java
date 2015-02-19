@@ -1,4 +1,4 @@
-package adf.embers.acceptance.client;
+package adf.embers.tools;
 
 import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
 import com.googlecode.yatspec.state.givenwhenthen.TestLogger;

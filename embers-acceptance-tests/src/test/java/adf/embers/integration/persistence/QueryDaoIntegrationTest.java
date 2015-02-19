@@ -1,8 +1,8 @@
 package adf.embers.integration.persistence;
 
-import adf.embers.EmbersDatabase;
 import adf.embers.query.persistence.Query;
 import adf.embers.query.persistence.QueryDao;
+import adf.embers.tools.EmbersDatabase;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;

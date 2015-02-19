@@ -1,21 +1,20 @@
 package adf.embers.acceptance;
 
-import adf.embers.acceptance.client.ActionUnderTestHttpCaller;
 import adf.embers.query.QueryHandler;
 import adf.embers.query.persistence.Query;
+import adf.embers.tools.ActionUnderTestHttpCaller;
+import adf.embers.tools.EmbersServer;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecRunner;
 import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
 import com.googlecode.yatspec.state.givenwhenthen.StateExtractor;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
-import org.hamcrest.CoreMatchers;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 
 @RunWith(SpecRunner.class)
 @Notes("Hosted on jetty, in a jersey ServletContainer, IOC via ResourceConfig\n" +
@@ -46,7 +45,7 @@ public class QueryExecutorHostedOnJettyTest extends TestState {
         givenEmbersHasAQueryThatShowsAllQueries();
         when(userMakesHttpGetRequestFor("allQueries"));
         then(theResponseCode(), is(200));
-        then(theResponseBody(), CoreMatchers.allOf(containsString("name"), containsString("description"), containsString("sql"), containsString("allQueries")));
+        then(theResponseBody(), allOf(containsString("name"), containsString("description"), containsString("sql"), containsString("allQueries")));
     }
 
     private void givenEmbersHasAQueryThatShowsAllQueries() {

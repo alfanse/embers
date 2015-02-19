@@ -1,6 +1,5 @@
-package adf.embers.acceptance;
+package adf.embers.tools;
 
-import adf.embers.EmbersDatabase;
 import adf.embers.configuration.EmbersConfiguration;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;

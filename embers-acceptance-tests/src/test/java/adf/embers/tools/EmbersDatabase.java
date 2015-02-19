@@ -1,4 +1,4 @@
-package adf.embers;
+package adf.embers.tools;
 
 import adf.embers.query.persistence.Query;
 import adf.embers.query.persistence.QueryDao;
