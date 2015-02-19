@@ -3,6 +3,7 @@ package adf.embers.acceptance;
 import adf.embers.query.QueryHandler;
 import adf.embers.query.persistence.Query;
 import adf.embers.tools.ActionUnderTestHttpCaller;
+import adf.embers.tools.EmbersQueries;
 import adf.embers.tools.EmbersServer;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecRunner;
@@ -23,6 +24,7 @@ public class QueryExecutorHostedOnJettyTest extends TestState {
 
     @ClassRule
     public static EmbersServer embersServer = new EmbersServer();
+    private EmbersQueries embersQueries = new EmbersQueries(this, embersServer.getEmbersDatabase());
 
     @Test
     public void queryNotFound() throws Exception {
@@ -49,16 +51,11 @@ public class QueryExecutorHostedOnJettyTest extends TestState {
     }
 
     private void givenEmbersHasAQueryThatShowsAllQueries() {
-        insertQuery(embersServer.getEmbersDatabase().allQueries());
+        embersQueries.insertAllQueries();
     }
 
     private void givenEmbersHasAQueryThatReturnsNoRows() {
-        insertQuery(new Query("noRows", "Show what happens when query runs but no data is selected", "select * from queries where name = 'missing'"));
-    }
-
-    private void insertQuery(Query noRows) {
-        interestingGivens.add("Expected Query To Run", noRows);
-        embersServer.getEmbersDatabase().insertQuery(noRows);
+        embersQueries.insertQuery(new Query("noRows", "Show what happens when query runs but no data is selected", "select * from queries where name = 'missing'"));
     }
 
     private ActionUnderTest userMakesHttpGetRequestFor(String queryToMake) {
