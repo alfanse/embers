@@ -1,18 +1,19 @@
 package adf.embers.tools;
 
-import adf.embers.query.persistence.Query;
-import adf.embers.query.persistence.QueryDao;
 import org.hsqldb.jdbc.JDBCDataSource;
 import org.hsqldb.jdbcDriver;
 import org.skife.jdbi.v2.DBI;
 import org.skife.jdbi.v2.Handle;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class EmbersDatabase {
 
-    public static final String JDBC_URL = "jdbc:hsqldb:mem:test";
+    public static final String JDBC_URL = "jdbc:hsqldb:mem:acceptance-test";
     private static final String USERNAME = "sa";
     private static final String PASSWORD = "";
     private final String jdbcUrl;
@@ -32,6 +33,15 @@ public class EmbersDatabase {
         this.dataSource.setLoginTimeout(5);
     }
 
+    public void shutdownInMemoryDatabase() {
+        try (Connection connection = getDataSource().getConnection()) {
+            Statement st = connection.createStatement();
+            st.execute("SHUTDOWN");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public DataSource getDataSource() {
         return dataSource;
     }
@@ -46,14 +56,4 @@ public class EmbersDatabase {
         handle.close();
     }
 
-    public Query allQueries() {
-        return new Query("allQueries", "Shows all the available queries", "select id, name, description, sql from queries order by name");
-    }
-
-    public void insertQuery(Query query) {
-        DBI dbi = new DBI(dataSource);
-        QueryDao open = dbi.open(QueryDao.class);
-        open.save(query);
-        dbi.close(open);
-    }
 }

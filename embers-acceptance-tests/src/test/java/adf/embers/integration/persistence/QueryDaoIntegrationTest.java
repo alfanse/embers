@@ -20,7 +20,6 @@ public class QueryDaoIntegrationTest {
         embersDatabase = new EmbersDatabase("jdbc:hsqldb:mem:daoTest");
         embersDatabase.startInMemoryDatabase();
         embersDatabase.createTableQueries();
-        embersDatabase.insertQuery(embersDatabase.allQueries());
     }
 
     @Before
@@ -31,14 +30,14 @@ public class QueryDaoIntegrationTest {
 
     @Test
     public void saveAndFindQueryByName() throws Exception {
-        Query expectedQuery = embersDatabase.allQueries();
+        Query expectedQuery = new Query("testq", "some description", "select 1 from dual");
         queryDao.save(expectedQuery);
 
-        final Query queryByName = queryDao.findQueryByName(expectedQuery.getName());
-        assertThat(queryByName.getName()).isEqualTo(expectedQuery.getName());
-        assertThat(queryByName.getDescription()).isEqualTo(expectedQuery.getDescription());
-        assertThat(queryByName.getSql()).isEqualTo(expectedQuery.getSql());
-        assertThat(queryByName.getId()).isGreaterThan(0);
+        final Query actualQuery = queryDao.findQueryByName(expectedQuery.getName());
+        assertThat(actualQuery.getName()).isEqualTo(expectedQuery.getName());
+        assertThat(actualQuery.getDescription()).isEqualTo(expectedQuery.getDescription());
+        assertThat(actualQuery.getSql()).isEqualTo(expectedQuery.getSql());
+        assertThat(actualQuery.getId()).isGreaterThan(0);
     }
 
     @Test

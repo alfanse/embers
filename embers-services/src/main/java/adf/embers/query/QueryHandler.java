@@ -31,7 +31,6 @@ public class QueryHandler {
             List<String> errors = queryResult.getErrors();
             Optional<String> errorsString = errors.stream().reduce((s, s2) -> s + "\n" + s2);
             return Response.status(HttpURLConnection.HTTP_NOT_FOUND).type(MediaType.TEXT_PLAIN_TYPE).entity(errorsString.get()).build();
-//            return Response.status(HttpURLConnection.HTTP_NOT_FOUND).type(MediaType.TEXT_PLAIN_TYPE).entity(errorsString.get()).build();
         }
         return Response.ok(queryResult.getResult()).build();
     }

@@ -1,6 +1,7 @@
 package adf.embers.tools;
 
 import adf.embers.configuration.EmbersConfiguration;
+import adf.embers.query.QueryHandler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -10,7 +11,7 @@ import org.junit.rules.ExternalResource;
 
 public class EmbersServer extends ExternalResource {
 
-    private static final int port = 8001;
+    private static final int PORT = 8001;
 
     private EmbersDatabase embersDatabase;
     private Server server;
@@ -24,6 +25,7 @@ public class EmbersServer extends ExternalResource {
     @Override
     protected void after() {
         stopHttpServer();
+        embersDatabase.shutdownInMemoryDatabase();
     }
 
     public void startDatabase() throws Exception {
@@ -41,7 +43,7 @@ public class EmbersServer extends ExternalResource {
         ServletContextHandler handler = new ServletContextHandler();
         handler.addServlet(new ServletHolder(new ServletContainer(resourceConfig)), "/");
 
-        server = new Server(port);
+        server = new Server(PORT);
         server.setHandler(handler);
         server.start();
     }
@@ -56,5 +58,9 @@ public class EmbersServer extends ExternalResource {
 
     public EmbersDatabase getEmbersDatabase() {
         return embersDatabase;
+    }
+
+    public String getContextPath() {
+        return "http://localhost:"+ PORT +"/" + QueryHandler.PATH;
     }
 }

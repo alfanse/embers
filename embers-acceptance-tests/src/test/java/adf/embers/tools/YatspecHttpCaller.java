@@ -1,6 +1,7 @@
 package adf.embers.tools;
 
 import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
+import com.googlecode.yatspec.state.givenwhenthen.StateExtractor;
 import com.googlecode.yatspec.state.givenwhenthen.TestLogger;
 
 import java.io.BufferedReader;
@@ -10,20 +11,38 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class ActionUnderTestHttpCaller {
+public class YatspecHttpCaller {
 
     private final TestLogger testLogger;
+    private final String contextPath;
 
-    public ActionUnderTestHttpCaller(TestLogger testLogger) {
+    public YatspecHttpCaller(TestLogger testLogger, String contextPath) {
         this.testLogger = testLogger;
+        this.contextPath = contextPath;
     }
 
-    public ActionUnderTest getRequestFor(String url) {
-        return (givens, capturedInputAndOutputs) -> {
-            URL u = new URL(url);
-            givens.add("Url", u.toExternalForm());
+    public ActionUnderTest getRequestFor(String queryName) {
+        return loggedGetRequest(contextPath + "/" + queryName);
+    }
 
-            HttpURLConnection conn = (HttpURLConnection)u.openConnection();
+    public StateExtractor<Integer> responseCode() {
+        return inputAndOutput -> inputAndOutput.getType("Response Code", Integer.class);
+    }
+
+    public StateExtractor<String> theErrorResponse() {
+        return inputAndOutput -> inputAndOutput.getType("Error Response Body", String.class);
+    }
+
+    public StateExtractor<String> responseBody() {
+        return inputAndOutput -> inputAndOutput.getType("Response Body", String.class);
+    }
+
+    private ActionUnderTest loggedGetRequest(String url) {
+        return (givens, capturedInputAndOutputs) -> {
+            URL location = new URL(url);
+            givens.add("Url", location.toExternalForm());
+
+            HttpURLConnection conn = (HttpURLConnection)location.openConnection();
             try {
                 int responseCode = conn.getResponseCode();
                 testLogger.log("Response Code", responseCode);
@@ -47,10 +66,6 @@ public class ActionUnderTestHttpCaller {
         };
     }
 
-    private void captureInputStream(InputStream inputStream, String logKey) throws IOException {
-        testLogger.log(logKey, readInputStream(inputStream));
-    }
-
     private String readInputStream(InputStream inputStream) throws IOException {
         StringBuilder sb = new StringBuilder();
         try (BufferedReader br = new BufferedReader((new InputStreamReader(inputStream)))) {
@@ -59,5 +74,9 @@ public class ActionUnderTestHttpCaller {
             }
         }
         return sb.toString();
+    }
+
+    private void captureInputStream(InputStream inputStream, String logKey) throws IOException {
+        testLogger.log(logKey, readInputStream(inputStream));
     }
 }
