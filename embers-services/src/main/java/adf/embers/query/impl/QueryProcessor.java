@@ -24,21 +24,24 @@ public class QueryProcessor implements adf.embers.query.QueryProcessor {
     @Override
     public QueryResult placeQuery(final QueryRequest queryRequest) {
         QueryResultBuilder queryResultBuilder = new QueryResultBuilder();
-        Query queryOptional;
         try {
-            queryOptional = queriesDao.findQueryByName(queryRequest.getQueryName());
-            if(queryOptional==null) {
-                return queryResultBuilder.addError("Query not found: " + queryRequest.getQueryName()).build();
+            Query query = queriesDao.findQueryByName(queryRequest.getQueryName());
+            if(query==null) {
+                queryResultBuilder.addError("Query not found: " + queryRequest.getQueryName());
+            } else {
+                executeNamedQueryAndFormatResult(queryResultBuilder, query);
             }
         } catch (Exception e) {
-            return queryResultBuilder.addError(e.getMessage()).build();
+            queryResultBuilder.addError(e.getMessage());
         }
 
-        List<Map<String, Object>> result = queryExecutor.runQuery(queryOptional);
-        final String formattedResult = getFormatter().format(result, queryRequest);
-        queryResultBuilder.withResult(formattedResult);
-
         return queryResultBuilder.build();
+    }
+
+    private void executeNamedQueryAndFormatResult(QueryResultBuilder queryResultBuilder, Query query) {
+        List<Map<String, Object>> result = queryExecutor.runQuery(query);
+        final String formattedResult = getFormatter().format(result);
+        queryResultBuilder.withResult(formattedResult);
     }
 
     private QueryFormatter getFormatter() {

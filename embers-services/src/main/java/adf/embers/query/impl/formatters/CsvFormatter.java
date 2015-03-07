@@ -1,7 +1,6 @@
 package adf.embers.query.impl.formatters;
 
 import adf.embers.query.QueryFormatter;
-import adf.embers.query.QueryRequest;
 
 import java.util.List;
 import java.util.Map;
@@ -14,7 +13,7 @@ public class CsvFormatter implements QueryFormatter {
     private static final String NEW_LINE = "\n";
 
     @Override
-    public String format(List<Map<String, Object>> result, QueryRequest queryRequest) {
+    public String format(List<Map<String, Object>> result) {
 
         if(result.size() < 1) {
             return "";

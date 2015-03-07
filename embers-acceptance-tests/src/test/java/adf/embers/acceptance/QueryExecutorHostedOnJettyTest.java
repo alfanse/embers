@@ -53,12 +53,12 @@ public class QueryExecutorHostedOnJettyTest extends TestState {
         then(http.responseBody(), allOf(containsString("name"), containsString("description"), containsString("sql"), containsString(ALL_QUERIES)));
     }
 
-    private void givenEmbersHasAQueryThatShowsAllQueries() {
-        yatspecQueryInserter.insertAllQueries();
+    private void givenEmbersHasAQueryThatShowsAllQueries() throws Exception {
+        given(yatspecQueryInserter.allQueries());
     }
 
-    private void givenEmbersHasAQueryThatReturnsNoRows() {
-        yatspecQueryInserter.insertQuery(new Query("noRows", "Show what happens when query runs but no data is selected", "select * from queries where name = 'missing'"));
+    private void givenEmbersHasAQueryThatReturnsNoRows() throws Exception {
+        given(yatspecQueryInserter.insertQuery(new Query("noRows", "Show what happens when query runs but no data is selected", "select * from queries where name = 'missing'")));
     }
 
     private String empty() {

@@ -1,6 +1,5 @@
 package adf.embers.query.impl.formatters;
 
-import adf.embers.query.QueryRequest;
 import org.junit.Test;
 
 import java.util.LinkedHashMap;
@@ -10,16 +9,14 @@ import java.util.Map;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
 public class CsvFormatterTest {
-    private final QueryRequest queryRequest = mock(QueryRequest.class);
     private final CsvFormatter csvFormatter = new CsvFormatter();
     private long idCounter = 1;
 
     @Test
     public void formatEmptyResult() throws Exception {
-        String format = csvFormatter.format(emptyList(), queryRequest);
+        String format = csvFormatter.format(emptyList());
         assertThat(format).isEmpty();
     }
 
@@ -28,7 +25,7 @@ public class CsvFormatterTest {
         //noinspection unchecked
         List<Map<String, Object>> result = givenARowOfDataFromQueriesTable(getMapOfOneRowOfData(), getMapOfOneRowOfData());
 
-        String format = csvFormatter.format(result, queryRequest);
+        String format = csvFormatter.format(result);
         String[] rowsArray = format.split("\n");
         String headerRow = rowsArray[0];
         assertThat(headerRow).isEqualTo("string,long");

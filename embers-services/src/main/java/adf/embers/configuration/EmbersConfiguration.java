@@ -2,7 +2,7 @@ package adf.embers.configuration;
 
 import adf.embers.query.QueryExecutor;
 import adf.embers.query.QueryHandler;
-import adf.embers.query.impl.QueryProcessor;
+import adf.embers.query.QueryProcessor;
 import adf.embers.query.persistence.QueryDao;
 import org.skife.jdbi.v2.DBI;
 
@@ -33,10 +33,10 @@ public class EmbersConfiguration {
     }
 
     private QueryProcessor queryProcessor() {
-        return new QueryProcessor(queryDao(dbi), queryRunner());
+        return new adf.embers.query.impl.QueryProcessor(queryDao(), queryRunner());
     }
 
-    private QueryDao queryDao(DBI dbi) {
+    private QueryDao queryDao() {
         return dbi.open(QueryDao.class);
     }
 

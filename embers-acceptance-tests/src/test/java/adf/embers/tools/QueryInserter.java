@@ -10,9 +10,11 @@ public class QueryInserter {
 
     public static final String ALL_QUERIES = "allQueries";
     private DataSource dataSource;
+    private LoggingStrategy logging;
 
-    public QueryInserter(DataSource dataSource) {
+    public QueryInserter(DataSource dataSource, LoggingStrategy loggingStrategy) {
         this.dataSource = dataSource;
+        this.logging = loggingStrategy;
     }
 
     public void insertAllQueries() {
@@ -20,9 +22,14 @@ public class QueryInserter {
     }
 
     public void insertQuery(Query query) {
+        logging.logInsertQuery(query);
         DBI dbi = new DBI(dataSource);
         QueryDao open = dbi.open(QueryDao.class);
         open.save(query);
         dbi.close(open);
     }
+}
+
+interface LoggingStrategy {
+    void logInsertQuery(Query query);
 }

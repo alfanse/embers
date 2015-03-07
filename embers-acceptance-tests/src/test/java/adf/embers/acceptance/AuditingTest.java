@@ -5,7 +5,6 @@ import adf.embers.tools.YatspecHttpCaller;
 import adf.embers.tools.YatspecQueryInserter;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecRunner;
-import com.googlecode.yatspec.state.givenwhenthen.GivensBuilder;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -25,15 +24,12 @@ public class AuditingTest extends TestState {
 
     @Test
     public void auditAnExistingQueryThatRespondsWithData() throws Exception {
-        given(allQueries());
+        given(yatspecQueryInserter.allQueries());
+        //TODO create audit table
+        //TODO Insert record when query is run
         when(http.getRequestFor(ALL_QUERIES));
-        //TODO show audit
+        //TODO show audit result
+        //TODO show expected query result
     }
 
-    private GivensBuilder allQueries() {
-        return givens -> {
-            yatspecQueryInserter.insertAllQueries();
-            return givens;
-        };
-    }
 }
