@@ -32,6 +32,7 @@ public class EmbersServer extends ExternalResource {
         embersDatabase = new EmbersDatabase(EmbersDatabase.JDBC_URL);
         embersDatabase.startInMemoryDatabase();
         embersDatabase.createTableQueries();
+        embersDatabase.createTableQueriesStatistics();
     }
 
     public void startHttpServer() throws Exception {

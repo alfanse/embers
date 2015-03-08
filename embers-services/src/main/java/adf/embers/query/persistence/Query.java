@@ -4,7 +4,6 @@ package adf.embers.query.persistence;
 public class Query {
     private Long id;
     private final String name, description, sql;
-    //todo add audit information, created details, updated details.
 
     public Query(String name, String description, String sql) {
         this.name = name;

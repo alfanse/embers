@@ -11,14 +11,14 @@ import static org.mockito.Mockito.when;
 
 public class QueryProcessorTest {
 
-    private final QueryDao queriesDao = mock(QueryDao.class);
+    private final QueryDao queryDao = mock(QueryDao.class);
     private final QueryExecutor queryExecutor = mock(QueryExecutor.class);
-    private final QueryProcessor queryProcessor = new QueryProcessor(queriesDao, queryExecutor);
+    private final QueryProcessor queryProcessor = new QueryProcessor(queryDao, queryExecutor);
 
     @Test
     public void requestedQueryNotFound() {
         final String queryName = "notFoundName";
-        when(queriesDao.findQueryByName(queryName)).thenReturn(null);
+        when(queryDao.findQueryByName(queryName)).thenReturn(null);
 
         QueryResult queryResult = whenPlaceQueryIsCalled(queryName);
 
@@ -29,7 +29,7 @@ public class QueryProcessorTest {
     @Test
     public void daoExceptionHandledAsError() {
         final String queryName = "someName";
-        when(queriesDao.findQueryByName(queryName)).thenThrow(new RuntimeException("user lacks privilege or object not found: QUERIES"));
+        when(queryDao.findQueryByName(queryName)).thenThrow(new RuntimeException("user lacks privilege or object not found: QUERIES"));
 
         QueryResult queryResult = whenPlaceQueryIsCalled(queryName);
         assertThat(queryResult.hasErrors()).isTrue();

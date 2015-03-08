@@ -7,17 +7,23 @@ import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 
 @RegisterMapper(QueryMapper.class)
-/** JDBI implements this for access to Queries table */
+/**
+ * DAO access to A table holding details of the queries that the Embers QueryHandler can run.
+ * JDBI implements this for access to the table called: QUERIES.
+ */
 public interface QueryDao {
 
+    String TABLE_QUERIES = "queries";
     String COL_ID = "id";
     String COL_NAME = "name";
     String COL_DESCRIPTION = "description";
     String COL_SQL = "sql";
 
-    @SqlUpdate("Insert into queries (name, description, sql) values (:q.name, :q.description, :q.sql)")
+    @SqlUpdate("Insert into " + TABLE_QUERIES + " ("
+            + COL_NAME + ", " + COL_DESCRIPTION + ", " + COL_SQL
+            + ") values (:q.name, :q.description, :q.sql)")
     void save(@BindBean("q") Query query);
 
-    @SqlQuery("select * from queries where name = :queryName")
+    @SqlQuery("select * from " + TABLE_QUERIES + " where " + COL_NAME + " = :queryName")
     Query findQueryByName(@Bind(value = "queryName") String queryName);
 }

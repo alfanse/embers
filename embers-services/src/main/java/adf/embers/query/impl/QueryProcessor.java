@@ -13,11 +13,11 @@ import java.util.Map;
 
 public class QueryProcessor implements adf.embers.query.QueryProcessor {
 
-    private final QueryDao queriesDao;
+    private final QueryDao queryDao;
     private final QueryExecutor queryExecutor;
 
     public QueryProcessor(QueryDao queryDao, QueryExecutor queryExecutor) {
-        this.queriesDao = queryDao;
+        this.queryDao = queryDao;
         this.queryExecutor = queryExecutor;
     }
 
@@ -25,7 +25,7 @@ public class QueryProcessor implements adf.embers.query.QueryProcessor {
     public QueryResult placeQuery(final QueryRequest queryRequest) {
         QueryResultBuilder queryResultBuilder = new QueryResultBuilder();
         try {
-            Query query = queriesDao.findQueryByName(queryRequest.getQueryName());
+            Query query = queryDao.findQueryByName(queryRequest.getQueryName());
             if(query==null) {
                 queryResultBuilder.addError("Query not found: " + queryRequest.getQueryName());
             } else {

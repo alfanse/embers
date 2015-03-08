@@ -1,6 +1,6 @@
 package adf.embers.query.impl;
 
-import adf.embers.configuration.DbiFactory;
+import adf.embers.configuration.DbiHandleFactory;
 import adf.embers.query.persistence.Query;
 import org.junit.Test;
 import org.skife.jdbi.v2.Handle;
@@ -15,7 +15,7 @@ import static org.mockito.Mockito.when;
 
 public class QueryExecutorTest {
 
-    private final DbiFactory dbiFactory = mock(DbiFactory.class);
+    private final DbiHandleFactory dbiFactory = mock(DbiHandleFactory.class);
     private final Handle handle = mock(Handle.class);
 
     @Test

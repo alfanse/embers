@@ -66,6 +66,10 @@ public class YatspecHttpCaller {
         };
     }
 
+    private void captureInputStream(InputStream inputStream, String logKey) throws IOException {
+        testLogger.log(logKey, readInputStream(inputStream));
+    }
+
     private String readInputStream(InputStream inputStream) throws IOException {
         StringBuilder sb = new StringBuilder();
         try (BufferedReader br = new BufferedReader((new InputStreamReader(inputStream)))) {
@@ -74,9 +78,5 @@ public class YatspecHttpCaller {
             }
         }
         return sb.toString();
-    }
-
-    private void captureInputStream(InputStream inputStream, String logKey) throws IOException {
-        testLogger.log(logKey, readInputStream(inputStream));
     }
 }
