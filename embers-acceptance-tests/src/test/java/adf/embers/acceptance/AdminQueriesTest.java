@@ -1,7 +1,7 @@
 package adf.embers.acceptance;
 
 import adf.embers.tools.EmbersServer;
-import adf.embers.tools.YatspecHttpPostCommand;
+import adf.embers.tools.YatspecHttpCommand;
 import adf.embers.tools.YatspecHttpPostCommandBuilder;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecRunner;
@@ -18,7 +18,7 @@ public class AdminQueriesTest extends TestState {
 
     @ClassRule
     public static EmbersServer embersServer = new EmbersServer();
-    private YatspecHttpPostCommand http;
+    private YatspecHttpCommand http;
 
     @Test
     @Ignore("Under construction")
@@ -30,6 +30,6 @@ public class AdminQueriesTest extends TestState {
 
     private ActionUnderTest aNewQueryIsPosted() {
         http = new YatspecHttpPostCommandBuilder(this).withUrl(embersServer.getFullContextPath() + "/query/add").withName("newQuery").withSql("select systimestamp from dual").withDescription("a description").build();
-        return http;
+        return http.execute();
     }
 }
