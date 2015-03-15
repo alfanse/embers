@@ -2,7 +2,7 @@ package adf.embers.acceptance;
 
 import adf.embers.query.persistence.Query;
 import adf.embers.tools.EmbersServer;
-import adf.embers.tools.YatspecHttpCaller;
+import adf.embers.tools.YatspecHttpGetCommand;
 import adf.embers.tools.YatspecQueryInserter;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecRunner;
@@ -25,7 +25,7 @@ public class QueryExecutorHostedOnJettyTest extends TestState {
     @ClassRule
     public static EmbersServer embersServer = new EmbersServer();
 
-    private final YatspecHttpCaller http = new YatspecHttpCaller(this, embersServer.getContextPath());
+    private final YatspecHttpGetCommand http = new YatspecHttpGetCommand(this, embersServer.getFullContextPath());
     private final YatspecQueryInserter yatspecQueryInserter = new YatspecQueryInserter(this, embersServer.getEmbersDatabase().getDataSource());
 
     @Test

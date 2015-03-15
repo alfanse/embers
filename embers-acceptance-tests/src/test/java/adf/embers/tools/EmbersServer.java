@@ -61,7 +61,10 @@ public class EmbersServer extends ExternalResource {
         return embersDatabase;
     }
 
-    public String getContextPath() {
+    /**
+     * starting from http:// including /embers
+     */
+    public String getFullContextPath() {
         return "http://localhost:"+ PORT +"/" + QueryHandler.PATH;
     }
 }

@@ -11,12 +11,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class YatspecHttpCaller {
+public class YatspecHttpGetCommand {
 
     private final TestLogger testLogger;
     private final String contextPath;
 
-    public YatspecHttpCaller(TestLogger testLogger, String contextPath) {
+    public YatspecHttpGetCommand(TestLogger testLogger, String contextPath) {
         this.testLogger = testLogger;
         this.contextPath = contextPath;
     }
