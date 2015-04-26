@@ -1,5 +1,6 @@
 package adf.embers.configuration;
 
+import adf.embers.add.AdminQueryHandler;
 import adf.embers.query.QueryExecutor;
 import adf.embers.query.QueryHandler;
 import adf.embers.query.QueryProcessor;
@@ -13,17 +14,19 @@ import javax.sql.DataSource;
 public class EmbersConfiguration {
 
     private final DataSource dataSource;
-    private final QueryHandler queryHandler;
     private final DBI dbi;
 
     public EmbersConfiguration(DataSource dataSource) {
         this.dataSource = dataSource;
         this.dbi = dbi();
-        this.queryHandler = queryHandler();
     }
 
     public QueryHandler getQueryHandler() {
-        return queryHandler;
+        return queryHandler();
+    }
+
+    public AdminQueryHandler getAdminQueryHandler() {
+        return new AdminQueryHandler(queryDao());
     }
 
     private DBI dbi() {
@@ -54,9 +57,8 @@ public class EmbersConfiguration {
         return dbi.open(QueryDao.class);
     }
 
+
     private QueryStatisticsDao queriesExecutedDao() {
         return dbi.open(QueryStatisticsDao.class);
     }
-
-
 }

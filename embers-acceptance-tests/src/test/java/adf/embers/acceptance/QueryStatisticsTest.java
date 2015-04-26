@@ -1,5 +1,6 @@
 package adf.embers.acceptance;
 
+import adf.embers.query.QueryHandler;
 import adf.embers.tools.EmbersServer;
 import adf.embers.tools.YatspecHttpGetCommand;
 import adf.embers.tools.YatspecQueryInserter;
@@ -31,7 +32,7 @@ public class QueryStatisticsTest extends TestState {
     public static EmbersServer embersServer = new EmbersServer();
 
     private YatspecQueryInserter yatspecQueryInserter = new YatspecQueryInserter(this, embersServer.getEmbersDatabase().getDataSource());
-    private YatspecHttpGetCommand http = new YatspecHttpGetCommand(this, embersServer.getFullContextPath());
+    private YatspecHttpGetCommand http = new YatspecHttpGetCommand(this, embersServer.getFullContextPath() + "/" + QueryHandler.PATH);
 
     @Test
     public void auditAnExistingQueryThatRespondsWithData() throws Exception {

@@ -3,7 +3,7 @@ package adf.embers.tools;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 
 public class YatspecHttpPostCommandBuilder {
-    public static final String PARAM_QUERY_NAME = "queryName";
+    public static final String PARAM_QUERY_NAME = "name";
     public static final String PARAM_SQL = "sql";
     public static final String PARAM_DESCRIPTION = "description";
 

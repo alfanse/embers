@@ -1,7 +1,6 @@
 package adf.embers.tools;
 
 import adf.embers.configuration.EmbersConfiguration;
-import adf.embers.query.QueryHandler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -9,9 +8,13 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.junit.rules.ExternalResource;
 
+/* investigate http://crunchify.com/how-to-start-embedded-http-jersey-server-during-java-application-startup/
+to replace jetty with jersey server */
+
 public class EmbersServer extends ExternalResource {
 
-    private static final int PORT = 8001;
+    public static final int PORT = 8001;
+    public static final String CONTEXT_PATH_ROOT = "embers";
 
     private EmbersDatabase embersDatabase;
     private Server server;
@@ -40,9 +43,12 @@ public class EmbersServer extends ExternalResource {
 
         ResourceConfig resourceConfig = new ResourceConfig();
         resourceConfig.register(embersConfiguration.getQueryHandler());
+        resourceConfig.register(embersConfiguration.getAdminQueryHandler());
 
         ServletContextHandler handler = new ServletContextHandler();
         handler.addServlet(new ServletHolder(new ServletContainer(resourceConfig)), "/");
+        //setting context path separately works
+        handler.setContextPath("/" + CONTEXT_PATH_ROOT);
 
         server = new Server(PORT);
         server.setHandler(handler);
@@ -65,6 +71,6 @@ public class EmbersServer extends ExternalResource {
      * starting from http:// including /embers
      */
     public String getFullContextPath() {
-        return "http://localhost:"+ PORT +"/" + QueryHandler.PATH;
+        return "http://localhost:" + PORT + "/" + CONTEXT_PATH_ROOT;
     }
 }

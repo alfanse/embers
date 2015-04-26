@@ -41,10 +41,16 @@ subprojects {
                 'com.googlecode.yatspec:yatspec:217'
             ],
             jersey: [
+//                    implements javax.ws.rs
                 'org.glassfish.jersey.core:jersey-server:2.2',
                 'org.glassfish.jersey.containers:jersey-container-servlet:2.2'
             ],
+            jaxson: [
+//                    handles json serialisation
+'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.5.2'
+            ],
             jetty: [
+//                    old trusted server
                 'org.eclipse.jetty:jetty-server:9.3.0.M1',
                 'org.eclipse.jetty:jetty-servlet:9.3.0.M1'
             ],

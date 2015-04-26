@@ -28,7 +28,7 @@ public class YatspecHttpPostCommand extends YatspecHttpCommand {
         connection.setRequestMethod("POST");
         connection.setDoOutput(true);
         connection.setRequestProperty("Accept-Charset", charset);
-        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + charset);
+        connection.setRequestProperty("Content-Type", "application/json");
 
         try (OutputStream output = connection.getOutputStream()) {
             final String query = getQueryParametersWithEncodedValues(charset);
@@ -38,7 +38,7 @@ public class YatspecHttpPostCommand extends YatspecHttpCommand {
     }
 
     private String getQueryParametersWithEncodedValues(String charset) throws UnsupportedEncodingException {
-        return String.format("%s=%s&%s=%s&%s=%s",
+        return String.format("{\"%s\":\"%s\", \"%s\":\"%s\", \"%s\":\"%s\"}",
                 YatspecHttpPostCommandBuilder.PARAM_QUERY_NAME,
                 URLEncoder.encode(queryName, charset),
                 YatspecHttpPostCommandBuilder.PARAM_SQL,

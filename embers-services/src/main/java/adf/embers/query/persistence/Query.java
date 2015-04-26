@@ -3,7 +3,11 @@ package adf.embers.query.persistence;
 /** Entity for the Queries Table */
 public class Query {
     private Long id;
-    private final String name, description, sql;
+    private String name, description, sql;
+
+    public Query() {
+        //default needed for jaxson
+    }
 
     public Query(String name, String description, String sql) {
         this.name = name;
