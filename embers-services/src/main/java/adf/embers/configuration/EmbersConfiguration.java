@@ -1,6 +1,6 @@
 package adf.embers.configuration;
 
-import adf.embers.add.AdminQueryHandler;
+import adf.embers.admin.AdminQueryHandler;
 import adf.embers.query.QueryExecutor;
 import adf.embers.query.QueryHandler;
 import adf.embers.query.QueryProcessor;

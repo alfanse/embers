@@ -1,6 +1,6 @@
 package adf.embers.acceptance;
 
-import adf.embers.add.AdminQueryHandler;
+import adf.embers.admin.AdminQueryHandler;
 import adf.embers.tools.EmbersServer;
 import adf.embers.tools.YatspecHttpCommand;
 import adf.embers.tools.YatspecHttpPostCommandBuilder;
