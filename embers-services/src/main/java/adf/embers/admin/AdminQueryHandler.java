@@ -8,6 +8,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 @Path(AdminQueryHandler.PATH)
 //taken from http://docs.oracle.com/javaee/6/tutorial/doc/gkknj.html
@@ -23,7 +25,20 @@ public class AdminQueryHandler {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addQuery(Query query) {
 
-        queryDao.save(query);
+        queryDao.save(new Query(
+                decodeString(query.getName()),
+                decodeString(query.getDescription()),
+                decodeString(query.getSql())
+        ));
+
         return Response.ok("Successfully added query").build();
+    }
+
+    private String decodeString(String encodedString) {
+        try {
+            return URLDecoder.decode(encodedString, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("Failed to decode : " + encodedString);
+        }
     }
 }

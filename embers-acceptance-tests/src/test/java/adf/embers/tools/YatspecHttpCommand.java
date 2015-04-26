@@ -12,6 +12,7 @@ import java.net.URL;
 public abstract class YatspecHttpCommand {
     protected final TestLogger testLogger;
     private String url;
+    private String logPrefix = "";
 
     public YatspecHttpCommand(TestLogger testLogger) {
         this.testLogger = testLogger;
@@ -21,16 +22,20 @@ public abstract class YatspecHttpCommand {
         this.url = url;
     }
 
+    public void setLogPrefix(String logPrefix) {
+        this.logPrefix = logPrefix;
+    }
+
     public StateExtractor<Integer> responseCode() {
-        return inputAndOutput -> inputAndOutput.getType("Response Code", Integer.class);
+        return inputAndOutput -> inputAndOutput.getType(getLogKeyName("Response Code"), Integer.class);
     }
 
     public StateExtractor<String> theErrorResponse() {
-        return inputAndOutput -> inputAndOutput.getType("Error Response Body", String.class);
+        return inputAndOutput -> inputAndOutput.getType(getLogKeyName("Error Response Body"), String.class);
     }
 
     public StateExtractor<String> responseBody() {
-        return inputAndOutput -> inputAndOutput.getType("Response Body", String.class);
+        return inputAndOutput -> inputAndOutput.getType(getLogKeyName("Response Body"), String.class);
     }
 
     public ActionUnderTest execute() {
@@ -57,9 +62,9 @@ public abstract class YatspecHttpCommand {
 
     protected void captureResponse(HttpURLConnection conn) throws IOException {
         int responseCode = conn.getResponseCode();
-        testLogger.log("Response Code", responseCode);
-        testLogger.log("Response Content-Type", conn.getContentType());
-        testLogger.log("Response Content Length", conn.getContentLengthLong());
+        logWithPrefixOnKey("Response Code", responseCode);
+        logWithPrefixOnKey("Response Content-Type", conn.getContentType());
+        logWithPrefixOnKey("Response Content Length", conn.getContentLengthLong());
 
         if (responseCode == HttpURLConnection.HTTP_OK) {
             try (InputStream inputStream = conn.getInputStream()) {
@@ -73,7 +78,15 @@ public abstract class YatspecHttpCommand {
     }
 
     private void captureInputStream(InputStream inputStream, String logKey) throws IOException {
-        testLogger.log(logKey, readInputStream(inputStream));
+        logWithPrefixOnKey(logKey, readInputStream(inputStream));
+    }
+
+    private void logWithPrefixOnKey(String logKeySuffix, Object responseCode) {
+        testLogger.log(getLogKeyName(logKeySuffix), responseCode);
+    }
+
+    private String getLogKeyName(String logKeySuffix) {
+        return logPrefix + " " + logKeySuffix;
     }
 
     private String readInputStream(InputStream inputStream) throws IOException {
