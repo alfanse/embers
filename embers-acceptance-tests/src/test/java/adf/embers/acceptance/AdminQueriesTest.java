@@ -2,6 +2,7 @@ package adf.embers.acceptance;
 
 import adf.embers.admin.AdminQueryHandler;
 import adf.embers.query.QueryHandler;
+import adf.embers.query.persistence.QueryDao;
 import adf.embers.tools.EmbersServer;
 import adf.embers.tools.YatspecHttpCommand;
 import adf.embers.tools.YatspecHttpGetCommand;
@@ -14,6 +15,15 @@ import org.hamcrest.CoreMatchers;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.skife.jdbi.v2.DBI;
+import org.skife.jdbi.v2.Handle;
+import org.skife.jdbi.v2.Query;
+import org.skife.jdbi.v2.util.StringMapper;
+
+import javax.sql.DataSource;
+
+import java.util.List;
+import java.util.Map;
 
 import static java.net.HttpURLConnection.HTTP_OK;
 import static org.hamcrest.CoreMatchers.is;
@@ -34,7 +44,7 @@ public class AdminQueriesTest extends TestState {
         then(httpPost.responseCode(), is(HTTP_OK));
         then(httpPost.responseBody(), CoreMatchers.containsString("Successfully added query"));
 
-//        then(theDatabaseHasTheQueryStoredWithoutEncryption());
+        thenTheDatabaseHasTheQueryStoredWithoutEncryption();
 
         when(theNewQueryIsCalled());
         then(httpGet.responseCode(), is(HTTP_OK));
@@ -55,5 +65,15 @@ public class AdminQueriesTest extends TestState {
         this.httpGet = new YatspecHttpGetCommand(this, embersServer.getFullContextPath() + "/" + QueryHandler.PATH);
         httpGet.setLogPrefix("Second");
         return httpGet.getRequestFor(NEW_QUERY_NAME);
+    }
+
+    private void thenTheDatabaseHasTheQueryStoredWithoutEncryption() {
+        DataSource dataSource = embersServer.getEmbersDatabase().getDataSource();
+        DBI dbi = new DBI(dataSource);
+        try(Handle h = dbi.open()) {
+            Query<Map<String, Object>> q = h.createQuery("select * from " + QueryDao.TABLE_QUERIES + " order by " + QueryDao.COL_ID);
+            List<Map<String, Object>> rs = q.list();
+            log("Database Queries", rs);
+        }
     }
 }
