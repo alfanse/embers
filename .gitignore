@@ -3,3 +3,7 @@ build
 .gradle
 .idea
 *.iml
+.DS_Store
+embers.ipr
+embers.iws
+out
