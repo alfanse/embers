@@ -9,6 +9,7 @@ test.mustRunAfter ":embers-services:build"
 
 dependencies {
     compile project(":embers-services")
+    compile libs.acceptance_tests
     testCompile libs.unit_tests
     testCompile libs.acceptance_tests
     testCompile libs.jersey
