@@ -7,6 +7,8 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.junit.rules.ExternalResource;
+import org.skife.jdbi.v2.DBI;
+import org.skife.jdbi.v2.Handle;
 
 /* investigate http://crunchify.com/how-to-start-embedded-http-jersey-server-during-java-application-startup/
 to replace jetty with jersey server */
@@ -72,5 +74,9 @@ public class EmbersServer extends ExternalResource {
      */
     public String getFullContextPath() {
         return "http://localhost:" + PORT + "/" + CONTEXT_PATH_ROOT;
+    }
+
+    public Handle openHandleToEmbersDatabase() {
+        return new DBI(embersDatabase.getDataSource()).open();
     }
 }
