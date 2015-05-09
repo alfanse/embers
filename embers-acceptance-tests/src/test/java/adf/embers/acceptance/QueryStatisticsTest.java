@@ -2,7 +2,6 @@ package adf.embers.acceptance;
 
 import adf.embers.query.QueryHandler;
 import adf.embers.tools.EmbersServer;
-import adf.embers.tools.YatspecHttpGetCommand;
 import adf.embers.tools.YatspecQueryInserter;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecRunner;
@@ -16,6 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skife.jdbi.v2.DBI;
 import org.skife.jdbi.v2.Handle;
+import yatspec.http.YatspecHttpGetCommand;
 
 import java.util.List;
 import java.util.Map;

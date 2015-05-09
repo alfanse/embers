@@ -3,7 +3,6 @@ package adf.embers.acceptance;
 import adf.embers.query.QueryHandler;
 import adf.embers.query.persistence.Query;
 import adf.embers.tools.EmbersServer;
-import adf.embers.tools.YatspecHttpGetCommand;
 import adf.embers.tools.YatspecQueryInserter;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecRunner;
@@ -11,6 +10,7 @@ import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import yatspec.http.YatspecHttpGetCommand;
 
 import static adf.embers.tools.QueryInserter.ALL_QUERIES;
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;

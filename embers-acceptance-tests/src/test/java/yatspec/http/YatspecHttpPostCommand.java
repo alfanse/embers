@@ -1,4 +1,4 @@
-package adf.embers.tools;
+package yatspec.http;
 
 import com.googlecode.yatspec.state.givenwhenthen.CapturedInputAndOutputs;
 import com.googlecode.yatspec.state.givenwhenthen.TestLogger;
