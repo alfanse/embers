@@ -7,7 +7,7 @@ import com.googlecode.yatspec.state.givenwhenthen.TestLogger;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 
-import static adf.embers.decode.UrlTools.encodeString;
+import static adf.embers.statics.UrlTools.encodeString;
 
 public class YatspecHttpGetCommand extends YatspecHttpCommand {
 

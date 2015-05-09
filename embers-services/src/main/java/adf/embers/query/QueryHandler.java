@@ -10,7 +10,7 @@ import java.net.HttpURLConnection;
 import java.util.List;
 import java.util.Optional;
 
-import static adf.embers.decode.UrlTools.decodeString;
+import static adf.embers.statics.UrlTools.decodeString;
 
 @Path("/" + QueryHandler.PATH)
 public class QueryHandler {

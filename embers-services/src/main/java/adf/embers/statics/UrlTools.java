@@ -1,4 +1,4 @@
-package adf.embers.decode;
+package adf.embers.statics;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -11,7 +11,7 @@ public class UrlTools {
         try {
             return URLDecoder.decode(encodedString, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("Failed to decode : " + encodedString);
+            throw new RuntimeException("Failed to statics : " + encodedString);
         }
     }
 
