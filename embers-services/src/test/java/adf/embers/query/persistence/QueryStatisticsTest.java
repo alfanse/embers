@@ -11,7 +11,7 @@ public class QueryStatisticsTest {
     public void calculatesDuration() throws Exception {
         final QueryStatistics queryStatistics = new QueryStatistics(mock(Query.class));
         Thread.sleep(1);
-        queryStatistics.setDuration();
+        queryStatistics.markDuration();
         assertThat(queryStatistics.getDuration()).isGreaterThan(0);
     }
 }

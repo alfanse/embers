@@ -8,6 +8,7 @@ import adf.embers.query.persistence.QueryStatisticsDao;
 import java.util.List;
 import java.util.Map;
 
+/** Wraps the QueryExecutor and adds performance auditing */
 public class QueryExecutorRecordingStatistics implements QueryExecutor {
     private QueryExecutor queryExecutor;
     private QueryStatisticsDao auditQueryDao;
@@ -21,7 +22,7 @@ public class QueryExecutorRecordingStatistics implements QueryExecutor {
     public List<Map<String, Object>> runQuery(Query query) {
         final QueryStatistics queryStatistics = new QueryStatistics(query);
         final List<Map<String, Object>> result = this.queryExecutor.runQuery(query);
-        queryStatistics.setDuration();
+        queryStatistics.markDuration();
         queryStatistics.setResult("Number of rows returned: " + result.size());
         auditQueryDao.save(queryStatistics);
         return result;

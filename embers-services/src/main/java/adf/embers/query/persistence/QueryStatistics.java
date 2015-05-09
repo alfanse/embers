@@ -27,7 +27,7 @@ public class QueryStatistics {
         return duration;
     }
 
-    public void setDuration() {
+    public void markDuration() {
         this.duration = System.currentTimeMillis() - dateExecuted.getTime();
     }
 

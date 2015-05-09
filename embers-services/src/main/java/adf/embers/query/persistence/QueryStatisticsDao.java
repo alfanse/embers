@@ -17,6 +17,6 @@ public interface QueryStatisticsDao {
 
     @SqlUpdate("insert into " + TABLE_QUERIES_STATISTICS + " ("
             + COL_QUERY_NAME + ", " + COL_DATE_EXECUTED + ", " + COL_DURATION + ", " + COL_RESULT
-            + ") values (:aq.name, :aq.dateExecuted, :aq.duration, :aq.result)")
-    void save(@BindBean("aq") QueryStatistics queryStatistics);
+            + ") values (:qs.name, :qs.dateExecuted, :qs.duration, :qs.result)")
+    void save(@BindBean("qs") QueryStatistics queryStatistics);
 }
