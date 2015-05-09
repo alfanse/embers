@@ -11,18 +11,21 @@ import java.net.HttpURLConnection;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class AdminQueryHandlerTest {
 
+    public static final String PLAIN_QUERY_NAME = "new query";
+    public static final String ENCODED_QUERY_NAME = "new+query";
+    public static final String PLAIN_DESCRIPTION = "this encoded description, should change";
+    public static final String PLAIN_SQL = "select systimestamp from dual";
     private final QueryDao queryDao = mock(QueryDao.class);
 
     private final AdminQueryHandler adminQueryHandler = new AdminQueryHandler(queryDao);
     private Query postedQuery;
 
     @Test
-    public void successfullSaveRetunsOk() throws Exception {
+    public void saveRetunsOkWithSuccessMessage() throws Exception {
 
         this.postedQuery = new Query("newQuery", "Description", "select timestamp from dual");
 
@@ -31,39 +34,60 @@ public class AdminQueryHandlerTest {
         verify(queryDao).save(any(Query.class));
 
         assertThat(response.getStatus()).isEqualTo(HttpURLConnection.HTTP_OK);
+        assertThat(response.getEntity().toString()).contains("Successfully added");
     }
 
     @Test
-    public void querySqlIsDecoded() throws Exception {
-        this.postedQuery = new Query("newQuery", "Description", "select+systimestamp+from+dual");
+    public void saveWillUseDecodedQuerySql() throws Exception {
+        this.postedQuery = encodedQuery();
         whenAdminQueryHandlerAddQueryIsCalled(postedQuery);
 
         final ArgumentCaptor<Query> argumentCaptor = ArgumentCaptor.forClass(Query.class);
         verify(queryDao).save(argumentCaptor.capture());
 
-        assertThat(argumentCaptor.getValue().getSql()).isEqualTo("select systimestamp from dual");
+        assertThat(argumentCaptor.getValue().getSql()).isEqualTo(PLAIN_SQL);
     }
 
     @Test
-    public void queryDescriptionIsDecoded() throws Exception {
-        this.postedQuery = new Query("newQuery", "this+encoded+description,+should+change", "select+systimestamp+from+dual");
+    public void saveWillUseDecodedQueryDescription() throws Exception {
+        this.postedQuery = encodedQuery();
         whenAdminQueryHandlerAddQueryIsCalled(postedQuery);
 
         final ArgumentCaptor<Query> argumentCaptor = ArgumentCaptor.forClass(Query.class);
         verify(queryDao).save(argumentCaptor.capture());
 
-        Assertions.assertThat(argumentCaptor.getValue().getDescription()).isEqualTo("this encoded description, should change");
+        Assertions.assertThat(argumentCaptor.getValue().getDescription()).isEqualTo(PLAIN_DESCRIPTION);
     }
 
     @Test
-    public void queryNameIsDecoded() throws Exception {
-        this.postedQuery = new Query("new+query", "this+encoded+description,+should+change", "select+systimestamp+from+dual");
+    public void saveWillUseDecodedQueryName() throws Exception {
+        this.postedQuery = encodedQuery();
         whenAdminQueryHandlerAddQueryIsCalled(postedQuery);
 
         final ArgumentCaptor<Query> argumentCaptor = ArgumentCaptor.forClass(Query.class);
         verify(queryDao).save(argumentCaptor.capture());
 
         assertThat(argumentCaptor.getValue().getName()).isEqualTo("new query");
+    }
+
+    @Test
+    public void updateAnExistingQueryUsesDecodedValues(){
+        this.postedQuery = encodedQuery();
+        when(queryDao.findQueryByName(PLAIN_QUERY_NAME)).thenReturn(this.postedQuery);
+
+        Response response = whenAdminQueryHandlerAddQueryIsCalled(postedQuery);
+        final ArgumentCaptor<Query> argumentCaptor = ArgumentCaptor.forClass(Query.class);
+
+        verify(queryDao).update(argumentCaptor.capture());
+        assertThat(response.getStatus()).isEqualTo(HttpURLConnection.HTTP_OK);
+        assertThat(response.getEntity().toString()).contains("Successfully updated");
+
+        assertThat(argumentCaptor.getValue().getDescription()).isEqualTo(PLAIN_DESCRIPTION);
+        assertThat(argumentCaptor.getValue().getSql()).isEqualTo(PLAIN_SQL);
+    }
+
+    private Query encodedQuery() {
+        return new Query(ENCODED_QUERY_NAME, "this+encoded+description,+should+change", "select+systimestamp+from+dual");
     }
 
     private Response whenAdminQueryHandlerAddQueryIsCalled(Query postedQuery) {

@@ -15,7 +15,6 @@ import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
 import com.googlecode.yatspec.state.givenwhenthen.StateExtractor;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Description;
@@ -41,16 +40,20 @@ import static org.hamcrest.CoreMatchers.is;
 public class AdminQueriesTest extends TestState implements WithCustomResultListeners {
 
     public static final String NEW_QUERY_NAME = "newQuery";
+    public static final String UPDATED_SQL = "SELECT CURRENT_DATE AS date, CURRENT_TIME AS time FROM (VALUES(0))";
+    public static final String UPDATED_DESC = "this query returns the date and time";
+    public static final String ADDED_SQL = "SELECT CURRENT_DATE AS today, CURRENT_TIME AS now FROM (VALUES(0))";
+    public static final String ADDED_DESC = "this query returns the date,time";
     @ClassRule
     public static EmbersServer embersServer = new EmbersServer();
     private YatspecHttpCommand httpPost;
     private YatspecHttpGetCommand httpGet;
+    private String postedSql;
+    private String postedDescription;
 
     @Before
     public void clearDatabase(){
-        try (Handle handle = embersServer.openHandleToEmbersDatabase()) {
-            handle.execute("delete from "+QueryDao.TABLE_QUERIES);
-        }
+        embersServer.getEmbersDatabase().clearQueries();
     }
 
     @Test
@@ -66,39 +69,44 @@ public class AdminQueriesTest extends TestState implements WithCustomResultListe
         then(httpGet.responseBody(), CoreMatchers.containsString("today,now"));
     }
 
-//    @Test
-    @Ignore //TODO implement this
+    @Test
     public void usersCanUpdateExistingReports() throws Exception {
         givenAnExistingReport();
 
         when(anUpdateToTheQueryIsPosted());
         then(httpPost.responseCode(), is(HTTP_OK));
-        then(httpPost.responseBody(), CoreMatchers.containsString("Successfully added query"));
+        then(httpPost.responseBody(), CoreMatchers.containsString("Successfully updated query"));
 
         then(theQueriesTable(), hasTheQuery());
     }
 
     private ActionUnderTest anUpdateToTheQueryIsPosted() {
+        postedSql = UPDATED_SQL;
+        postedDescription = UPDATED_DESC;
         httpPost = new YatspecHttpPostCommandBuilder(this)
                 .withUrl(embersServer.getFullContextPath() + AdminQueryHandler.PATH)
                 .withName(NEW_QUERY_NAME)
-                .withSql("SELECT CURRENT_DATE AS now, CURRENT_TIME AS now FROM (VALUES(0))")
-                .withDescription("this query returns the date,time as now")
+                .withSql(postedSql)
+                .withDescription(postedDescription)
                 .build();
+        httpPost.setLogPrefix("Update");
         return httpPost.execute();
 
     }
 
     private void givenAnExistingReport() throws Exception {
         when(aNewQueryIsPosted());
+        httpPost = null;
     }
 
     private ActionUnderTest aNewQueryIsPosted() {
+        postedSql = ADDED_SQL;
+        postedDescription = ADDED_DESC;
         httpPost = new YatspecHttpPostCommandBuilder(this)
                 .withUrl(embersServer.getFullContextPath() + AdminQueryHandler.PATH)
                 .withName(NEW_QUERY_NAME)
-                .withSql("SELECT CURRENT_DATE AS today, CURRENT_TIME AS now FROM (VALUES(0))")
-                .withDescription("this query returns the date,time")
+                .withSql(postedSql)
+                .withDescription(postedDescription)
                 .build();
         return httpPost.execute();
     }
@@ -119,6 +127,8 @@ public class AdminQueriesTest extends TestState implements WithCustomResultListe
             public boolean matches(Object item) {
                 List<Map<String, Object>> resultSet = ((ResultSetWrapper) item).getResultSet();
                 assertThat(resultSet).hasSize(1);
+                assertThat(resultSet.get(0).get(QueryDao.COL_SQL)).isEqualTo(postedSql);
+                assertThat(resultSet.get(0).get(QueryDao.COL_DESCRIPTION)).isEqualTo(postedDescription);
                 return true;
             }
         };
@@ -126,7 +136,7 @@ public class AdminQueriesTest extends TestState implements WithCustomResultListe
 
     private StateExtractor<ResultSetWrapper> theQueriesTable() {
         return inputAndOutputs -> {
-            try (Handle handle = embersServer.openHandleToEmbersDatabase()) {
+            try (Handle handle = embersServer.getEmbersDatabase().openDatabaseHandle()) {
                 Query<Map<String, Object>> q = handle.createQuery("select * from " + QueryDao.TABLE_QUERIES + " order by " + QueryDao.COL_ID);
                 ResultSetWrapper resultSetWrapper = new ResultSetWrapper(q.list());
                 log("Database - " + QueryDao.TABLE_QUERIES, resultSetWrapper);

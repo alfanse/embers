@@ -70,10 +70,21 @@ public class EmbersDatabase {
                 COL_RESULT + " VARCHAR(100) )");
     }
 
-    private void executeSql(String sql) {
-        Handle handle = new DBI(dataSource).open();
-        handle.execute(sql);
-        handle.close();
+    public void clearQueries() {
+        executeSql("delete from "+QueryDao.TABLE_QUERIES);
     }
 
+    public void executeSql(String sql) {
+        try (Handle handle = openDatabaseHandle()) {
+            handle.execute(sql);
+        }
+    }
+
+    public Handle openDatabaseHandle() {
+        return createDBI().open();
+    }
+
+    private DBI createDBI() {
+        return new DBI(dataSource);
+    }
 }

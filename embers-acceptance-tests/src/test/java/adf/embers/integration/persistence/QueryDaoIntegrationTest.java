@@ -26,6 +26,8 @@ public class QueryDaoIntegrationTest {
     public void setupDao() {
         DBI dbi = new DBI(embersDatabase.getDataSource());
         queryDao = dbi.open(QueryDao.class);
+
+        embersDatabase.clearQueries();
     }
 
     @Test
@@ -37,6 +39,21 @@ public class QueryDaoIntegrationTest {
         assertThat(actualQuery.getName()).isEqualTo(expectedQuery.getName());
         assertThat(actualQuery.getDescription()).isEqualTo(expectedQuery.getDescription());
         assertThat(actualQuery.getSql()).isEqualTo(expectedQuery.getSql());
+        assertThat(actualQuery.getId()).isGreaterThan(0);
+    }
+
+    @Test
+    public void saveAndUpdateQuery() throws Exception {
+        Query expectedQuery = new Query("testq", "some description", "select 1 from dual");
+        queryDao.save(expectedQuery);
+
+        Query updatedQuery = new Query(expectedQuery.getName(), "changed description", "changed sql");
+        queryDao.update(updatedQuery);
+
+        final Query actualQuery = queryDao.findQueryByName(expectedQuery.getName());
+        assertThat(actualQuery.getName()).isEqualTo(updatedQuery.getName());
+        assertThat(actualQuery.getDescription()).isEqualTo(updatedQuery.getDescription());
+        assertThat(actualQuery.getSql()).isEqualTo(updatedQuery.getSql());
         assertThat(actualQuery.getId()).isGreaterThan(0);
     }
 

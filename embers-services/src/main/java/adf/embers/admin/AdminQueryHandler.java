@@ -24,14 +24,26 @@ public class AdminQueryHandler {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addQuery(Query query) {
+        String strategy;
 
-        queryDao.save(new Query(
+        Query queryOnDb = queryDao.findQueryByName(decodeString(query.getName()));
+        if(queryOnDb==null) {
+            queryDao.save(createDecodedQuery(query));
+            strategy = "added";
+        } else {
+            queryDao.update(createDecodedQuery(query));
+            strategy= "updated";
+        }
+
+        return Response.ok("Successfully " + strategy + " query").build();
+    }
+
+    private Query createDecodedQuery(Query query) {
+        return new Query(
                 decodeString(query.getName()),
                 decodeString(query.getDescription()),
                 decodeString(query.getSql())
-        ));
-
-        return Response.ok("Successfully added query").build();
+        );
     }
 
     private String decodeString(String encodedString) {

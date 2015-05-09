@@ -19,11 +19,14 @@ public interface QueryDao {
     String COL_DESCRIPTION = "description";
     String COL_SQL = "sql";
 
-    @SqlUpdate("Insert into " + TABLE_QUERIES + " ("
-            + COL_NAME + ", " + COL_DESCRIPTION + ", " + COL_SQL
-            + ") values (:q.name, :q.description, :q.sql)")
-    void save(@BindBean("q") Query query);
-
     @SqlQuery("select * from " + TABLE_QUERIES + " where " + COL_NAME + " = :queryName")
     Query findQueryByName(@Bind(value = "queryName") String queryName);
+
+    @SqlUpdate("Insert into " + TABLE_QUERIES + " ("
+            + COL_NAME + ", " + COL_DESCRIPTION + ", " + COL_SQL + ") values (:q.name, :q.description, :q.sql)")
+    void save(@BindBean("q") Query query);
+
+    @SqlUpdate("Update "+TABLE_QUERIES
+            +" set "+COL_DESCRIPTION+"=:q.description, "+COL_SQL+"=:q.sql where "+COL_NAME+"=:q.name")
+    void update(@BindBean("q") Query query);
 }
