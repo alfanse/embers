@@ -5,7 +5,7 @@ Allow new/update reports to be happen at anytime.
 ### Done
 query - inc Audit Query execution with: which query, when, duration.
 
-admin - add, update.
+admin - add, update, delete.
 
 ### TODO
 Add security around admin
@@ -13,5 +13,3 @@ Add security around admin
 Audit Query execution, include Who ran it.
 
 Cache queries
-
-admin - Delete
