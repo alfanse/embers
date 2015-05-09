@@ -62,4 +62,15 @@ public class QueryDaoIntegrationTest {
         final Query queryByName = queryDao.findQueryByName("unknown");
         assertThat(queryByName).isNull();
     }
+
+    @Test
+    public void deleteQuery(){
+        final Query expectedQuery = new Query("testq", "some description", "select 1 from dual");
+        queryDao.save(expectedQuery);
+
+        queryDao.delete(expectedQuery.getName());
+
+        final Query queryByName = queryDao.findQueryByName(expectedQuery.getName());
+        assertThat(queryByName).isNull();
+    }
 }

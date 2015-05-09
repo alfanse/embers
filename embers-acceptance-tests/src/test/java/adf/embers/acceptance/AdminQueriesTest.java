@@ -22,6 +22,7 @@ import org.junit.runner.RunWith;
 import org.skife.jdbi.v2.Handle;
 import org.skife.jdbi.v2.Query;
 import yatspec.http.YatspecHttpCommand;
+import yatspec.http.YatspecHttpDeleteCommand;
 import yatspec.http.YatspecHttpGetCommand;
 import yatspec.http.YatspecHttpPostCommandBuilder;
 import yatspec.renderers.ResultSetRenderer;
@@ -52,6 +53,7 @@ public class AdminQueriesTest extends TestState implements WithCustomResultListe
     private YatspecHttpGetCommand httpGet;
     private String postedSql;
     private String postedDescription;
+    private YatspecHttpDeleteCommand httpDelete;
 
     @Before
     public void clearDatabase(){
@@ -82,11 +84,30 @@ public class AdminQueriesTest extends TestState implements WithCustomResultListe
         then(theQueriesTable(), hasTheQuery());
     }
 
+    @Test
+    public void usersCanDeleteExistingReports() throws Exception {
+        givenAnExistingReport();
+        then(theQueriesTable(), hasTheQuery());
+
+        when(theQueryIsDeleted());
+        then(httpDelete.responseCode(), is(HTTP_OK));
+        then(httpDelete.responseBody(), CoreMatchers.containsString("Successfully deleted query"));
+
+        then(theQueriesTable(), isMissingTheQuery());
+    }
+
+    private ActionUnderTest theQueryIsDeleted() {
+        httpDelete = new YatspecHttpDeleteCommand(this, embersAdminPath());
+        httpDelete.setLogPrefix("Delete");
+        httpDelete.deleteRequestFor(QUERY_NAME);
+        return httpDelete.execute();
+    }
+
     private ActionUnderTest anUpdateToTheQueryIsPosted() {
         postedSql = UPDATED_SQL;
         postedDescription = UPDATED_DESC;
         httpPost = new YatspecHttpPostCommandBuilder(this)
-                .withUrl(embersServer.getFullContextPath() + AdminQueryHandler.PATH)
+                .withUrl(embersAdminPath())
                 .withName(QUERY_NAME)
                 .withSql(postedSql)
                 .withDescription(postedDescription)
@@ -105,7 +126,7 @@ public class AdminQueriesTest extends TestState implements WithCustomResultListe
         postedSql = ADDED_SQL;
         postedDescription = ADDED_DESC;
         httpPost = new YatspecHttpPostCommandBuilder(this)
-                .withUrl(embersServer.getFullContextPath() + AdminQueryHandler.PATH)
+                .withUrl(embersAdminPath())
                 .withName(QUERY_NAME)
                 .withSql(postedSql)
                 .withDescription(postedDescription)
@@ -136,6 +157,21 @@ public class AdminQueriesTest extends TestState implements WithCustomResultListe
         };
     }
 
+    private org.hamcrest.Matcher isMissingTheQuery() {
+        return new BaseMatcher<ResultSetWrapper>() {
+
+            @Override
+            public void describeTo(Description description) { }
+
+            @Override
+            public boolean matches(Object item) {
+                List<Map<String, Object>> resultSet = ((ResultSetWrapper) item).getResultSet();
+                assertThat(resultSet).hasSize(0);
+                return true;
+            }
+        };
+    }
+
     private StateExtractor<ResultSetWrapper> theQueriesTable() {
         return inputAndOutputs -> {
             try (Handle handle = embersServer.getEmbersDatabase().openDatabaseHandle()) {
@@ -145,6 +181,10 @@ public class AdminQueriesTest extends TestState implements WithCustomResultListe
                 return resultSetWrapper;
             }
         };
+    }
+
+    private String embersAdminPath() {
+        return embersServer.getFullContextPath()+ AdminQueryHandler.PATH;
     }
 
     @Override

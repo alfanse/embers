@@ -3,9 +3,7 @@ package adf.embers.admin;
 import adf.embers.query.persistence.Query;
 import adf.embers.query.persistence.QueryDao;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -36,6 +34,13 @@ public class AdminQueryHandler {
         }
 
         return Response.ok("Successfully " + strategy + " query").build();
+    }
+
+    @DELETE
+    @Path("{queryName}")
+    public Response deleteQuery(@PathParam("queryName") String queryName){
+        queryDao.delete(decodeString(queryName));
+        return Response.ok("Successfully deleted query").build();
     }
 
     private Query createDecodedQuery(Query query) {

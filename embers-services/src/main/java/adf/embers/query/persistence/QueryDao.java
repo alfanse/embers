@@ -29,4 +29,7 @@ public interface QueryDao {
     @SqlUpdate("Update "+TABLE_QUERIES
             +" set "+COL_DESCRIPTION+"=:q.description, "+COL_SQL+"=:q.sql where "+COL_NAME+"=:q.name")
     void update(@BindBean("q") Query query);
+
+    @SqlUpdate("Delete from "+TABLE_QUERIES+" where "+COL_NAME+"=:queryName")
+    void delete(@Bind(value = "queryName") String queryName);
 }
