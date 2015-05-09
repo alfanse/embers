@@ -13,3 +13,5 @@ Add security around admin
 Audit Query execution, include Who ran it.
 
 Cache queries
+
+Render the Request/Response better in A/T
