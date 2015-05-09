@@ -36,14 +36,16 @@ import static org.fest.assertions.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 
 @RunWith(SpecRunner.class)
-@Notes("As an Authenticated admin user, I can change the available queries, so that reports can be added and existing ones amended/deleted.")
+@Notes("As an admin user, I can change the available queries, so that reports can be added or existing ones amended.")
 public class AdminQueriesTest extends TestState implements WithCustomResultListeners {
 
-    public static final String NEW_QUERY_NAME = "newQuery";
-    public static final String UPDATED_SQL = "SELECT CURRENT_DATE AS date, CURRENT_TIME AS time FROM (VALUES(0))";
-    public static final String UPDATED_DESC = "this query returns the date and time";
+    /*This query Name has a space in it to force the need for encoding*/
+    public static final String QUERY_NAME = "new Query";
     public static final String ADDED_SQL = "SELECT CURRENT_DATE AS today, CURRENT_TIME AS now FROM (VALUES(0))";
     public static final String ADDED_DESC = "this query returns the date,time";
+    public static final String UPDATED_SQL = "SELECT CURRENT_DATE AS date, CURRENT_TIME AS time FROM (VALUES(0))";
+    public static final String UPDATED_DESC = "this query returns the date and time";
+
     @ClassRule
     public static EmbersServer embersServer = new EmbersServer();
     private YatspecHttpCommand httpPost;
@@ -85,7 +87,7 @@ public class AdminQueriesTest extends TestState implements WithCustomResultListe
         postedDescription = UPDATED_DESC;
         httpPost = new YatspecHttpPostCommandBuilder(this)
                 .withUrl(embersServer.getFullContextPath() + AdminQueryHandler.PATH)
-                .withName(NEW_QUERY_NAME)
+                .withName(QUERY_NAME)
                 .withSql(postedSql)
                 .withDescription(postedDescription)
                 .build();
@@ -104,7 +106,7 @@ public class AdminQueriesTest extends TestState implements WithCustomResultListe
         postedDescription = ADDED_DESC;
         httpPost = new YatspecHttpPostCommandBuilder(this)
                 .withUrl(embersServer.getFullContextPath() + AdminQueryHandler.PATH)
-                .withName(NEW_QUERY_NAME)
+                .withName(QUERY_NAME)
                 .withSql(postedSql)
                 .withDescription(postedDescription)
                 .build();
@@ -114,7 +116,7 @@ public class AdminQueriesTest extends TestState implements WithCustomResultListe
     private ActionUnderTest theNewQueryIsCalled() {
         this.httpGet = new YatspecHttpGetCommand(this, embersServer.getFullContextPath() + "/" + QueryHandler.PATH);
         httpGet.setLogPrefix("Second");
-        return httpGet.getRequestFor(NEW_QUERY_NAME);
+        return httpGet.getRequestFor(QUERY_NAME);
     }
 
     private BaseMatcher<ResultSetWrapper> hasTheQuery() {

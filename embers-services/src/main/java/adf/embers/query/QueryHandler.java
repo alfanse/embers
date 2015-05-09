@@ -10,6 +10,8 @@ import java.net.HttpURLConnection;
 import java.util.List;
 import java.util.Optional;
 
+import static adf.embers.decode.UrlTools.decodeString;
+
 @Path("/" + QueryHandler.PATH)
 public class QueryHandler {
 
@@ -25,7 +27,7 @@ public class QueryHandler {
     @GET
     @Path("{queryName}")
     public Response executeQuery(@PathParam("queryName") String queryName) {
-        QueryResult queryResult = queryProcessor.placeQuery(() -> queryName);
+        QueryResult queryResult = queryProcessor.placeQuery(() -> decodeString(queryName));
 
         if (queryResult.hasErrors()) {
             List<String> errors = queryResult.getErrors();

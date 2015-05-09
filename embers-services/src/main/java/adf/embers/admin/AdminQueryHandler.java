@@ -8,8 +8,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
+
+import static adf.embers.decode.UrlTools.decodeString;
 
 @Path(AdminQueryHandler.PATH)
 //taken from http://docs.oracle.com/javaee/6/tutorial/doc/gkknj.html
@@ -46,11 +46,4 @@ public class AdminQueryHandler {
         );
     }
 
-    private String decodeString(String encodedString) {
-        try {
-            return URLDecoder.decode(encodedString, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("Failed to decode : " + encodedString);
-        }
-    }
 }
