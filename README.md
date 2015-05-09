@@ -1,5 +1,6 @@
 # Embedded Sql Reports
-Expose a generic as possible javax.ws.rs api that has a restricted set of queries that can report on an sql database.
+Expose a generic as possible javax.ws.rs api that has a restricted set of queries that can report on a jdbc database.
+
 Allow reports to be added, updated or deleted at anytime.
 
 ### Done
