@@ -4,27 +4,17 @@ import adf.embers.query.QueryHandler;
 import adf.embers.tools.EmbersServer;
 import adf.embers.tools.YatspecQueryInserter;
 import com.googlecode.yatspec.junit.Notes;
-import com.googlecode.yatspec.junit.SpecResultListener;
-import com.googlecode.yatspec.junit.SpecRunner;
-import com.googlecode.yatspec.junit.WithCustomResultListeners;
-import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.state.givenwhenthen.StateExtractor;
-import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.fest.assertions.data.MapEntry;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.skife.jdbi.v2.DBI;
 import org.skife.jdbi.v2.Handle;
 import yatspec.http.YatspecHttpGetCommand;
-import yatspec.renderers.HttpConnectionRenderer;
-import yatspec.renderers.HttpUrlConnectionWrapper;
-import yatspec.renderers.ResultSetRenderer;
 import yatspec.renderers.ResultSetWrapper;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,9 +22,8 @@ import static adf.embers.query.persistence.QueryStatisticsDao.*;
 import static adf.embers.tools.QueryInserter.ALL_QUERIES;
 import static org.fest.assertions.api.Assertions.assertThat;
 
-@RunWith(SpecRunner.class)
 @Notes("Performance of Embers Queries is audited to a database table.")
-public class QueryStatisticsTest extends TestState implements WithCustomResultListeners {
+public class QueryStatisticsTest extends EmbersAcceptanceTestBase {
 
     @ClassRule
     public static EmbersServer embersServer = new EmbersServer();
@@ -79,16 +68,4 @@ public class QueryStatisticsTest extends TestState implements WithCustomResultLi
             }
         };
     }
-
-    @Override
-    public Iterable<SpecResultListener> getResultListeners() throws Exception {
-        ArrayList<SpecResultListener> specResultListeners = new ArrayList<>();
-        specResultListeners.add(
-                new HtmlResultRenderer()
-                        .withCustomRenderer(ResultSetWrapper.class, new ResultSetRenderer())
-                        .withCustomRenderer(HttpUrlConnectionWrapper.class, new HttpConnectionRenderer())
-        );
-        return specResultListeners;
-    }
-
 }

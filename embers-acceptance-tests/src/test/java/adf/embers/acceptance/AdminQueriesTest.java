@@ -5,32 +5,22 @@ import adf.embers.query.QueryHandler;
 import adf.embers.query.persistence.QueryDao;
 import adf.embers.tools.EmbersServer;
 import com.googlecode.yatspec.junit.Notes;
-import com.googlecode.yatspec.junit.SpecResultListener;
-import com.googlecode.yatspec.junit.SpecRunner;
-import com.googlecode.yatspec.junit.WithCustomResultListeners;
-import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
 import com.googlecode.yatspec.state.givenwhenthen.StateExtractor;
-import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Description;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.skife.jdbi.v2.Handle;
 import org.skife.jdbi.v2.Query;
 import yatspec.http.YatspecHttpDeleteCommand;
 import yatspec.http.YatspecHttpGetCommand;
 import yatspec.http.YatspecHttpPostCommand;
 import yatspec.http.YatspecHttpPostCommandBuilder;
-import yatspec.renderers.HttpConnectionRenderer;
-import yatspec.renderers.HttpUrlConnectionWrapper;
-import yatspec.renderers.ResultSetRenderer;
 import yatspec.renderers.ResultSetWrapper;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -38,11 +28,10 @@ import static java.net.HttpURLConnection.HTTP_OK;
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 
-@RunWith(SpecRunner.class)
 @Notes("As an admin user<br/>" +
         "I can: add, update and delete queries<br/>" +
         "So that users can instantly use the changed query.")
-public class AdminQueriesTest extends TestState implements WithCustomResultListeners {
+public class AdminQueriesTest extends EmbersAcceptanceTestBase {
 
     /*This query Name has a space in it to force the need for encoding*/
     public static final String QUERY_NAME = "new Query";
@@ -60,7 +49,7 @@ public class AdminQueriesTest extends TestState implements WithCustomResultListe
     private String postedDescription;
 
     @Before
-    public void clearDatabase(){
+    public void clearDatabase() {
         embersServer.getEmbersDatabase().clearQueries();
     }
 
@@ -160,7 +149,8 @@ public class AdminQueriesTest extends TestState implements WithCustomResultListe
         return new BaseMatcher<ResultSetWrapper>() {
 
             @Override
-            public void describeTo(Description description) { }
+            public void describeTo(Description description) {
+            }
 
             @Override
             public boolean matches(Object item) {
@@ -177,7 +167,8 @@ public class AdminQueriesTest extends TestState implements WithCustomResultListe
         return new BaseMatcher<ResultSetWrapper>() {
 
             @Override
-            public void describeTo(Description description) { }
+            public void describeTo(Description description) {
+            }
 
             @Override
             public boolean matches(Object item) {
@@ -189,17 +180,6 @@ public class AdminQueriesTest extends TestState implements WithCustomResultListe
     }
 
     private String embersAdminPath() {
-        return embersServer.getFullContextPath()+ AdminQueryHandler.PATH;
-    }
-
-    @Override
-    public Iterable<SpecResultListener> getResultListeners() throws Exception {
-        ArrayList<SpecResultListener> specResultListeners = new ArrayList<>();
-        specResultListeners.add(
-                new HtmlResultRenderer()
-                        .withCustomRenderer(ResultSetWrapper.class, new ResultSetRenderer())
-                        .withCustomRenderer(HttpUrlConnectionWrapper.class, new HttpConnectionRenderer())
-        );
-        return specResultListeners;
+        return embersServer.getFullContextPath() + AdminQueryHandler.PATH;
     }
 }
