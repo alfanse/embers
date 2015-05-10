@@ -4,7 +4,10 @@ import adf.embers.query.QueryHandler;
 import adf.embers.tools.EmbersServer;
 import adf.embers.tools.YatspecQueryInserter;
 import com.googlecode.yatspec.junit.Notes;
+import com.googlecode.yatspec.junit.SpecResultListener;
 import com.googlecode.yatspec.junit.SpecRunner;
+import com.googlecode.yatspec.junit.WithCustomResultListeners;
+import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.state.givenwhenthen.StateExtractor;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.fest.assertions.data.MapEntry;
@@ -16,7 +19,12 @@ import org.junit.runner.RunWith;
 import org.skife.jdbi.v2.DBI;
 import org.skife.jdbi.v2.Handle;
 import yatspec.http.YatspecHttpGetCommand;
+import yatspec.renderers.HttpConnectionRenderer;
+import yatspec.renderers.HttpUrlConnectionWrapper;
+import yatspec.renderers.ResultSetRenderer;
+import yatspec.renderers.ResultSetWrapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +34,7 @@ import static org.fest.assertions.api.Assertions.assertThat;
 
 @RunWith(SpecRunner.class)
 @Notes("Performance of Embers Queries is audited to a database table.")
-public class QueryStatisticsTest extends TestState {
+public class QueryStatisticsTest extends TestState implements WithCustomResultListeners {
 
     @ClassRule
     public static EmbersServer embersServer = new EmbersServer();
@@ -70,6 +78,17 @@ public class QueryStatisticsTest extends TestState {
                 return true;
             }
         };
+    }
+
+    @Override
+    public Iterable<SpecResultListener> getResultListeners() throws Exception {
+        ArrayList<SpecResultListener> specResultListeners = new ArrayList<>();
+        specResultListeners.add(
+                new HtmlResultRenderer()
+                        .withCustomRenderer(ResultSetWrapper.class, new ResultSetRenderer())
+                        .withCustomRenderer(HttpUrlConnectionWrapper.class, new HttpConnectionRenderer())
+        );
+        return specResultListeners;
     }
 
 }

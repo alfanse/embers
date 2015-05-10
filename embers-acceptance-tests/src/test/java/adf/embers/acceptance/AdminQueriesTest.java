@@ -145,6 +145,17 @@ public class AdminQueriesTest extends TestState implements WithCustomResultListe
         return httpGet.getRequestFor(QUERY_NAME);
     }
 
+    private StateExtractor<ResultSetWrapper> theQueriesTable() {
+        return inputAndOutputs -> {
+            try (Handle handle = embersServer.getEmbersDatabase().openDatabaseHandle()) {
+                Query<Map<String, Object>> q = handle.createQuery("select * from " + QueryDao.TABLE_QUERIES + " order by " + QueryDao.COL_ID);
+                ResultSetWrapper resultSetWrapper = new ResultSetWrapper(q.list());
+                log("Database - " + QueryDao.TABLE_QUERIES, resultSetWrapper);
+                return resultSetWrapper;
+            }
+        };
+    }
+
     private BaseMatcher<ResultSetWrapper> hasTheQuery() {
         return new BaseMatcher<ResultSetWrapper>() {
 
@@ -173,17 +184,6 @@ public class AdminQueriesTest extends TestState implements WithCustomResultListe
                 List<Map<String, Object>> resultSet = ((ResultSetWrapper) item).getResultSet();
                 assertThat(resultSet).hasSize(0);
                 return true;
-            }
-        };
-    }
-
-    private StateExtractor<ResultSetWrapper> theQueriesTable() {
-        return inputAndOutputs -> {
-            try (Handle handle = embersServer.getEmbersDatabase().openDatabaseHandle()) {
-                Query<Map<String, Object>> q = handle.createQuery("select * from " + QueryDao.TABLE_QUERIES + " order by " + QueryDao.COL_ID);
-                ResultSetWrapper resultSetWrapper = new ResultSetWrapper(q.list());
-                log("Database - " + QueryDao.TABLE_QUERIES, resultSetWrapper);
-                return resultSetWrapper;
             }
         };
     }
