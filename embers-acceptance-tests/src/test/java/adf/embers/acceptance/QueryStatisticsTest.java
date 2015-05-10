@@ -53,7 +53,7 @@ public class QueryStatisticsTest extends TestState implements WithCustomResultLi
         return inputAndOutputs -> {
             Handle handle = new DBI(embersServer.getEmbersDatabase().getDataSource()).open();
             final List<Map<String, Object>> result = handle.select("select * from " + TABLE_QUERIES_STATISTICS + " order by id desc");
-            log("Performance Audit", result);
+            log("Database - Performance Audit", new ResultSetWrapper(result));
             handle.close();
             return result;
         };
