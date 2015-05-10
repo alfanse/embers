@@ -42,7 +42,7 @@ public class QueryStatisticsTest extends EmbersAcceptanceTestBase {
         return inputAndOutputs -> {
             Handle handle = new DBI(embersServer.getEmbersDatabase().getDataSource()).open();
             final List<Map<String, Object>> result = handle.select("select * from " + TABLE_QUERIES_STATISTICS + " order by id desc");
-            log("Database - Performance Audit", new ResultSetWrapper(result));
+            log("Database Table - "+TABLE_QUERIES_STATISTICS, new ResultSetWrapper(result));
             handle.close();
             return result;
         };
