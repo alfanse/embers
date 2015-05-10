@@ -21,10 +21,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skife.jdbi.v2.Handle;
 import org.skife.jdbi.v2.Query;
-import yatspec.http.YatspecHttpCommand;
 import yatspec.http.YatspecHttpDeleteCommand;
 import yatspec.http.YatspecHttpGetCommand;
+import yatspec.http.YatspecHttpPostCommand;
 import yatspec.http.YatspecHttpPostCommandBuilder;
+import yatspec.renderers.HttpConnectionRenderer;
+import yatspec.renderers.HttpUrlConnectionWrapper;
 import yatspec.renderers.ResultSetRenderer;
 import yatspec.renderers.ResultSetWrapper;
 
@@ -37,7 +39,9 @@ import static org.fest.assertions.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 
 @RunWith(SpecRunner.class)
-@Notes("As an admin user, I can change the available queries, so that reports can be added or existing ones amended.")
+@Notes("As an admin user<br/>" +
+        "I can: add, update and delete queries<br/>" +
+        "So that users can instantly use the changed query.")
 public class AdminQueriesTest extends TestState implements WithCustomResultListeners {
 
     /*This query Name has a space in it to force the need for encoding*/
@@ -49,11 +53,11 @@ public class AdminQueriesTest extends TestState implements WithCustomResultListe
 
     @ClassRule
     public static EmbersServer embersServer = new EmbersServer();
-    private YatspecHttpCommand httpPost;
+    private YatspecHttpPostCommand httpPost;
     private YatspecHttpGetCommand httpGet;
+    private YatspecHttpDeleteCommand httpDelete;
     private String postedSql;
     private String postedDescription;
-    private YatspecHttpDeleteCommand httpDelete;
 
     @Before
     public void clearDatabase(){
@@ -62,7 +66,7 @@ public class AdminQueriesTest extends TestState implements WithCustomResultListe
 
     @Test
     public void usersCanAddNewReports() throws Exception {
-        when(aNewQueryIsPosted());
+        when(aNewQueryIsCreated());
         then(httpPost.responseCode(), is(HTTP_OK));
         then(httpPost.responseBody(), CoreMatchers.containsString("Successfully added query"));
 
@@ -98,7 +102,7 @@ public class AdminQueriesTest extends TestState implements WithCustomResultListe
 
     private ActionUnderTest theQueryIsDeleted() {
         httpDelete = new YatspecHttpDeleteCommand(this, embersAdminPath());
-        httpDelete.setLogPrefix("Delete");
+        httpDelete.setLogPrefix("Delete Query - ");
         httpDelete.deleteRequestFor(QUERY_NAME);
         return httpDelete.execute();
     }
@@ -112,17 +116,17 @@ public class AdminQueriesTest extends TestState implements WithCustomResultListe
                 .withSql(postedSql)
                 .withDescription(postedDescription)
                 .build();
-        httpPost.setLogPrefix("Update");
+        httpPost.setLogPrefix("Update Query - ");
         return httpPost.execute();
 
     }
 
     private void givenAnExistingReport() throws Exception {
-        when(aNewQueryIsPosted());
+        when(aNewQueryIsCreated());
         httpPost = null;
     }
 
-    private ActionUnderTest aNewQueryIsPosted() {
+    private ActionUnderTest aNewQueryIsCreated() {
         postedSql = ADDED_SQL;
         postedDescription = ADDED_DESC;
         httpPost = new YatspecHttpPostCommandBuilder(this)
@@ -131,12 +135,13 @@ public class AdminQueriesTest extends TestState implements WithCustomResultListe
                 .withSql(postedSql)
                 .withDescription(postedDescription)
                 .build();
+        httpPost.setLogPrefix("Create Query - ");
         return httpPost.execute();
     }
 
     private ActionUnderTest theNewQueryIsCalled() {
         this.httpGet = new YatspecHttpGetCommand(this, embersServer.getFullContextPath() + "/" + QueryHandler.PATH);
-        httpGet.setLogPrefix("Second");
+        httpGet.setLogPrefix("Run Query - ");
         return httpGet.getRequestFor(QUERY_NAME);
     }
 
@@ -157,7 +162,7 @@ public class AdminQueriesTest extends TestState implements WithCustomResultListe
         };
     }
 
-    private org.hamcrest.Matcher isMissingTheQuery() {
+    private org.hamcrest.Matcher<ResultSetWrapper> isMissingTheQuery() {
         return new BaseMatcher<ResultSetWrapper>() {
 
             @Override
@@ -191,7 +196,10 @@ public class AdminQueriesTest extends TestState implements WithCustomResultListe
     public Iterable<SpecResultListener> getResultListeners() throws Exception {
         ArrayList<SpecResultListener> specResultListeners = new ArrayList<>();
         specResultListeners.add(
-                new HtmlResultRenderer().withCustomRenderer(ResultSetWrapper.class, new ResultSetRenderer()));
+                new HtmlResultRenderer()
+                        .withCustomRenderer(ResultSetWrapper.class, new ResultSetRenderer())
+                        .withCustomRenderer(HttpUrlConnectionWrapper.class, new HttpConnectionRenderer())
+        );
         return specResultListeners;
     }
 }

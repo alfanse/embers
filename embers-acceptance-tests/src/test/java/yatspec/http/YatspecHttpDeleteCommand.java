@@ -3,6 +3,7 @@ package yatspec.http;
 import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
 import com.googlecode.yatspec.state.givenwhenthen.CapturedInputAndOutputs;
 import com.googlecode.yatspec.state.givenwhenthen.TestLogger;
+import yatspec.renderers.HttpUrlConnectionWrapper;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -24,7 +25,7 @@ public class YatspecHttpDeleteCommand extends YatspecHttpCommand {
     }
 
     @Override
-    protected void addRequestDetails(CapturedInputAndOutputs capturedInputAndOutputs, HttpURLConnection connection) throws IOException {
+    protected void addRequestDetails(CapturedInputAndOutputs capturedInputAndOutputs, HttpURLConnection connection, HttpUrlConnectionWrapper httpDetails) throws IOException {
         connection.setRequestMethod("DELETE");
     }
 }

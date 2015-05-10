@@ -2,6 +2,7 @@ package yatspec.http;
 
 import com.googlecode.yatspec.state.givenwhenthen.CapturedInputAndOutputs;
 import com.googlecode.yatspec.state.givenwhenthen.TestLogger;
+import yatspec.renderers.HttpUrlConnectionWrapper;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -23,16 +24,18 @@ public class YatspecHttpPostCommand extends YatspecHttpCommand {
         this.description = description;
     }
 
-    protected void addRequestDetails(CapturedInputAndOutputs capturedInputAndOutputs, HttpURLConnection connection) throws IOException {
+    protected void addRequestDetails(CapturedInputAndOutputs capturedInputAndOutputs, HttpURLConnection connection, HttpUrlConnectionWrapper httpDetails) throws IOException {
         final String charset = StandardCharsets.UTF_8.name();
         connection.setRequestMethod("POST");
         connection.setDoOutput(true);
         connection.setRequestProperty("Accept-Charset", charset);
         connection.setRequestProperty("Content-Type", "application/json");
 
+        httpDetails.setRequestProperties(connection.getRequestProperties());
+
         try (OutputStream output = connection.getOutputStream()) {
             final String query = getQueryParametersWithEncodedValues(charset);
-            capturedInputAndOutputs.add("Request Body", query);
+            httpDetails.setRequestBody(query);
             output.write(query.getBytes(charset));
         }
     }

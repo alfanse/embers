@@ -26,22 +26,22 @@ public class QueryExecutorHostedOnJettyTest extends TestState {
     @ClassRule
     public static EmbersServer embersServer = new EmbersServer();
 
-    private final YatspecHttpGetCommand http = new YatspecHttpGetCommand(this, embersServer.getFullContextPath() + "/" + QueryHandler.PATH);
+    private final YatspecHttpGetCommand httpGet = new YatspecHttpGetCommand(this, embersServer.getFullContextPath() + "/" + QueryHandler.PATH);
     private final YatspecQueryInserter yatspecQueryInserter = new YatspecQueryInserter(this, embersServer.getEmbersDatabase().getDataSource());
 
     @Test
     public void queryNotFound() throws Exception {
-        when(http.getRequestFor("unknownQuery"));
-        then(http.responseCode(), is(HTTP_NOT_FOUND));
-        then(http.theErrorResponse(), containsString("Query not found: unknownQuery"));
+        when(httpGet.getRequestFor("unknownQuery"));
+        then(httpGet.responseCode(), is(HTTP_NOT_FOUND));
+        then(httpGet.responseBody(), containsString("Query not found: unknownQuery"));
     }
 
     @Test
     public void queryRunsWithNoRowsOfData() throws Exception {
         givenEmbersHasAQueryThatReturnsNoRows();
-        when(http.getRequestFor("noRows"));
-        then(http.responseCode(), is(200));
-        then(http.responseBody(), is(empty()));
+        when(httpGet.getRequestFor("noRows"));
+        then(httpGet.responseCode(), is(200));
+        then(httpGet.responseBody(), is(empty()));
     }
 
     @Test
@@ -49,9 +49,9 @@ public class QueryExecutorHostedOnJettyTest extends TestState {
     public void showAllAvailableQueries() throws Exception {
         givenEmbersHasAQueryThatReturnsNoRows();
         givenEmbersHasAQueryThatShowsAllQueries();
-        when(http.getRequestFor(ALL_QUERIES));
-        then(http.responseCode(), is(200));
-        then(http.responseBody(), allOf(containsString("name"), containsString("description"), containsString("sql"), containsString(ALL_QUERIES)));
+        when(httpGet.getRequestFor(ALL_QUERIES));
+        then(httpGet.responseCode(), is(200));
+        then(httpGet.responseBody(), allOf(containsString("name"), containsString("description"), containsString("sql"), containsString(ALL_QUERIES)));
     }
 
     private void givenEmbersHasAQueryThatShowsAllQueries() throws Exception {

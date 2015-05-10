@@ -1,18 +1,18 @@
 package yatspec.http;
 
 import com.googlecode.yatspec.state.givenwhenthen.*;
+import yatspec.renderers.HttpUrlConnectionWrapper;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 public abstract class YatspecHttpCommand {
+    public static final String LOG_KEY_SUFFIX_FOR_HTTP = "Http Details";
     protected final TestLogger testLogger;
     private String url;
     private String logPrefix = "";
+    private final HttpUrlConnectionWrapper httpDetails = new HttpUrlConnectionWrapper();
 
     public YatspecHttpCommand(TestLogger testLogger) {
         this.testLogger = testLogger;
@@ -20,6 +20,7 @@ public abstract class YatspecHttpCommand {
 
     public void setUrl(String url) {
         this.url = url;
+        httpDetails.setRequestUrl(url);
     }
 
     public void setLogPrefix(String logPrefix) {
@@ -27,24 +28,26 @@ public abstract class YatspecHttpCommand {
     }
 
     public StateExtractor<Integer> responseCode() {
-        return inputAndOutput -> inputAndOutput.getType(getLogKeyName("Response Code"), Integer.class);
-    }
-
-    public StateExtractor<String> theErrorResponse() {
-        return inputAndOutput -> inputAndOutput.getType(getLogKeyName("Error Response Body"), String.class);
+        return inputAndOutput -> fetchCurrentHttpDetailsFromYatspec(inputAndOutput).getResponseCode();
     }
 
     public StateExtractor<String> responseBody() {
-        return inputAndOutput -> inputAndOutput.getType(getLogKeyName("Response Body"), String.class);
+        return inputAndOutput -> fetchCurrentHttpDetailsFromYatspec(inputAndOutput).getResponseBody();
+    }
+
+    private HttpUrlConnectionWrapper fetchCurrentHttpDetailsFromYatspec(CapturedInputAndOutputs inputAndOutput) {
+        return inputAndOutput.getType(getLogKeyName(LOG_KEY_SUFFIX_FOR_HTTP), HttpUrlConnectionWrapper.class);
     }
 
     public ActionUnderTest execute() {
         return (givens, capturedInputAndOutputs) -> {
             HttpURLConnection conn = openConnection(url, givens);
             try {
-                addRequestDetails(capturedInputAndOutputs, conn);
-                captureResponse(conn);
+                addRequestDetails(capturedInputAndOutputs, conn, httpDetails);
+                httpDetails.captureRequestDetails(conn);
+                httpDetails.captureResponseDetails(conn);
             } finally {
+                testLogger.log(getLogKeyName(LOG_KEY_SUFFIX_FOR_HTTP), httpDetails);
                 conn.disconnect();
             }
 
@@ -52,7 +55,7 @@ public abstract class YatspecHttpCommand {
         };
     }
 
-    protected abstract void addRequestDetails(CapturedInputAndOutputs capturedInputAndOutputs, HttpURLConnection connection) throws IOException;
+    protected abstract void addRequestDetails(CapturedInputAndOutputs capturedInputAndOutputs, HttpURLConnection connection, HttpUrlConnectionWrapper httpDetails) throws IOException;
 
     protected HttpURLConnection openConnection(String url, InterestingGivens givens) throws IOException {
         URL location = new URL(url);
@@ -60,42 +63,8 @@ public abstract class YatspecHttpCommand {
         return (HttpURLConnection) location.openConnection();
     }
 
-    protected void captureResponse(HttpURLConnection conn) throws IOException {
-        int responseCode = conn.getResponseCode();
-        logWithPrefixOnKey("Response Code", responseCode);
-        logWithPrefixOnKey("Response Content-Type", conn.getContentType());
-        logWithPrefixOnKey("Response Content Length", conn.getContentLengthLong());
-
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-            try (InputStream inputStream = conn.getInputStream()) {
-                captureInputStream(inputStream, "Response Body");
-            }
-        } else {
-            try (InputStream inputStream = conn.getErrorStream()) {
-                captureInputStream(inputStream, "Error Response Body");
-            }
-        }
-    }
-
-    private void captureInputStream(InputStream inputStream, String logKey) throws IOException {
-        logWithPrefixOnKey(logKey, readInputStream(inputStream));
-    }
-
-    private void logWithPrefixOnKey(String logKeySuffix, Object responseCode) {
-        testLogger.log(getLogKeyName(logKeySuffix), responseCode);
-    }
-
     private String getLogKeyName(String logKeySuffix) {
         return logPrefix + " " + logKeySuffix;
     }
 
-    private String readInputStream(InputStream inputStream) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        try (BufferedReader br = new BufferedReader((new InputStreamReader(inputStream)))) {
-            for (String line; (line = br.readLine()) != null; ) {
-                sb.append(line).append("\n");
-            }
-        }
-        return sb.toString();
-    }
 }
