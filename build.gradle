@@ -1,5 +1,5 @@
 description = """Embers - Embedded Sql Reporting.
-Embeddable servlet that exposes a restricted set of queries for an sql database.
+Embeddable servlets that expose a restricted set of queries for an sql database.
 Hosted on github: https://github.com/alfanse/embers.git"""
 
 allprojects {
@@ -19,14 +19,15 @@ allprojects {
         appName = "Embers"
     }
 
-    version = System.getProperty('build.number', 'DEV-SNAPSHOT')
     group = 'adf.embers'
+    version = System.getProperty('build.number', 'DEV-SNAPSHOT')
 }
 
 subprojects {
 
     extensions.add("libs", [
             core: [
+                //the only libraries the production jar depends on
                 'javax.ws.rs:javax.ws.rs-api:2.0.1',
                 'javax.inject:javax.inject:1',
                 'org.jdbi:jdbi:2.56'
@@ -41,20 +42,21 @@ subprojects {
                 'com.googlecode.yatspec:yatspec:217'
             ],
             jersey: [
-//                    implements javax.ws.rs
+//              implements javax.ws.rs
                 'org.glassfish.jersey.core:jersey-server:2.2',
                 'org.glassfish.jersey.containers:jersey-container-servlet:2.2'
             ],
             jaxson: [
-//                    handles json serialisation
-'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.5.2'
+//              handles json serialisation
+                'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.5.2'
             ],
             jetty: [
-//                    old trusted server
+//              beloved server
                 'org.eclipse.jetty:jetty-server:9.3.0.M1',
                 'org.eclipse.jetty:jetty-servlet:9.3.0.M1'
             ],
             database: [
+//              beloved in-memory DB for testing.
                 'org.hsqldb:hsqldb:2.3.2'
             ]
     ]);
