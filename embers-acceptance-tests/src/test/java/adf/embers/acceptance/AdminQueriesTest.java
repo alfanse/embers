@@ -4,6 +4,7 @@ import adf.embers.admin.AdminQueryHandler;
 import adf.embers.query.QueryHandler;
 import adf.embers.query.persistence.QueryDao;
 import adf.embers.tools.EmbersServer;
+import adf.embers.tools.YatspecHttpPostCommandBuilder;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
 import com.googlecode.yatspec.state.givenwhenthen.StateExtractor;
@@ -18,7 +19,6 @@ import org.skife.jdbi.v2.Query;
 import yatspec.http.YatspecHttpDeleteCommand;
 import yatspec.http.YatspecHttpGetCommand;
 import yatspec.http.YatspecHttpPostCommand;
-import yatspec.http.YatspecHttpPostCommandBuilder;
 import yatspec.renderers.ResultSetWrapper;
 
 import java.util.List;

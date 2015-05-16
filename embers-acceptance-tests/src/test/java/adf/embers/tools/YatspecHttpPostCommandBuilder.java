@@ -1,6 +1,12 @@
-package yatspec.http;
+package adf.embers.tools;
 
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
+import yatspec.http.RequestBodyProducer;
+import yatspec.http.YatspecHttpPostCommand;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 public class YatspecHttpPostCommandBuilder {
     public static final String PARAM_QUERY_NAME = "name";
@@ -43,7 +49,25 @@ public class YatspecHttpPostCommandBuilder {
     }
 
     public YatspecHttpPostCommand build() {
-        return new YatspecHttpPostCommand(testLogger, url, queryName, sql, description);
+        return new YatspecHttpPostCommand(testLogger, url, getRequestBodyProducer());
+    }
+
+    private RequestBodyProducer getRequestBodyProducer() {
+        return () -> {
+                    String charset = StandardCharsets.UTF_8.name();
+                    try {
+                        return String.format("{\"%s\":\"%s\", \"%s\":\"%s\", \"%s\":\"%s\"}",
+                                PARAM_QUERY_NAME,
+                                URLEncoder.encode(queryName, charset),
+                                PARAM_SQL,
+                                URLEncoder.encode(sql, charset),
+                                PARAM_DESCRIPTION,
+                                URLEncoder.encode(description, charset)
+                        );
+                    } catch (UnsupportedEncodingException e) {
+                        throw new RuntimeException(e);
+                    }
+                };
     }
 
 }

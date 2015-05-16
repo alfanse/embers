@@ -27,18 +27,6 @@ public abstract class YatspecHttpCommand {
         this.logPrefix = logPrefix;
     }
 
-    public StateExtractor<Integer> responseCode() {
-        return inputAndOutput -> fetchCurrentHttpDetailsFromYatspec(inputAndOutput).getResponseCode();
-    }
-
-    public StateExtractor<String> responseBody() {
-        return inputAndOutput -> fetchCurrentHttpDetailsFromYatspec(inputAndOutput).getResponseBody();
-    }
-
-    private HttpUrlConnectionWrapper fetchCurrentHttpDetailsFromYatspec(CapturedInputAndOutputs inputAndOutput) {
-        return inputAndOutput.getType(getLogKeyName(LOG_KEY_SUFFIX_FOR_HTTP), HttpUrlConnectionWrapper.class);
-    }
-
     public ActionUnderTest execute() {
         return (givens, capturedInputAndOutputs) -> {
             HttpURLConnection conn = openConnection(url, givens);
@@ -55,12 +43,24 @@ public abstract class YatspecHttpCommand {
         };
     }
 
+    public StateExtractor<Integer> responseCode() {
+        return inputAndOutput -> fetchCurrentHttpDetailsFromYatspec(inputAndOutput).getResponseCode();
+    }
+
+    public StateExtractor<String> responseBody() {
+        return inputAndOutput -> fetchCurrentHttpDetailsFromYatspec(inputAndOutput).getResponseBody();
+    }
+
     protected abstract void addRequestDetails(CapturedInputAndOutputs capturedInputAndOutputs, HttpURLConnection connection, HttpUrlConnectionWrapper httpDetails) throws IOException;
 
-    protected HttpURLConnection openConnection(String url, InterestingGivens givens) throws IOException {
+    private HttpURLConnection openConnection(String url, InterestingGivens givens) throws IOException {
         URL location = new URL(url);
         givens.add("Url", location.toExternalForm());
         return (HttpURLConnection) location.openConnection();
+    }
+
+    private HttpUrlConnectionWrapper fetchCurrentHttpDetailsFromYatspec(CapturedInputAndOutputs inputAndOutput) {
+        return inputAndOutput.getType(getLogKeyName(LOG_KEY_SUFFIX_FOR_HTTP), HttpUrlConnectionWrapper.class);
     }
 
     private String getLogKeyName(String logKeySuffix) {

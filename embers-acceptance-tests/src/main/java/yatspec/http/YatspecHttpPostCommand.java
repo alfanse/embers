@@ -6,22 +6,16 @@ import yatspec.renderers.HttpUrlConnectionWrapper;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 public class YatspecHttpPostCommand extends YatspecHttpCommand {
-    private final String queryName;
-    private final String sql;
-    private final String description;
+    private RequestBodyProducer requestBodyProducer;
 
-    public YatspecHttpPostCommand(TestLogger testLogger, String url, String queryName, String sql, String description) {
+    public YatspecHttpPostCommand(TestLogger testLogger, String url, RequestBodyProducer requestBodyProducer) {
         super(testLogger);
         super.setUrl(url);
-        this.queryName = queryName;
-        this.sql = sql;
-        this.description = description;
+        this.requestBodyProducer = requestBodyProducer;
     }
 
     protected void addRequestDetails(CapturedInputAndOutputs capturedInputAndOutputs, HttpURLConnection connection, HttpUrlConnectionWrapper httpDetails) throws IOException {
@@ -34,20 +28,11 @@ public class YatspecHttpPostCommand extends YatspecHttpCommand {
         httpDetails.setRequestProperties(connection.getRequestProperties());
 
         try (OutputStream output = connection.getOutputStream()) {
-            final String query = getQueryParametersWithEncodedValues(charset);
+            final String query = requestBodyProducer.produceRequestBody();
             httpDetails.setRequestBody(query);
             output.write(query.getBytes(charset));
         }
     }
 
-    private String getQueryParametersWithEncodedValues(String charset) throws UnsupportedEncodingException {
-        return String.format("{\"%s\":\"%s\", \"%s\":\"%s\", \"%s\":\"%s\"}",
-                YatspecHttpPostCommandBuilder.PARAM_QUERY_NAME,
-                URLEncoder.encode(queryName, charset),
-                YatspecHttpPostCommandBuilder.PARAM_SQL,
-                URLEncoder.encode(sql, charset),
-                YatspecHttpPostCommandBuilder.PARAM_DESCRIPTION,
-                URLEncoder.encode(description, charset)
-        );
-    }
 }
+
