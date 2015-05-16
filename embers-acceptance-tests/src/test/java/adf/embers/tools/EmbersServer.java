@@ -1,6 +1,8 @@
 package adf.embers.tools;
 
+import adf.embers.admin.AdminQueryHandler;
 import adf.embers.configuration.EmbersConfiguration;
+import adf.embers.query.QueryHandler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -67,11 +69,18 @@ public class EmbersServer extends ExternalResource {
         return embersDatabase;
     }
 
-    /**
-     * starting from http:// including /embers
-     */
-    public String getFullContextPath() {
-        return "http://localhost:" + PORT + "/" + CONTEXT_PATH_ROOT;
+    public String embersQueryPath() {
+        return getEmbersContextPath() + "/" + QueryHandler.PATH;
     }
 
+    public String embersAdminPath() {
+        return getEmbersContextPath() + AdminQueryHandler.PATH;
+    }
+
+    /**
+     * starting from http:// up to /embers
+     */
+    private String getEmbersContextPath() {
+        return "http://localhost:" + PORT + "/" + CONTEXT_PATH_ROOT;
+    }
 }

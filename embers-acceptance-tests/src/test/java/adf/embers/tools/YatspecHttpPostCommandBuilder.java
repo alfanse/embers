@@ -30,19 +30,19 @@ public class YatspecHttpPostCommandBuilder {
         return this;
     }
 
-    public YatspecHttpPostCommandBuilder withName(String queryName) {
+    public YatspecHttpPostCommandBuilder withQueryName(String queryName) {
         testLogger.interestingGivens.add(PARAM_QUERY_NAME, queryName);
         this.queryName = queryName;
         return this;
     }
 
-    public YatspecHttpPostCommandBuilder withSql(String sql) {
+    public YatspecHttpPostCommandBuilder withQuerySql(String sql) {
         testLogger.interestingGivens.add(PARAM_SQL, sql);
         this.sql = sql;
         return this;
     }
 
-    public YatspecHttpPostCommandBuilder withDescription(String description) {
+    public YatspecHttpPostCommandBuilder withQueryDescription(String description) {
         testLogger.interestingGivens.add(PARAM_DESCRIPTION, description);
         this.description = description;
         return this;

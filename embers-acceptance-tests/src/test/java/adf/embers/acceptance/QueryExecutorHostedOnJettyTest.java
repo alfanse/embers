@@ -1,10 +1,10 @@
 package adf.embers.acceptance;
 
-import adf.embers.query.QueryHandler;
 import adf.embers.query.persistence.Query;
 import adf.embers.tools.EmbersServer;
 import adf.embers.tools.YatspecQueryInserter;
 import com.googlecode.yatspec.junit.Notes;
+import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
 import org.junit.ClassRule;
 import org.junit.Test;
 import yatspec.http.YatspecHttpGetCommand;
@@ -25,12 +25,13 @@ public class QueryExecutorHostedOnJettyTest extends EmbersAcceptanceTestBase {
     @ClassRule
     public static EmbersServer embersServer = new EmbersServer();
 
-    private final YatspecHttpGetCommand http = new YatspecHttpGetCommand(this, embersServer.getFullContextPath() + "/" + QueryHandler.PATH);
+    private final YatspecHttpGetCommand http = new YatspecHttpGetCommand(this);
+
     private final YatspecQueryInserter yatspecQueryInserter = new YatspecQueryInserter(this, embersServer.getEmbersDatabase().getDataSource());
 
     @Test
     public void queryNotFound() throws Exception {
-        when(http.getRequestFor("unknownQuery"));
+        when(httpGetRequestFor("unknownQuery"));
         then(http.responseCode(), is(HTTP_NOT_FOUND));
         then(http.responseBody(), containsString("Query not found: unknownQuery"));
     }
@@ -38,7 +39,7 @@ public class QueryExecutorHostedOnJettyTest extends EmbersAcceptanceTestBase {
     @Test
     public void queryRunsWithNoRowsOfData() throws Exception {
         givenEmbersHasAQueryThatReturnsNoRows();
-        when(http.getRequestFor("noRows"));
+        when(httpGetRequestFor("noRows"));
         then(http.responseCode(), is(200));
         then(http.responseBody(), is(empty()));
     }
@@ -48,9 +49,14 @@ public class QueryExecutorHostedOnJettyTest extends EmbersAcceptanceTestBase {
     public void showAllAvailableQueries() throws Exception {
         givenEmbersHasAQueryThatReturnsNoRows();
         givenEmbersHasAQueryThatShowsAllQueries();
-        when(http.getRequestFor(ALL_QUERIES));
+        when(httpGetRequestFor(ALL_QUERIES));
         then(http.responseCode(), is(200));
         then(http.responseBody(), allOf(containsString("name"), containsString("description"), containsString("sql"), containsString(ALL_QUERIES)));
+    }
+
+    private ActionUnderTest httpGetRequestFor(String query) {
+        http.setUrl(embersServer.embersQueryPath() + "/" + query);
+        return http;
     }
 
     private void givenEmbersHasAQueryThatShowsAllQueries() throws Exception {

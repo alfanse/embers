@@ -1,7 +1,5 @@
 package adf.embers.acceptance;
 
-import adf.embers.admin.AdminQueryHandler;
-import adf.embers.query.QueryHandler;
 import adf.embers.query.persistence.QueryDao;
 import adf.embers.tools.EmbersServer;
 import adf.embers.tools.YatspecHttpPostCommandBuilder;
@@ -24,6 +22,7 @@ import yatspec.renderers.ResultSetWrapper;
 import java.util.List;
 import java.util.Map;
 
+import static adf.embers.statics.UrlTools.encodeString;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
@@ -90,23 +89,23 @@ public class AdminQueriesTest extends EmbersAcceptanceTestBase {
     }
 
     private ActionUnderTest theQueryIsDeleted() {
-        httpDelete = new YatspecHttpDeleteCommand(this, embersAdminPath());
+        httpDelete = new YatspecHttpDeleteCommand(this);
         httpDelete.setLogPrefix("Delete Query - ");
-        httpDelete.deleteRequestFor(QUERY_NAME);
-        return httpDelete.execute();
+        httpDelete.setUrl(embersServer.embersAdminPath() + "/" + encodeString(QUERY_NAME));
+        return httpDelete;
     }
 
     private ActionUnderTest anUpdateToTheQueryIsPosted() {
         postedSql = UPDATED_SQL;
         postedDescription = UPDATED_DESC;
         httpPost = new YatspecHttpPostCommandBuilder(this)
-                .withUrl(embersAdminPath())
-                .withName(QUERY_NAME)
-                .withSql(postedSql)
-                .withDescription(postedDescription)
+                .withUrl(embersServer.embersAdminPath())
+                .withQueryName(QUERY_NAME)
+                .withQuerySql(postedSql)
+                .withQueryDescription(postedDescription)
                 .build();
         httpPost.setLogPrefix("Update Query - ");
-        return httpPost.execute();
+        return httpPost;
 
     }
 
@@ -119,19 +118,20 @@ public class AdminQueriesTest extends EmbersAcceptanceTestBase {
         postedSql = ADDED_SQL;
         postedDescription = ADDED_DESC;
         httpPost = new YatspecHttpPostCommandBuilder(this)
-                .withUrl(embersAdminPath())
-                .withName(QUERY_NAME)
-                .withSql(postedSql)
-                .withDescription(postedDescription)
+                .withUrl(embersServer.embersAdminPath())
+                .withQueryName(QUERY_NAME)
+                .withQuerySql(postedSql)
+                .withQueryDescription(postedDescription)
                 .build();
         httpPost.setLogPrefix("Create Query - ");
-        return httpPost.execute();
+        return httpPost;
     }
 
     private ActionUnderTest theNewQueryIsCalled() {
-        this.httpGet = new YatspecHttpGetCommand(this, embersServer.getFullContextPath() + "/" + QueryHandler.PATH);
+        this.httpGet = new YatspecHttpGetCommand(this);
         httpGet.setLogPrefix("Run Query - ");
-        return httpGet.getRequestFor(QUERY_NAME);
+        httpGet.setUrl(embersServer.embersQueryPath() + "/" + encodeString(QUERY_NAME));
+        return httpGet;
     }
 
     private StateExtractor<ResultSetWrapper> theQueriesTable() {
@@ -179,7 +179,4 @@ public class AdminQueriesTest extends EmbersAcceptanceTestBase {
         };
     }
 
-    private String embersAdminPath() {
-        return embersServer.getFullContextPath() + AdminQueryHandler.PATH;
-    }
 }

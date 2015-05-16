@@ -1,9 +1,9 @@
 package adf.embers.acceptance;
 
-import adf.embers.query.QueryHandler;
 import adf.embers.tools.EmbersServer;
 import adf.embers.tools.YatspecQueryInserter;
 import com.googlecode.yatspec.junit.Notes;
+import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
 import com.googlecode.yatspec.state.givenwhenthen.StateExtractor;
 import org.fest.assertions.data.MapEntry;
 import org.hamcrest.Description;
@@ -29,13 +29,18 @@ public class QueryStatisticsTest extends EmbersAcceptanceTestBase {
     public static EmbersServer embersServer = new EmbersServer();
 
     private YatspecQueryInserter yatspecQueryInserter = new YatspecQueryInserter(this, embersServer.getEmbersDatabase().getDataSource());
-    private YatspecHttpGetCommand http = new YatspecHttpGetCommand(this, embersServer.getFullContextPath() + "/" + QueryHandler.PATH);
+    private YatspecHttpGetCommand http = new YatspecHttpGetCommand(this);
 
     @Test
     public void auditAnExistingQueryThatRespondsWithData() throws Exception {
         given(yatspecQueryInserter.allQueries());
-        when(http.getRequestFor(ALL_QUERIES));
+        when(httpGetRequestFor(ALL_QUERIES));
         then(thePerformanceAudit(), showsUsefulStatisticsAboutTheExecutedQuery());
+    }
+
+    private ActionUnderTest httpGetRequestFor(String query){
+        http.setUrl(embersServer.embersQueryPath() + "/" + query);
+        return http;
     }
 
     private StateExtractor<List<Map<String, Object>>> thePerformanceAudit() {

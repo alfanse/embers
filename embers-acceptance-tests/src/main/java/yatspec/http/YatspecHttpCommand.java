@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public abstract class YatspecHttpCommand {
+public abstract class YatspecHttpCommand implements ActionUnderTest {
     public static final String LOG_KEY_SUFFIX_FOR_HTTP = "Http Details";
     protected final TestLogger testLogger;
     private String url;
@@ -27,20 +27,18 @@ public abstract class YatspecHttpCommand {
         this.logPrefix = logPrefix;
     }
 
-    public ActionUnderTest execute() {
-        return (givens, capturedInputAndOutputs) -> {
-            HttpURLConnection conn = openConnection(url, givens);
-            try {
-                addRequestDetails(capturedInputAndOutputs, conn, httpDetails);
-                httpDetails.captureRequestDetails(conn);
-                httpDetails.captureResponseDetails(conn);
-            } finally {
-                testLogger.log(getLogKeyName(LOG_KEY_SUFFIX_FOR_HTTP), httpDetails);
-                conn.disconnect();
-            }
+    public CapturedInputAndOutputs execute(InterestingGivens givens, CapturedInputAndOutputs capturedInputAndOutputs) throws Exception{
+        HttpURLConnection conn = openConnection(url, givens);
+        try {
+            addRequestDetails(capturedInputAndOutputs, conn, httpDetails);
+            httpDetails.captureRequestDetails(conn);
+            httpDetails.captureResponseDetails(conn);
+        } finally {
+            testLogger.log(getLogKeyName(LOG_KEY_SUFFIX_FOR_HTTP), httpDetails);
+            conn.disconnect();
+        }
 
-            return capturedInputAndOutputs;
-        };
+        return capturedInputAndOutputs;
     }
 
     public StateExtractor<Integer> responseCode() {
