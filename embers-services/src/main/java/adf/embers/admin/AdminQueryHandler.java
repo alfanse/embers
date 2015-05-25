@@ -22,14 +22,15 @@ public class AdminQueryHandler {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addOrUpdateQuery(Query query) {
-        String strategy;
+        Query decodedQuery = createDecodedQuery(query);
+        Query queryOnDb = queryDao.findQueryByName(decodedQuery.getName());
 
-        Query queryOnDb = queryDao.findQueryByName(decodeString(query.getName()));
+        String strategy;
         if(queryOnDb==null) {
-            queryDao.save(createDecodedQuery(query));
+            queryDao.save(decodedQuery);
             strategy = "added";
         } else {
-            queryDao.update(createDecodedQuery(query));
+            queryDao.update(decodedQuery);
             strategy= "updated";
         }
 
