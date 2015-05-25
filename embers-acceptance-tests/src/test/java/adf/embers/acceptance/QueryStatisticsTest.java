@@ -10,16 +10,14 @@ import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.skife.jdbi.v2.DBI;
-import org.skife.jdbi.v2.Handle;
 import yatspec.http.YatspecHttpGetCommand;
-import yatspec.renderers.ResultSetWrapper;
 
 import java.util.List;
 import java.util.Map;
 
 import static adf.embers.query.persistence.QueryStatisticsDao.*;
 import static adf.embers.tools.QueryInserter.ALL_QUERIES;
+import static adf.embers.tools.functions.QueryFunctions.getAndLogQueryStatistics;
 import static org.fest.assertions.api.Assertions.assertThat;
 
 @Notes("Performance of Embers Queries is audited to a database table.")
@@ -44,13 +42,7 @@ public class QueryStatisticsTest extends EmbersAcceptanceTestBase {
     }
 
     private StateExtractor<List<Map<String, Object>>> thePerformanceAudit() {
-        return inputAndOutputs -> {
-            Handle handle = new DBI(embersServer.getEmbersDatabase().getDataSource()).open();
-            final List<Map<String, Object>> result = handle.select("select * from " + TABLE_QUERIES_STATISTICS + " order by id desc");
-            log("Database Table - "+TABLE_QUERIES_STATISTICS, new ResultSetWrapper(result));
-            handle.close();
-            return result;
-        };
+        return getAndLogQueryStatistics(embersServer.getEmbersDatabase().getDataSource(), this);
     }
 
     private TypeSafeDiagnosingMatcher<List<Map<String, Object>>> showsUsefulStatisticsAboutTheExecutedQuery() {
