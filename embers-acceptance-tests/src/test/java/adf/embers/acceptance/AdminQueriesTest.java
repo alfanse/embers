@@ -1,7 +1,6 @@
 package adf.embers.acceptance;
 
 import adf.embers.query.persistence.QueryDao;
-import adf.embers.tools.EmbersServer;
 import adf.embers.tools.YatspecHttpPostCommandBuilder;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
@@ -9,8 +8,6 @@ import com.googlecode.yatspec.state.givenwhenthen.StateExtractor;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Description;
-import org.junit.Before;
-import org.junit.ClassRule;
 import org.junit.Test;
 import org.skife.jdbi.v2.Handle;
 import org.skife.jdbi.v2.Query;
@@ -39,18 +36,11 @@ public class AdminQueriesTest extends EmbersAcceptanceTestBase {
     public static final String UPDATED_SQL = "SELECT CURRENT_DATE AS date, CURRENT_TIME AS time FROM (VALUES(0))";
     public static final String UPDATED_DESC = "this query returns the date and time";
 
-    @ClassRule
-    public static EmbersServer embersServer = new EmbersServer();
     private YatspecHttpPostCommand httpPost;
     private YatspecHttpGetCommand httpGet;
     private YatspecHttpDeleteCommand httpDelete;
     private String postedSql;
     private String postedDescription;
-
-    @Before
-    public void clearDatabase() {
-        embersServer.getEmbersDatabase().clearQueries();
-    }
 
     @Test
     public void usersCanAddNewReports() throws Exception {

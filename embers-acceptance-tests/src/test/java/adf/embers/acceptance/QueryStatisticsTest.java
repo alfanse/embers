@@ -1,6 +1,5 @@
 package adf.embers.acceptance;
 
-import adf.embers.tools.EmbersServer;
 import adf.embers.tools.YatspecQueryInserter;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
@@ -8,7 +7,6 @@ import com.googlecode.yatspec.state.givenwhenthen.StateExtractor;
 import org.fest.assertions.data.MapEntry;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
-import org.junit.ClassRule;
 import org.junit.Test;
 import yatspec.http.YatspecHttpGetCommand;
 
@@ -22,9 +20,6 @@ import static org.fest.assertions.api.Assertions.assertThat;
 
 @Notes("Performance of Embers Queries is audited to a database table.")
 public class QueryStatisticsTest extends EmbersAcceptanceTestBase {
-
-    @ClassRule
-    public static EmbersServer embersServer = new EmbersServer();
 
     private YatspecQueryInserter yatspecQueryInserter = new YatspecQueryInserter(this, embersServer.getEmbersDatabase().getDataSource());
     private YatspecHttpGetCommand http = new YatspecHttpGetCommand(this);

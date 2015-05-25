@@ -1,15 +1,12 @@
 package adf.embers.e2e;
 
 import adf.embers.acceptance.EmbersAcceptanceTestBase;
-import adf.embers.tools.EmbersServer;
 import adf.embers.tools.YatspecHttpPostCommandBuilder;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
 import com.googlecode.yatspec.state.givenwhenthen.GivensBuilder;
-import org.junit.ClassRule;
 import org.junit.Test;
 import org.skife.jdbi.v2.Handle;
-import yatspec.http.YatspecHttpDeleteCommand;
 import yatspec.http.YatspecHttpGetCommand;
 import yatspec.http.YatspecHttpPostCommand;
 import yatspec.renderers.ResultSetWrapper;
@@ -22,12 +19,9 @@ import static adf.embers.statics.UrlTools.encodeString;
 public class PuttingItAllTogetherTest extends EmbersAcceptanceTestBase {
 
     public static final String QUERY_MOST_RENTED_ITEMS = "findMostRentedItems";
-    @ClassRule
-    public static EmbersServer embersServer = new EmbersServer();
 
     private YatspecHttpPostCommand httpPost;
     private YatspecHttpGetCommand httpGet;
-    private YatspecHttpDeleteCommand httpDelete;
 
     @Test
     public void maintainAReportAgainstADatabase() throws Exception {
@@ -44,11 +38,11 @@ public class PuttingItAllTogetherTest extends EmbersAcceptanceTestBase {
                 .withUrl(embersServer.embersAdminPath())
                 .withQueryName(QUERY_MOST_RENTED_ITEMS)
                 .withQuerySql(
-                        "select i.name, nvl(count(r.item_id),0) as \"Rented Count\" "+
-                        "  from items i " +
-                        "  left outer join rentals r on r.item_id = i.item_id" +
-                        " group by i.name" +
-                        " order by 2 desc ")
+                        "select i.name, nvl(count(r.item_id),0) as \"Rented Count\" " +
+                                "  from items i " +
+                                "  left outer join rentals r on r.item_id = i.item_id" +
+                                " group by i.name" +
+                                " order by 2 desc ")
                 .withQueryDescription(description)
                 .build();
         httpPost.setLogPrefix("Create Query - ");
@@ -67,7 +61,7 @@ public class PuttingItAllTogetherTest extends EmbersAcceptanceTestBase {
                 .withUrl(embersServer.embersAdminPath())
                 .withQueryName(QUERY_MOST_RENTED_ITEMS)
                 .withQuerySql(
-                        "select i.name, nvl(count(r.item_id),0) as \"Rented Count\" "+
+                        "select i.name, nvl(count(r.item_id),0) as \"Rented Count\" " +
                                 "  from items i " +
                                 "  left outer join rentals r on r.item_id = i.item_id" +
                                 " group by i.name" +
@@ -126,18 +120,18 @@ public class PuttingItAllTogetherTest extends EmbersAcceptanceTestBase {
 
         embersServer.getEmbersDatabase().executeSql("insert into RENTALS" +
                 "(ITEM_ID, CUSTOMER_ID, RENTAL_PRICE, EXPECTED_OUT, ACTUALLY_OUT, EXPECTED_BACK, ACTUALLY_BACK)" +
-                        "values (" +
-                " ((select item_id from items where name = 'Thing'), (select customer_id from customers where name = 'Mr Grahame Brown') , 15.55,  "       + nowAdjusted(-100) + ", " + nowAdjusted(-99) + ", " + nowAdjusted(-90) + ", " + nowAdjusted(-90) + ")" +
-                        ",((select item_id from items where name = 'Thing'), (select customer_id from customers where name = 'Miss Sweaty Betty'), 16.55, " + nowAdjusted(-50) + ", " + nowAdjusted(-49) + ", " + nowAdjusted(-40) + ", " + nowAdjusted(-40) + ")" +
-                        ",((select item_id from items where name = 'Thing'), (select customer_id from customers where name = 'Mrs Windome Meere'), 16.55, " + nowAdjusted(-20) + ", " + nowAdjusted(-20) + ", " + nowAdjusted(-10) + ", " + nowAdjusted(-10) + ")" +
-                        ",((select item_id from items where name = 'Thing'), (select customer_id from customers where name = 'John Doe')         , 18.55, "  + nowAdjusted(-5) + ", " + nowAdjusted(-5) + ", " + nowAdjusted(5) + ", null)" +
-                        ",((select item_id from items where name = 'Mac Book Pro'), (select customer_id from customers where name = 'Mr Grahame Brown'), 15.55, " + nowAdjusted(-20) + ", " + nowAdjusted(-20) + ", " + nowAdjusted(-10) + ", " + nowAdjusted(-10) + ")" +
-                        ",((select item_id from items where name = 'Mac Book Pro'), (select customer_id from customers where name = 'Mr Grahame Brown'), 15.55, "  + nowAdjusted(-5) + ", " + nowAdjusted(-5) + ", " + nowAdjusted(5) + ", null)" +
-                        ",((select item_id from items where name = 'Mouse Mat'), (select customer_id from customers where name = 'Mr Grahame Brown'), 15.55, "  + nowAdjusted(-5) + ", " + nowAdjusted(-5) + ", " + nowAdjusted(5) + ", null)" +
-                        ",((select item_id from items where name = 'Car'), (select customer_id from customers where name = 'Mr Grahame Brown'), 15.55, " + nowAdjusted(-40) + ", " + nowAdjusted(-39) + ", " + nowAdjusted(-20) + ", " + nowAdjusted(-19) + ")" +
-                        ",((select item_id from items where name = 'Car'), (select customer_id from customers where name = 'Mr Grahame Brown'), 15.55, " + nowAdjusted(-20) + ", " + nowAdjusted(-19) + ", " + nowAdjusted(-10) + ", " + nowAdjusted(-10) + ")" +
-                        ",((select item_id from items where name = 'Car'), (select customer_id from customers where name = 'Mr Grahame Brown'), 15.55, "  + nowAdjusted(-5) + ", " + nowAdjusted(-5) + ", " + nowAdjusted(5) + ", null)" +
-                        ")");
+                "values (" +
+                " ((select item_id from items where name = 'Thing'), (select customer_id from customers where name = 'Mr Grahame Brown') , 15.55,  " + nowAdjusted(-100) + ", " + nowAdjusted(-99) + ", " + nowAdjusted(-90) + ", " + nowAdjusted(-90) + ")" +
+                ",((select item_id from items where name = 'Thing'), (select customer_id from customers where name = 'Miss Sweaty Betty'), 16.55, " + nowAdjusted(-50) + ", " + nowAdjusted(-49) + ", " + nowAdjusted(-40) + ", " + nowAdjusted(-40) + ")" +
+                ",((select item_id from items where name = 'Thing'), (select customer_id from customers where name = 'Mrs Windome Meere'), 16.55, " + nowAdjusted(-20) + ", " + nowAdjusted(-20) + ", " + nowAdjusted(-10) + ", " + nowAdjusted(-10) + ")" +
+                ",((select item_id from items where name = 'Thing'), (select customer_id from customers where name = 'John Doe')         , 18.55, " + nowAdjusted(-5) + ", " + nowAdjusted(-5) + ", " + nowAdjusted(5) + ", null)" +
+                ",((select item_id from items where name = 'Mac Book Pro'), (select customer_id from customers where name = 'Mr Grahame Brown'), 15.55, " + nowAdjusted(-20) + ", " + nowAdjusted(-20) + ", " + nowAdjusted(-10) + ", " + nowAdjusted(-10) + ")" +
+                ",((select item_id from items where name = 'Mac Book Pro'), (select customer_id from customers where name = 'Mr Grahame Brown'), 15.55, " + nowAdjusted(-5) + ", " + nowAdjusted(-5) + ", " + nowAdjusted(5) + ", null)" +
+                ",((select item_id from items where name = 'Mouse Mat'), (select customer_id from customers where name = 'Mr Grahame Brown'), 15.55, " + nowAdjusted(-5) + ", " + nowAdjusted(-5) + ", " + nowAdjusted(5) + ", null)" +
+                ",((select item_id from items where name = 'Car'), (select customer_id from customers where name = 'Mr Grahame Brown'), 15.55, " + nowAdjusted(-40) + ", " + nowAdjusted(-39) + ", " + nowAdjusted(-20) + ", " + nowAdjusted(-19) + ")" +
+                ",((select item_id from items where name = 'Car'), (select customer_id from customers where name = 'Mr Grahame Brown'), 15.55, " + nowAdjusted(-20) + ", " + nowAdjusted(-19) + ", " + nowAdjusted(-10) + ", " + nowAdjusted(-10) + ")" +
+                ",((select item_id from items where name = 'Car'), (select customer_id from customers where name = 'Mr Grahame Brown'), 15.55, " + nowAdjusted(-5) + ", " + nowAdjusted(-5) + ", " + nowAdjusted(5) + ", null)" +
+                ")");
 
         return givens -> {
             logSql("Table of Items", "select * from items");

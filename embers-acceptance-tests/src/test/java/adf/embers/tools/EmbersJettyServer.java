@@ -20,6 +20,7 @@ public class EmbersJettyServer {
     }
 
     public void startHttpServer(DataSource dataSource) throws Exception {
+        System.out.println("Starting the Embers Server");
         EmbersConfiguration embersConfiguration = new EmbersConfiguration(dataSource);
         Servlet jerseyServlet = createJerseyServletWithEmbersHandlers(embersConfiguration);
 
@@ -28,6 +29,7 @@ public class EmbersJettyServer {
     }
 
     public void stopHttpServer() {
+        System.out.println("Stopping the Embers server");
         try {
             server.stop();
         } catch (Exception e) {

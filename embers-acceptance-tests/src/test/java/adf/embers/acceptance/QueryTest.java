@@ -1,11 +1,9 @@
 package adf.embers.acceptance;
 
 import adf.embers.query.persistence.Query;
-import adf.embers.tools.EmbersServer;
 import adf.embers.tools.YatspecQueryInserter;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
-import org.junit.ClassRule;
 import org.junit.Test;
 import yatspec.http.YatspecHttpGetCommand;
 
@@ -21,9 +19,6 @@ import static org.hamcrest.CoreMatchers.*;
         "IOC via ResourceConfig\n" +
         "Database via Hsqldb")
 public class QueryTest extends EmbersAcceptanceTestBase {
-
-    @ClassRule
-    public static EmbersServer embersServer = new EmbersServer();
 
     private final YatspecHttpGetCommand http = new YatspecHttpGetCommand(this);
 

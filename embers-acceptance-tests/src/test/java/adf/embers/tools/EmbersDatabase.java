@@ -29,6 +29,7 @@ public class EmbersDatabase {
     }
 
     public void startInMemoryDatabase() throws Exception {
+        System.out.println("Starting the Embers database");
         DriverManager.registerDriver(jdbcDriver.driverInstance);
 
         this.dataSource = new JDBCDataSource();
@@ -39,11 +40,12 @@ public class EmbersDatabase {
     }
 
     public void shutdownInMemoryDatabase() {
+        System.out.println("Stopping the Embers database");
         try (Connection connection = getDataSource().getConnection()) {
             Statement st = connection.createStatement();
             st.execute("SHUTDOWN");
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.err.println("Error shutting down the embers database: " + e.getMessage());
         }
     }
 
@@ -70,8 +72,17 @@ public class EmbersDatabase {
                 COL_RESULT + " VARCHAR(100) )");
     }
 
-    public void clearQueries() {
-        executeSql("delete from "+QueryDao.TABLE_QUERIES);
+    public void clearEmbersTables() {
+        clearTableQueries();
+        clearTableQueryStatistics();
+    }
+
+    public void clearTableQueries() {
+        executeSql("delete from "+ QueryDao.TABLE_QUERIES);
+    }
+
+    public void clearTableQueryStatistics() {
+        executeSql("delete from "+ QueryStatisticsDao.TABLE_QUERIES_STATISTICS);
     }
 
     public void executeSql(String sql) {

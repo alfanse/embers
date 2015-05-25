@@ -27,7 +27,7 @@ public class QueryDaoIntegrationTest {
         DBI dbi = new DBI(embersDatabase.getDataSource());
         queryDao = dbi.open(QueryDao.class);
 
-        embersDatabase.clearQueries();
+        embersDatabase.clearTableQueries();
     }
 
     @Test
