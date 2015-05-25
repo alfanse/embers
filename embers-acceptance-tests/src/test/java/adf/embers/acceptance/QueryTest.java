@@ -20,7 +20,7 @@ import static org.hamcrest.CoreMatchers.*;
         "This example hosts embers on Jetty, in a jersey ServletContainer.\n" +
         "IOC via ResourceConfig\n" +
         "Database via Hsqldb")
-public class QueryExecutorHostedOnJettyTest extends EmbersAcceptanceTestBase {
+public class QueryTest extends EmbersAcceptanceTestBase {
 
     @ClassRule
     public static EmbersServer embersServer = new EmbersServer();
