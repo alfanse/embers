@@ -91,7 +91,7 @@ public class AdminQueryHandlerTest {
     }
 
     private Response whenAdminQueryHandlerAddQueryIsCalled(Query postedQuery) {
-        return adminQueryHandler.addQuery(postedQuery);
+        return adminQueryHandler.addOrUpdateQuery(postedQuery);
     }
 
 }

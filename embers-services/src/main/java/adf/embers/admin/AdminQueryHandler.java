@@ -21,7 +21,7 @@ public class AdminQueryHandler {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addQuery(Query query) {
+    public Response addOrUpdateQuery(Query query) {
         String strategy;
 
         Query queryOnDb = queryDao.findQueryByName(decodeString(query.getName()));
