@@ -21,6 +21,7 @@ public class EmbersServer {
         startJettyServer(embersDatabase.getDataSource());
     }
 
+    @SuppressWarnings("unused") //Keeping it as a might be needed to fix re-using server bugs
     public void after() {
         embersJettyServer.stopHttpServer();
         embersDatabase.shutdownInMemoryDatabase();
