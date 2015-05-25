@@ -11,19 +11,28 @@ import org.glassfish.jersey.servlet.ServletContainer;
 import javax.servlet.Servlet;
 import javax.sql.DataSource;
 
-/**
- * Created by alex on 25/05/2015.
- */
 public class EmbersJettyServer {
 
-    private Server server;
+    private final Server server;
+
+    public EmbersJettyServer(int port) {
+        this.server = new Server(port);
+    }
 
     public void startHttpServer(DataSource dataSource) throws Exception {
-        server = new Server(EmbersServer.PORT);
-        final EmbersConfiguration embersConfiguration = new EmbersConfiguration(dataSource);
+        EmbersConfiguration embersConfiguration = new EmbersConfiguration(dataSource);
         Servlet jerseyServlet = createJerseyServletWithEmbersHandlers(embersConfiguration);
+
         server.setHandler(createEmbersHandler(jerseyServlet));
         server.start();
+    }
+
+    public void stopHttpServer() {
+        try {
+            server.stop();
+        } catch (Exception e) {
+            System.err.println("Exception stopping jetty server: "+e.getMessage());
+        }
     }
 
     private Servlet createJerseyServletWithEmbersHandlers(EmbersConfiguration embersConfiguration) {
@@ -40,13 +49,5 @@ public class EmbersJettyServer {
         handler.setContextPath("/" + EmbersServer.CONTEXT_PATH_ROOT);
 
         return handler;
-    }
-
-    public void stopHttpServer() {
-        try {
-            server.stop();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 }

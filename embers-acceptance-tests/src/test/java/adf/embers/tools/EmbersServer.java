@@ -37,7 +37,7 @@ public class EmbersServer extends ExternalResource {
     }
 
     private void startJettyServer(DataSource dataSource) throws Exception {
-        embersJettyServer = new EmbersJettyServer();
+        embersJettyServer = new EmbersJettyServer(EmbersServer.PORT);
         embersJettyServer.startHttpServer(dataSource);
     }
 
