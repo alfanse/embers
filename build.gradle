@@ -64,5 +64,5 @@ subprojects {
 
 task wrapper(type: Wrapper) {
     //to pick up a new version execute: ./gradlew wrapper
-    gradleVersion = '2.3'
+    gradleVersion = '2.4'
 }
