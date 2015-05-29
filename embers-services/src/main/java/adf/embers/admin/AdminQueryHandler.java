@@ -13,6 +13,7 @@ import static adf.embers.statics.UrlTools.decodeString;
 //taken from http://docs.oracle.com/javaee/6/tutorial/doc/gkknj.html
 public class AdminQueryHandler {
     public static final String PATH = "/admin";
+    public static final String PATH_PARAM_QUERY_NAME = "queryName";
     private QueryDao queryDao;
 
     public AdminQueryHandler(QueryDao queryDao) {
@@ -38,8 +39,8 @@ public class AdminQueryHandler {
     }
 
     @DELETE
-    @Path("{queryName}")
-    public Response deleteQuery(@PathParam("queryName") String queryName){
+    @Path("{" + PATH_PARAM_QUERY_NAME + "}")
+    public Response deleteQuery(@PathParam(PATH_PARAM_QUERY_NAME) String queryName){
         queryDao.delete(decodeString(queryName));
         return Response.ok("Successfully deleted query").build();
     }
