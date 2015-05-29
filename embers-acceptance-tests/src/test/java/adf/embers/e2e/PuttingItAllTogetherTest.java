@@ -2,16 +2,28 @@ package adf.embers.e2e;
 
 import adf.embers.acceptance.EmbersAcceptanceTestBase;
 import adf.embers.tools.YatspecHttpPostCommandBuilder;
+import adf.embers.tools.functions.QueryFunctions;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
 import com.googlecode.yatspec.state.givenwhenthen.GivensBuilder;
+import com.googlecode.yatspec.state.givenwhenthen.StateExtractor;
+import org.fest.assertions.core.Condition;
+import org.fest.assertions.data.MapEntry;
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.junit.Test;
 import org.skife.jdbi.v2.Handle;
 import yatspec.http.YatspecHttpGetCommand;
 import yatspec.http.YatspecHttpPostCommand;
 import yatspec.renderers.ResultSetWrapper;
 
+import java.util.List;
+import java.util.Map;
+
+import static adf.embers.query.persistence.QueryStatisticsDao.COL_DURATION;
+import static adf.embers.query.persistence.QueryStatisticsDao.COL_QUERY_NAME;
 import static adf.embers.statics.UrlTools.encodeString;
+import static org.fest.assertions.api.Assertions.assertThat;
 
 @Notes("As a developer on a app with a relational database,\n" +
         "I want to maintain a set of user reports, \n" +
@@ -19,6 +31,7 @@ import static adf.embers.statics.UrlTools.encodeString;
 public class PuttingItAllTogetherTest extends EmbersAcceptanceTestBase {
 
     public static final String QUERY_MOST_RENTED_ITEMS = "findMostRentedItems";
+    public static final int MAX_TOLERATED_DURATION = 50;
 
     private YatspecHttpPostCommand httpPost;
     private YatspecHttpGetCommand httpGet;
@@ -31,6 +44,8 @@ public class PuttingItAllTogetherTest extends EmbersAcceptanceTestBase {
 
         when(theUserWantsTheQueryChangedSoThatItWill("Find number of times each item has been rented, sorted least rented first"));
         thenTheUserCanRunTheQuery();
+
+        then(theUserCheckesTheQueriesPerformance(), andIsHappyItsFastEnough());
     }
 
     private ActionUnderTest aUserQueryIsCreatedThatWill(String description) {
@@ -71,7 +86,6 @@ public class PuttingItAllTogetherTest extends EmbersAcceptanceTestBase {
         httpPost.setLogPrefix("Updated Query - ");
         return httpPost;
     }
-
 
     private GivensBuilder aRentalDatabase() {
         embersServer.getEmbersDatabase().executeSql("CREATE TABLE ITEMS (" +
@@ -143,6 +157,36 @@ public class PuttingItAllTogetherTest extends EmbersAcceptanceTestBase {
 
     private String nowAdjusted(int days) {
         return "DATE_SUB ( NOW, INTERVAL " + days + " DAY )";
+    }
+
+
+    private StateExtractor<List<Map<String, Object>>> theUserCheckesTheQueriesPerformance() {
+        return QueryFunctions.getAndLogQueryStatistics(embersServer.getEmbersDatabase().getDataSource(), this, "Performance Results");
+    }
+
+    private TypeSafeDiagnosingMatcher<List<Map<String, Object>>> andIsHappyItsFastEnough() {
+        return new TypeSafeDiagnosingMatcher<List<Map<String, Object>>>() {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Not the expected result.");
+            }
+
+            @Override
+            protected boolean matchesSafely(List<Map<String, Object>> item, Description mismatchDescription) {
+                assertThat(item).hasSize(2);
+                final Map<String, Object> firstRow = item.get(0);
+                assertThat(firstRow).contains(MapEntry.entry(COL_QUERY_NAME, QUERY_MOST_RENTED_ITEMS));
+                assertThat(firstRow.get(COL_DURATION)).is(new Condition<Object>() {
+                    @Override
+                    public boolean matches(Object value) {
+                        int actualDuration = Integer.parseInt(value.toString());
+                        assertThat(actualDuration).isLessThan(MAX_TOLERATED_DURATION);
+                        return true;
+                    }
+                });
+                return true;
+            }
+        };
     }
 
     private void logSql(String logName, String sql) {
