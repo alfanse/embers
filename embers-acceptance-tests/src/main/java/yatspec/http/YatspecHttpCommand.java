@@ -6,6 +6,7 @@ import yatspec.renderers.HttpUrlConnectionWrapper;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Map;
 
 public abstract class YatspecHttpCommand implements ActionUnderTest {
     public static final String LOG_KEY_SUFFIX_FOR_HTTP = "Http Details";
@@ -49,6 +50,10 @@ public abstract class YatspecHttpCommand implements ActionUnderTest {
         return inputAndOutput -> fetchCurrentHttpDetailsFromYatspec(inputAndOutput).getResponseBody();
     }
 
+    public StateExtractor<Map<String, Object>> responseHeaders() {
+        return inputAndOutput -> fetchCurrentHttpDetailsFromYatspec(inputAndOutput).getResponseHeaders();
+    }
+
     protected abstract void addRequestDetails(CapturedInputAndOutputs capturedInputAndOutputs, HttpURLConnection connection, HttpUrlConnectionWrapper httpDetails) throws IOException;
 
     private HttpURLConnection openConnection(String url, InterestingGivens givens) throws IOException {
@@ -64,5 +69,4 @@ public abstract class YatspecHttpCommand implements ActionUnderTest {
     private String getLogKeyName(String logKeySuffix) {
         return logPrefix + " " + logKeySuffix;
     }
-
 }
