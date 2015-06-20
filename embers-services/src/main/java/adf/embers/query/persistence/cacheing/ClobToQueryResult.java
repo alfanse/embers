@@ -3,7 +3,6 @@ package adf.embers.query.persistence.cacheing;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
-import java.io.Reader;
 import java.sql.Clob;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,22 +20,17 @@ public class ClobToQueryResult {
     }
 
     private String clobBackToJsonString(java.sql.Clob data) {
-        final StringBuilder sb = new StringBuilder();
 
-        try {
-            final Reader reader = data.getCharacterStream();
-            final BufferedReader br = new BufferedReader(reader);
-
+        try (final BufferedReader br = new BufferedReader(data.getCharacterStream())){
+            final StringBuilder sb = new StringBuilder();
             int b;
             while (-1 != (b = br.read())) {
                 sb.append((char) b);
             }
-
-            br.close();
+            return sb.toString();
         } catch (Exception e) {
             throw new RuntimeException("Failed to deserialise the cached query result from the database");
         }
 
-        return sb.toString();
     }
 }
