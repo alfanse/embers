@@ -1,16 +1,19 @@
 package adf.embers.query.impl;
 
 import adf.embers.query.QueryExecutor;
+import adf.embers.query.persistence.CachedQuery;
 import adf.embers.query.persistence.Query;
 import adf.embers.query.persistence.QueryResultCacheDao;
-import adf.embers.query.persistence.ResultHolder;
 import org.junit.Test;
+import org.mockito.Mockito;
 
+import java.time.Duration;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.fest.assertions.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 public class CachingQueryExecutorTest {
 
@@ -18,18 +21,46 @@ public class CachingQueryExecutorTest {
     private final QueryResultCacheDao queryResultCacheDao = mock(QueryResultCacheDao.class);
 
     private final CachingQueryExecutor cachingQueryExecutor = new CachingQueryExecutor(queryResultCacheDao, queryExecutor);
+    private final Query query = new Query();
+    private final CachedQuery cachedQuery = new CachedQuery(query, Duration.ofDays(1));
+    private final List<Map<String, Object>> realResult = new ArrayList<>();
 
     @Test
-    public void queryOnCacheMissCachesResult() throws Exception {
-        Query query = new Query();
+    public void queryOnCacheMissWillCacheResult() throws Exception {
 
-        when(queryResultCacheDao.findCachedResult(query)).thenReturn(new ResultHolder());
+        givenTheCacheResultOf(cachedQuery);
 
-        ArrayList<Map<String, Object>> realResult = new ArrayList<>();
+        givenTheLiveQueryResult();
+
+        List<Map<String, Object>> result = whenCachedQueryIsCalled();
+
+        verify(queryResultCacheDao).updateQueryCacheResult(cachedQuery);
+
+        assertThat(result).isSameAs(realResult);
+    }
+
+    @Test
+    public void queryOnCachedHitWillReuseCachedResult() throws Exception {
+        cachedQuery.setCachedQueryResult(realResult);
+        givenTheCacheResultOf(cachedQuery);
+
+        List<Map<String, Object>> result = whenCachedQueryIsCalled();
+
+        verify(queryResultCacheDao, Mockito.never()).updateQueryCacheResult(cachedQuery);
+
+        assertThat(result).isSameAs(realResult);
+    }
+
+    private List<Map<String, Object>> whenCachedQueryIsCalled() {
+        return cachingQueryExecutor.runQuery(query);
+    }
+
+    private void givenTheCacheResultOf(CachedQuery cachedQuery) {
+        when(queryResultCacheDao.findCachedQueryResult(query)).thenReturn(cachedQuery);
+    }
+
+    private void givenTheLiveQueryResult() {
         when(queryExecutor.runQuery(query)).thenReturn(realResult);
-
-        cachingQueryExecutor.runQuery(query);
-
     }
 
 }

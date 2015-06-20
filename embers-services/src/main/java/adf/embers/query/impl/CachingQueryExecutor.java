@@ -1,6 +1,7 @@
 package adf.embers.query.impl;
 
 import adf.embers.query.QueryExecutor;
+import adf.embers.query.persistence.CachedQuery;
 import adf.embers.query.persistence.Query;
 import adf.embers.query.persistence.QueryResultCacheDao;
 
@@ -19,6 +20,13 @@ public class CachingQueryExecutor implements adf.embers.query.QueryExecutor {
 
     @Override
     public List<Map<String, Object>> runQuery(Query query) {
-        return null;
+        CachedQuery cachedQueryResult = queryResultCacheDao.findCachedQueryResult(query);
+
+        if(cachedQueryResult.isCacheMiss()) {
+            cachedQueryResult.setCachedQueryResult(queryExecutor.runQuery(query));
+            queryResultCacheDao.updateQueryCacheResult(cachedQueryResult);
+        }
+
+        return cachedQueryResult.getCachedQueryResult();
     }
 }

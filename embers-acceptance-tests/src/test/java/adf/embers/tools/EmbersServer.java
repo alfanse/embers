@@ -32,6 +32,7 @@ public class EmbersServer {
         embersDatabase.startInMemoryDatabase();
         embersDatabase.createTableQueries();
         embersDatabase.createTableQueriesStatistics();
+        embersDatabase.createTableQueryResultCache();
     }
 
     private void startJettyServer(DataSource dataSource) throws Exception {
