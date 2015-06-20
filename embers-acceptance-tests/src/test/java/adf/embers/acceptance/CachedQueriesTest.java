@@ -33,8 +33,8 @@ import static org.hamcrest.CoreMatchers.is;
         "The calling client needs to know its a cached report, but end user need not.")
 public class CachedQueriesTest extends EmbersAcceptanceTestBase {
 
-    public static final String NAME_OF_CACHED_QUERY = "cachedQuery";
-    public static final String HEADER_KEY_REPORT_CACHED_AT = "REPORT_CACHED_AT";
+    private static final String NAME_OF_CACHED_QUERY = "cachedQuery";
+    private static final String HEADER_KEY_REPORT_CACHED_AT = "REPORT_CACHED_AT";
 
     private final YatspecQueryInserter yatspecQueryInserter = new YatspecQueryInserter(this, embersServer.getEmbersDatabase().getDataSource());
     private final YatspecHttpCommand http = new YatspecHttpGetCommand(this);
@@ -45,11 +45,12 @@ public class CachedQueriesTest extends EmbersAcceptanceTestBase {
         givenACacheableQuery();
         givenTheReportHasNotBeenCached();
 
-        when(httpGetRequestFor(NAME_OF_CACHED_QUERY));
+        when(httpGetRequestForCacheableQuery());
 
         then(http.responseCode(), is(200));
         then(http.responseBody(), containsString("header"));
 
+        //noinspection unchecked
         then(http.responseHeaders(), has(entryCachedReportTrue()));
 
     }
@@ -59,11 +60,12 @@ public class CachedQueriesTest extends EmbersAcceptanceTestBase {
     public void aCachedQueryIsUsedWhileStillWithinExpirationTime() throws Exception {
         givenAQueryHasRecentlyBeenMadeToACacheableQuery();
 
-        when(httpGetRequestFor(NAME_OF_CACHED_QUERY));
+        when(httpGetRequestForCacheableQuery());
 
         then(http.responseCode(), is(200));
         then(http.responseBody(), containsString("header"));
 
+        //noinspection unchecked
         then(http.responseHeaders(), has(entryCachedReportTrue()));
     }
 
@@ -92,8 +94,8 @@ public class CachedQueriesTest extends EmbersAcceptanceTestBase {
     }
 
 
-    private ActionUnderTest httpGetRequestFor(String query) {
-        http.setUrl(embersServer.embersCachedQueryPath() + "/" + query);
+    private ActionUnderTest httpGetRequestForCacheableQuery() {
+        http.setUrl(embersServer.embersCachedQueryPath() + "/" + CachedQueriesTest.NAME_OF_CACHED_QUERY);
         return http;
     }
 

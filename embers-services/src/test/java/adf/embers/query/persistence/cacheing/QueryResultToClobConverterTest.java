@@ -12,15 +12,15 @@ import java.util.*;
 import static org.fest.assertions.api.Assertions.assertThat;
 
 
-public class ClobToQueryResultTest {
+public class QueryResultToClobConverterTest {
 
     public static final String KEY = "key";
-    private final ClobToQueryResult clobToQueryResult = new ClobToQueryResult();
+    private final QueryResultToClobConverter queryResultToClobConverter = new QueryResultToClobConverter();
 
     @Test
     /** null specifically means cache never been populated */
     public void handleNullClobByReturningNull() throws Exception {
-        List<Map<String, Object>> queryResult = clobToQueryResult.deserialise(null);
+        List<Map<String, Object>> queryResult = queryResultToClobConverter.deserialise(null);
         assertThat(queryResult).isNull();
     }
 
@@ -30,7 +30,7 @@ public class ClobToQueryResultTest {
         String value = "a string, with \"punctuation\".";
         Clob clob = givenQueryResultedInASingleValueOf(value);
 
-        List<Map<String, Object>> queryResult = clobToQueryResult.deserialise(clob);
+        List<Map<String, Object>> queryResult = queryResultToClobConverter.deserialise(clob);
 
         assertThat(queryResult.get(0).get(KEY)).isEqualTo(value);
     }
@@ -42,7 +42,7 @@ public class ClobToQueryResultTest {
         Date value = new Date();
         Clob clob = givenQueryResultedInASingleValueOf(value);
 
-        List<Map<String, Object>> queryResult = clobToQueryResult.deserialise(clob);
+        List<Map<String, Object>> queryResult = queryResultToClobConverter.deserialise(clob);
 
         assertThat(queryResult.get(0).get(KEY)).isEqualTo(new SimpleDateFormat("MMM dd, yyyy h:mm:ss aa").format(value));
     }
@@ -54,7 +54,7 @@ public class ClobToQueryResultTest {
         Float value = 123456789.987654321f;
         Clob clob = givenQueryResultedInASingleValueOf(value);
 
-        List<Map<String, Object>> queryResult = clobToQueryResult.deserialise(clob);
+        List<Map<String, Object>> queryResult = queryResultToClobConverter.deserialise(clob);
 
         assertThat(queryResult.get(0).get(KEY).toString()).isEqualTo(value.toString());
     }
@@ -77,6 +77,37 @@ public class ClobToQueryResultTest {
 
     private String givenAJsonStringOf(ArrayList<Map<String, Object>> resultToCache) {
         return new Gson().toJson(resultToCache);
+    }
+
+    @Test
+    public void serialiseEmptyList() throws Exception {
+        String jsonString = queryResultToClobConverter.serialise(Collections.emptyList());
+        assertThat(jsonString).isEqualTo("[]");
+    }
+
+
+    @Test
+    public void multipleRowsMultipleColumnsIntoJson() throws Exception {
+        ArrayList<Map<String, Object>> queryResult = new ArrayList<>();
+        Map<String, Object> aRowOfData = new HashMap<>();
+        aRowOfData.put("string", "a string, with \"punctuation\".");
+        aRowOfData.put("integer", 123456789);
+        aRowOfData.put("floats", 987654321.123456789f);
+        aRowOfData.put("date", new Date(1434801713301l));
+        queryResult.add(aRowOfData);
+
+        Map<String, Object> anotherRowOfData = new HashMap<>();
+        anotherRowOfData.put("string", "a string, with \"punctuation\".");
+        anotherRowOfData.put("integer", 123456789);
+        anotherRowOfData.put("floats", 987654321.123456789f);
+        anotherRowOfData.put("date", new Date(1434801713301l));
+        queryResult.add(anotherRowOfData);
+
+        String jsonString = queryResultToClobConverter.serialise(queryResult);
+
+        assertThat(jsonString).isEqualTo(
+                "[{\"date\":\"Jun 20, 2015 1:01:53 PM\",\"floats\":9.8765434E8,\"string\":\"a string, with \\\"punctuation\\\".\",\"integer\":123456789}" +
+                ",{\"date\":\"Jun 20, 2015 1:01:53 PM\",\"floats\":9.8765434E8,\"string\":\"a string, with \\\"punctuation\\\".\",\"integer\":123456789}]");
     }
 
 }

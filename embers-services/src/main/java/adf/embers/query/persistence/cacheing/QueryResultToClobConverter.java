@@ -8,10 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ClobToQueryResult {
+public class QueryResultToClobConverter {
 
-    public static final List<Map<String, Object>> TYPE_OF_RESULT = new ArrayList<>();
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
+    private static final List<Map<String, Object>> TYPE_OF_RESULT = new ArrayList<>(0);
 
+    public String serialise(List<Map<String, Object>> cachedQueryResult) {
+        return new Gson().toJson(cachedQueryResult);
+    }
+
+    @SuppressWarnings("unchecked")
     public List<Map<String, Object>> deserialise(Clob clob) {
         if (clob == null) {
             return null;

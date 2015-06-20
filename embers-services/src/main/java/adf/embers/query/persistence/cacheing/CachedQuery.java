@@ -1,7 +1,6 @@
 package adf.embers.query.persistence.cacheing;
 
 import adf.embers.query.persistence.Query;
-import com.google.gson.Gson;
 
 import java.sql.Timestamp;
 import java.time.Duration;
@@ -35,6 +34,10 @@ public class CachedQuery {
         return liveDurationMs;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public boolean isCacheMiss() {
         return cachedQueryResult ==null;
     }
@@ -47,16 +50,13 @@ public class CachedQuery {
         this.cachedQueryResult = queryResult;
     }
 
+    /* Called by QueryResultCacheDao.updateQueryCacheResult */
     public String getCachedQueryResultAsJsonString(){
-        return new Gson().toJson(cachedQueryResult);
+        return new QueryResultToClobConverter().serialise(cachedQueryResult);
     }
 
     public Timestamp getDateCached() {
         return dateCached;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public void setDateCached(Date dateCached) {

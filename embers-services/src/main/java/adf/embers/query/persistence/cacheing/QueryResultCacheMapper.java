@@ -8,14 +8,16 @@ import java.sql.SQLException;
 
 public class QueryResultCacheMapper implements ResultSetMapper<CachedQuery> {
 
-    private final ClobToQueryResult clobToQueryResult;
+    private final QueryResultToClobConverter queryResultToClobConverter;
 
-    QueryResultCacheMapper(ClobToQueryResult clobToQueryResult) {
-        this.clobToQueryResult = clobToQueryResult;
+    //for unit testing
+    QueryResultCacheMapper(QueryResultToClobConverter queryResultToClobConverter) {
+        this.queryResultToClobConverter = queryResultToClobConverter;
     }
 
+    //for JDBI
     public QueryResultCacheMapper() {
-        this(new ClobToQueryResult());
+        this(new QueryResultToClobConverter());
     }
 
     @Override
@@ -25,7 +27,7 @@ public class QueryResultCacheMapper implements ResultSetMapper<CachedQuery> {
         cachedQuery.setDateCached(r.getTimestamp(QueryResultCacheDao.COL_DATE_CACHED));
 
         cachedQuery.setCachedQueryResult(
-                clobToQueryResult.deserialise(
+                queryResultToClobConverter.deserialise(
                         r.getClob(QueryResultCacheDao.COL_RESULT)));
         return cachedQuery;
     }

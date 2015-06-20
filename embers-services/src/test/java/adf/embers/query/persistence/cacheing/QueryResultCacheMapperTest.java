@@ -16,15 +16,15 @@ public class QueryResultCacheMapperTest {
 
     private final ResultSet resultSet = mock(ResultSet.class);
     private final StatementContext statementContext = mock(StatementContext.class);
-    private final ClobToQueryResult clobToQueryResult = mock(ClobToQueryResult.class);
-    private final QueryResultCacheMapper queryResultCacheMapper = new QueryResultCacheMapper(clobToQueryResult);
+    private final QueryResultToClobConverter queryResultToClobConverter = mock(QueryResultToClobConverter.class);
+    private final QueryResultCacheMapper queryResultCacheMapper = new QueryResultCacheMapper(queryResultToClobConverter);
 
     @Test
     public void deserialiseJsonResultToListOfMaps() throws Exception {
 
         SerialClob clob = new SerialClob("thing".toCharArray());
         ArrayList<Map<String, Object>> resultToCache = new ArrayList<>();
-        when(clobToQueryResult.deserialise(clob)).thenReturn(resultToCache);
+        when(queryResultToClobConverter.deserialise(clob)).thenReturn(resultToCache);
         when(resultSet.getClob(QueryResultCacheDao.COL_RESULT)).thenReturn(clob);
 
         CachedQuery cachedQuery = queryResultCacheMapper.map(0, resultSet, statementContext);
