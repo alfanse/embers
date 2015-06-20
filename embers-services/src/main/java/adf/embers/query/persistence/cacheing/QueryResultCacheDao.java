@@ -1,5 +1,6 @@
-package adf.embers.query.persistence;
+package adf.embers.query.persistence.cacheing;
 
+import adf.embers.query.persistence.Query;
 import org.skife.jdbi.v2.sqlobject.BindBean;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
@@ -24,7 +25,7 @@ public interface QueryResultCacheDao {
 
     @SqlUpdate("update "+TABLE_QUERIES_RESULT_CACHE
                + " set " + COL_DATE_CACHED + "= :cq.dateCached, "
-                         + COL_RESULT+ "= :cq.cachedQueryResult " +
+                         + COL_RESULT+ "= :cq.cachedQueryResultAsJsonString " +
                " where " + COL_QUERY_NAME +"= :cq.queryName")
     void updateQueryCacheResult(@BindBean("cq") CachedQuery cachedQuery);
 }

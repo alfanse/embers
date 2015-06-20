@@ -1,8 +1,8 @@
 package adf.embers.integration.persistence;
 
-import adf.embers.query.persistence.CachedQuery;
 import adf.embers.query.persistence.Query;
-import adf.embers.query.persistence.QueryResultCacheDao;
+import adf.embers.query.persistence.cacheing.CachedQuery;
+import adf.embers.query.persistence.cacheing.QueryResultCacheDao;
 import adf.embers.tools.EmbersDatabase;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -58,26 +58,23 @@ public class QueryResultCacheDaoIntegrationTest {
         assertThat(findResult.getCachedQueryResult()).isNull();
         assertThat(findResult.getDateCached()).isNull();
 
-        Date dateResultRetrieved = new Date();
         ArrayList<Map<String, Object>> resultToCache = new ArrayList<>();
         Map<String, Object> aRowOfData = new HashMap<>();
         aRowOfData.put("string", "a string, with \"punctuation\".");
-        aRowOfData.put("integer", 123456789);
-        aRowOfData.put("floats", 987654321.123456789f);
-        aRowOfData.put("date", new Date());
         resultToCache.add(aRowOfData);
         cachedQuery.setCachedQueryResult(resultToCache);
+
+        Date dateResultRetrieved = new Date();
         cachedQuery.setDateCached(dateResultRetrieved);
 
-        //TODO implement cacheing
-//        queryResultCacheDao.updateQueryCacheResult(cachedQuery);
+        queryResultCacheDao.updateQueryCacheResult(cachedQuery);
 
-//        CachedQuery findCachedResult = queryResultCacheDao.findCachedQueryResult(query);
-//        assertThat(findCachedResult.getQueryName()).isEqualTo(query.getName());
-//        assertThat(findCachedResult.getLiveDurationMs()).isEqualTo(liveDuration.toMillis());
-//        assertThat(findCachedResult.isCacheMiss()).isFalse();
-//        assertThat(findCachedResult.getDateCached()).isAfterOrEqualsTo(dateResultRetrieved);
-//        assertThat(findCachedResult.getCachedQueryResult()).isEqualTo(resultToCache);
+        CachedQuery findCachedResult = queryResultCacheDao.findCachedQueryResult(query);
+        assertThat(findCachedResult.getQueryName()).isEqualTo(query.getName());
+        assertThat(findCachedResult.getLiveDurationMs()).isEqualTo(liveDuration.toMillis());
+        assertThat(findCachedResult.isCacheMiss()).isFalse();
+        assertThat(findCachedResult.getDateCached()).isEqualTo(dateResultRetrieved);
+        assertThat(findCachedResult.getCachedQueryResult()).isEqualTo(resultToCache);
     }
 
 }

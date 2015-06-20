@@ -1,8 +1,8 @@
 package adf.embers.tools;
 
 import adf.embers.query.persistence.QueryDao;
-import adf.embers.query.persistence.QueryResultCacheDao;
 import adf.embers.query.persistence.QueryStatisticsDao;
+import adf.embers.query.persistence.cacheing.QueryResultCacheDao;
 import org.hsqldb.jdbc.JDBCDataSource;
 import org.hsqldb.jdbcDriver;
 import org.skife.jdbi.v2.DBI;
@@ -80,7 +80,7 @@ public class EmbersDatabase {
                 QueryResultCacheDao.COL_QUERY_NAME + " VARCHAR(50) NOT NULL, " +
                 QueryResultCacheDao.COL_LIVE_DURATION_MS + " INTEGER NOT NULL, " +
                 QueryResultCacheDao.COL_DATE_CACHED + " TIMESTAMP, " +
-                QueryResultCacheDao.COL_RESULT + " BLOB )");
+                QueryResultCacheDao.COL_RESULT + " CLOB )");
     }
 
     public void clearEmbersTables() {

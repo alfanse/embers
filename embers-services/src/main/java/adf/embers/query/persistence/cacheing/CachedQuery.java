@@ -1,5 +1,9 @@
-package adf.embers.query.persistence;
+package adf.embers.query.persistence.cacheing;
 
+import adf.embers.query.persistence.Query;
+import com.google.gson.Gson;
+
+import java.sql.Timestamp;
 import java.time.Duration;
 import java.util.Date;
 import java.util.List;
@@ -9,7 +13,7 @@ public class CachedQuery {
 
     private String queryName;
     private long liveDurationMs;
-    private Date dateCached;
+    private Timestamp dateCached;
     private List<Map<String, Object>> cachedQueryResult;
     private long id;
 
@@ -43,7 +47,11 @@ public class CachedQuery {
         this.cachedQueryResult = queryResult;
     }
 
-    public Date getDateCached() {
+    public String getCachedQueryResultAsJsonString(){
+        return new Gson().toJson(cachedQueryResult);
+    }
+
+    public Timestamp getDateCached() {
         return dateCached;
     }
 
@@ -52,6 +60,10 @@ public class CachedQuery {
     }
 
     public void setDateCached(Date dateCached) {
+        this.dateCached = new Timestamp(dateCached.getTime());
+    }
+
+    public void setDateCached(Timestamp dateCached) {
         this.dateCached = dateCached;
     }
 }

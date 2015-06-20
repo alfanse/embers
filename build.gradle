@@ -50,6 +50,9 @@ subprojects {
 //              handles json serialisation
                 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.5.2'
             ],
+            gson: [
+                    'com.google.code.gson:gson:2.3.1'
+            ],
             jetty: [
 //              beloved server
                 'org.eclipse.jetty:jetty-server:9.3.0.M1',

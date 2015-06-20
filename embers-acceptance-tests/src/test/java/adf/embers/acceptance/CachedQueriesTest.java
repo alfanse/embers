@@ -2,7 +2,7 @@ package adf.embers.acceptance;
 
 import adf.embers.query.persistence.Query;
 import adf.embers.query.persistence.QueryDao;
-import adf.embers.query.persistence.QueryResultCacheDao;
+import adf.embers.query.persistence.cacheing.QueryResultCacheDao;
 import adf.embers.tools.YatspecQueryInserter;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;

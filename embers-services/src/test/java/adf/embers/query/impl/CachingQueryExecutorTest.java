@@ -1,9 +1,9 @@
 package adf.embers.query.impl;
 
 import adf.embers.query.QueryExecutor;
-import adf.embers.query.persistence.CachedQuery;
 import adf.embers.query.persistence.Query;
-import adf.embers.query.persistence.QueryResultCacheDao;
+import adf.embers.query.persistence.cacheing.CachedQuery;
+import adf.embers.query.persistence.cacheing.QueryResultCacheDao;
 import org.junit.Test;
 import org.mockito.Mockito;
 
