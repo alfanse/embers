@@ -1,6 +1,9 @@
 package adf.embers.configuration;
 
 import adf.embers.admin.AdminQueryHandler;
+import adf.embers.cache.QueryResultCacheHandler;
+import adf.embers.cache.QueryResultCacheProcessor;
+import adf.embers.cache.persistence.QueryResultCacheDao;
 import adf.embers.query.QueryExecutor;
 import adf.embers.query.QueryHandler;
 import adf.embers.query.QueryProcessor;
@@ -27,6 +30,10 @@ public class EmbersConfiguration {
 
     public AdminQueryHandler getAdminQueryHandler() {
         return new AdminQueryHandler(queryDao());
+    }
+
+    public QueryResultCacheHandler getQueryResultCacheHandler() {
+        return new QueryResultCacheHandler(new QueryResultCacheProcessor(queryResultCacheDao(), queryDao(), auditingQueryExecutor()));
     }
 
     private DBI dbi() {
@@ -60,5 +67,9 @@ public class EmbersConfiguration {
 
     private QueryStatisticsDao queriesExecutedDao() {
         return dbi.open(QueryStatisticsDao.class);
+    }
+
+    private QueryResultCacheDao queryResultCacheDao() {
+        return dbi.open(QueryResultCacheDao.class);
     }
 }

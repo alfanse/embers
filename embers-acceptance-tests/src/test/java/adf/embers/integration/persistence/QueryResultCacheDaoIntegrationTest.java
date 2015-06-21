@@ -1,8 +1,8 @@
 package adf.embers.integration.persistence;
 
-import adf.embers.query.persistence.Query;
-import adf.embers.query.persistence.cacheing.CachedQuery;
-import adf.embers.query.persistence.cacheing.QueryResultCacheDao;
+import adf.embers.cache.persistence.CachedQuery;
+import adf.embers.cache.persistence.QueryResultCacheDao;
+import adf.embers.query.QueryRequest;
 import adf.embers.tools.EmbersDatabase;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -39,11 +39,11 @@ public class QueryResultCacheDaoIntegrationTest {
 
     @Test
     public void canSaveThenFindThenSaveCachedResult() throws Exception {
-        Query query = new Query("queryName", "query description", "select timestamp from "+QueryResultCacheDao.TABLE_QUERIES_RESULT_CACHE);
+        QueryRequest query = () -> "queryName";
         Duration liveDuration = Duration.ofHours(1);
 
-        CachedQuery cachedQuery = new CachedQuery(query, liveDuration);
-        assertThat(cachedQuery.getQueryName()).isEqualTo(query.getName());
+        CachedQuery cachedQuery = new CachedQuery(query.getQueryName(), liveDuration.toMillis());
+        assertThat(cachedQuery.getQueryName()).isEqualTo(query.getQueryName());
         assertThat(cachedQuery.getDateCached()).isNull();
         assertThat(cachedQuery.getCachedQueryResult()).isNull();
         assertThat(cachedQuery.getLiveDurationMs()).isEqualTo(liveDuration.toMillis());
@@ -52,7 +52,7 @@ public class QueryResultCacheDaoIntegrationTest {
         queryResultCacheDao.save(cachedQuery);
 
         CachedQuery findResult = queryResultCacheDao.findCachedQueryResult(query);
-        assertThat(findResult.getQueryName()).isEqualTo(query.getName());
+        assertThat(findResult.getQueryName()).isEqualTo(query.getQueryName());
         assertThat(findResult.getLiveDurationMs()).isEqualTo(liveDuration.toMillis());
         assertThat(findResult.isCacheMiss()).isTrue();
         assertThat(findResult.getCachedQueryResult()).isNull();
@@ -70,7 +70,7 @@ public class QueryResultCacheDaoIntegrationTest {
         queryResultCacheDao.updateQueryCacheResult(cachedQuery);
 
         CachedQuery findCachedResult = queryResultCacheDao.findCachedQueryResult(query);
-        assertThat(findCachedResult.getQueryName()).isEqualTo(query.getName());
+        assertThat(findCachedResult.getQueryName()).isEqualTo(query.getQueryName());
         assertThat(findCachedResult.getLiveDurationMs()).isEqualTo(liveDuration.toMillis());
         assertThat(findCachedResult.isCacheMiss()).isFalse();
         assertThat(findCachedResult.getDateCached()).isEqualTo(dateResultRetrieved);

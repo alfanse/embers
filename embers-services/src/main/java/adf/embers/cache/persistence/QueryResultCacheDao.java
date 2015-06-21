@@ -1,6 +1,6 @@
-package adf.embers.query.persistence.cacheing;
+package adf.embers.cache.persistence;
 
-import adf.embers.query.persistence.Query;
+import adf.embers.query.QueryRequest;
 import org.skife.jdbi.v2.sqlobject.BindBean;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
@@ -20,8 +20,8 @@ public interface QueryResultCacheDao {
             + ") values (:cq.queryName, :cq.liveDurationMs)")
     void save(@BindBean("cq") CachedQuery cachedQuery);
 
-    @SqlQuery("select * from " + TABLE_QUERIES_RESULT_CACHE + " where " + COL_QUERY_NAME + " = :q.name")
-    CachedQuery findCachedQueryResult(@BindBean("q") Query query);
+    @SqlQuery("select * from " + TABLE_QUERIES_RESULT_CACHE + " where " + COL_QUERY_NAME + " = :qr.queryName")
+    CachedQuery findCachedQueryResult(@BindBean("qr") QueryRequest queryRequest);
 
     @SqlUpdate("update "+TABLE_QUERIES_RESULT_CACHE
                + " set " + COL_DATE_CACHED + "= :cq.dateCached, "

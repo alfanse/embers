@@ -41,6 +41,7 @@ public class EmbersJettyServer {
         ResourceConfig resourceConfig = new ResourceConfig();
         resourceConfig.register(embersConfiguration.getQueryHandler());
         resourceConfig.register(embersConfiguration.getAdminQueryHandler());
+        resourceConfig.register(embersConfiguration.getQueryResultCacheHandler());
         return new ServletContainer(resourceConfig);
     }
 

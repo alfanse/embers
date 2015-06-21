@@ -11,6 +11,7 @@ import adf.embers.query.persistence.QueryDao;
 import java.util.List;
 import java.util.Map;
 
+/** Loads the Query, executes it, returns result */
 public class QueryProcessor implements adf.embers.query.QueryProcessor {
 
     private final QueryDao queryDao;

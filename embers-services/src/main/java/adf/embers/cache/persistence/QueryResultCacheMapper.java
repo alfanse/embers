@@ -1,4 +1,4 @@
-package adf.embers.query.persistence.cacheing;
+package adf.embers.cache.persistence;
 
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;

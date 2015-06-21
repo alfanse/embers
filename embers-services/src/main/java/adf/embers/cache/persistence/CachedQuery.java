@@ -1,9 +1,6 @@
-package adf.embers.query.persistence.cacheing;
-
-import adf.embers.query.persistence.Query;
+package adf.embers.cache.persistence;
 
 import java.sql.Timestamp;
-import java.time.Duration;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -15,11 +12,6 @@ public class CachedQuery {
     private Timestamp dateCached;
     private List<Map<String, Object>> cachedQueryResult;
     private long id;
-
-    public CachedQuery(Query query, Duration liveDurationMs) {
-        this.queryName = query.getName();
-        this.liveDurationMs = liveDurationMs.toMillis();
-    }
 
     public CachedQuery(String queryName, long liveDurationMs) {
         this.queryName = queryName;
@@ -50,7 +42,8 @@ public class CachedQuery {
         this.cachedQueryResult = queryResult;
     }
 
-    /* Called by QueryResultCacheDao.updateQueryCacheResult */
+    /** Called by QueryResultCacheDao.updateQueryCacheResult */
+    @SuppressWarnings("unused")
     public String getCachedQueryResultAsJsonString(){
         return new QueryResultToClobConverter().serialise(cachedQueryResult);
     }
@@ -65,5 +58,9 @@ public class CachedQuery {
 
     public void setDateCached(Timestamp dateCached) {
         this.dateCached = dateCached;
+    }
+
+    public boolean hasCachedQueryResult() {
+        return cachedQueryResult!=null;
     }
 }

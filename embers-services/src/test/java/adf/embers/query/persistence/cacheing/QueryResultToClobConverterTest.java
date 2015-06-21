@@ -1,5 +1,6 @@
 package adf.embers.query.persistence.cacheing;
 
+import adf.embers.cache.persistence.QueryResultToClobConverter;
 import com.google.gson.Gson;
 import org.junit.Test;
 

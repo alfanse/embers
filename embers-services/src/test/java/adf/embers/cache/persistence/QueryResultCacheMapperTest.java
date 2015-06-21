@@ -1,6 +1,7 @@
-package adf.embers.query.persistence.cacheing;
+package adf.embers.cache.persistence;
 
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.skife.jdbi.v2.StatementContext;
 
 import javax.sql.rowset.serial.SerialClob;
@@ -9,14 +10,12 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class QueryResultCacheMapperTest {
 
-    private final ResultSet resultSet = mock(ResultSet.class);
-    private final StatementContext statementContext = mock(StatementContext.class);
-    private final QueryResultToClobConverter queryResultToClobConverter = mock(QueryResultToClobConverter.class);
+    private final ResultSet resultSet = Mockito.mock(ResultSet.class);
+    private final StatementContext statementContext = Mockito.mock(StatementContext.class);
+    private final QueryResultToClobConverter queryResultToClobConverter = Mockito.mock(QueryResultToClobConverter.class);
     private final QueryResultCacheMapper queryResultCacheMapper = new QueryResultCacheMapper(queryResultToClobConverter);
 
     @Test
@@ -24,8 +23,8 @@ public class QueryResultCacheMapperTest {
 
         SerialClob clob = new SerialClob("thing".toCharArray());
         ArrayList<Map<String, Object>> resultToCache = new ArrayList<>();
-        when(queryResultToClobConverter.deserialise(clob)).thenReturn(resultToCache);
-        when(resultSet.getClob(QueryResultCacheDao.COL_RESULT)).thenReturn(clob);
+        Mockito.when(queryResultToClobConverter.deserialise(clob)).thenReturn(resultToCache);
+        Mockito.when(resultSet.getClob(QueryResultCacheDao.COL_RESULT)).thenReturn(clob);
 
         CachedQuery cachedQuery = queryResultCacheMapper.map(0, resultSet, statementContext);
 

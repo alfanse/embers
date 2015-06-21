@@ -1,8 +1,8 @@
 package adf.embers.tools;
 
+import adf.embers.cache.persistence.QueryResultCacheDao;
 import adf.embers.query.persistence.QueryDao;
 import adf.embers.query.persistence.QueryStatisticsDao;
-import adf.embers.query.persistence.cacheing.QueryResultCacheDao;
 import org.hsqldb.jdbc.JDBCDataSource;
 import org.hsqldb.jdbcDriver;
 import org.skife.jdbi.v2.DBI;

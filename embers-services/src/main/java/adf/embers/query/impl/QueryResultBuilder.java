@@ -20,6 +20,10 @@ public class QueryResultBuilder {
         return this;
     }
 
+    public boolean hasNoErrors() {
+        return errors.isEmpty();
+    }
+
     public QueryResult build() {
         return new QueryResult() {
             @Override

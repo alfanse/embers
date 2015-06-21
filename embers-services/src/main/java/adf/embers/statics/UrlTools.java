@@ -11,7 +11,7 @@ public class UrlTools {
         try {
             return URLDecoder.decode(encodedString, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("Failed to statics : " + encodedString);
+            throw new RuntimeException("Failed to decode : " + encodedString);
         }
     }
 

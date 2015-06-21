@@ -1,4 +1,4 @@
-package adf.embers.query.persistence.cacheing;
+package adf.embers.cache.persistence;
 
 import com.google.gson.Gson;
 

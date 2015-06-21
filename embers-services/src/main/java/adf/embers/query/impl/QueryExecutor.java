@@ -7,6 +7,7 @@ import org.skife.jdbi.v2.Handle;
 import java.util.List;
 import java.util.Map;
 
+/** Executes a pre-defined sql query, returns result */
 public class QueryExecutor implements adf.embers.query.QueryExecutor {
     private final DbiHandleFactory handleFactory;
 
