@@ -24,7 +24,8 @@ public interface QueryResultCacheDao {
     CachedQuery findCachedQueryResult(@BindBean("qr") QueryRequest queryRequest);
 
     @SqlUpdate("update "+TABLE_QUERIES_RESULT_CACHE
-               + " set " + COL_DATE_CACHED + "= :cq.dateCached, "
+               + " set " + COL_LIVE_DURATION_MS + "= :cq.liveDurationMs, "
+                         + COL_DATE_CACHED + "= :cq.timestampWhenCached, "
                          + COL_RESULT+ "= :cq.cachedQueryResultAsJsonString " +
                " where " + COL_QUERY_NAME +"= :cq.queryName")
     void updateQueryCacheResult(@BindBean("cq") CachedQuery cachedQuery);

@@ -30,40 +30,52 @@ public class QueryResultCacheProcessor implements QueryProcessor {
     public QueryResult placeQuery(QueryRequest queryRequest) {
         QueryResultBuilder queryResultBuilder = new QueryResultBuilder();
 
-        CachedQuery cachedQueryResult = queryResultCacheDao.findCachedQueryResult(queryRequest);
+        CachedQuery cachedQuery = queryResultCacheDao.findCachedQueryResult(queryRequest);
 
-        if(hasNeverBeenCachedBefore(cachedQueryResult)) {
+        if(hasNeverBeenCachedBefore(cachedQuery)) {
 
-            Query query = queryDao.findQueryByName(queryRequest.getQueryName());
+            Query query = findQuery(queryRequest);
 
             if(isNotACachableQuery(query)){
 
-                queryResultBuilder.addError(
-                        (query == null ? "Query not found: " : "Query not eligible for caching: ")
-                        +queryRequest.getQueryName());
-
-            } else {
-
-                List<Map<String, Object>> queryResult = queryExecutor.runQuery(query);
-
-                cachedQueryResult = new CachedQuery(query.getName(), query.getCacheableDuration().toMillis());
-                cachedQueryResult.setCachedQueryResult(queryResult);
-                cachedQueryResult.setDateCached(new Date());
-                queryResultCacheDao.save(cachedQueryResult);
+                return queryResultBuilder.addError(
+                        (query == null ?
+                                "Query not found: " :
+                                "Query not eligible for caching: ")
+                                + queryRequest.getQueryName())
+                        .build();
 
             }
+
+            CachedQuery newCachedQuery = new CachedQuery(query.getName(), query.getCacheableDuration().toMillis());
+            queryResultCacheDao.save(newCachedQuery);
+            cachedQuery = newCachedQuery;
+
         }
 
-        //todo cache expired
+        if(cachedQuery.isCacheMiss()) {
+            Query query = findQuery(queryRequest);
+            List<Map<String, Object>> queryResult = executeQuery(query);
+            cachedQuery.setLiveDurationMs(query.getCacheableDuration().toMillis());
+            cachedQuery.setCachedQueryResult(queryResult);
+            cachedQuery.setDateWhenCached(new Date());
+            queryResultCacheDao.updateQueryCacheResult(cachedQuery);
+        }
 
-        //todo cache re-useable
-
-        if(hasResultThatNeedsFormatting(queryResultBuilder, cachedQueryResult)) {
-            final String formattedResult = new CsvFormatter().format(cachedQueryResult.getCachedQueryResult());
+        if(hasResultThatNeedsFormatting(queryResultBuilder, cachedQuery)) {
+            final String formattedResult = new CsvFormatter().format(cachedQuery.getCachedQueryResult());
             queryResultBuilder.withResult(formattedResult);
         }
 
         return queryResultBuilder.build();
+    }
+
+    private Query findQuery(QueryRequest queryRequest) {
+        return queryDao.findQueryByName(queryRequest.getQueryName());
+    }
+
+    private List<Map<String, Object>> executeQuery(Query query) {
+        return queryExecutor.runQuery(query);
     }
 
     private boolean hasResultThatNeedsFormatting(QueryResultBuilder queryResultBuilder, CachedQuery cachedQueryResult) {

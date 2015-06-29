@@ -44,7 +44,7 @@ public class QueryResultCacheDaoIntegrationTest {
 
         CachedQuery cachedQuery = new CachedQuery(query.getQueryName(), liveDuration.toMillis());
         assertThat(cachedQuery.getQueryName()).isEqualTo(query.getQueryName());
-        assertThat(cachedQuery.getDateCached()).isNull();
+        assertThat(cachedQuery.getTimestampWhenCached()).isNull();
         assertThat(cachedQuery.getCachedQueryResult()).isNull();
         assertThat(cachedQuery.getLiveDurationMs()).isEqualTo(liveDuration.toMillis());
         assertThat(cachedQuery.isCacheMiss()).isTrue();
@@ -56,7 +56,7 @@ public class QueryResultCacheDaoIntegrationTest {
         assertThat(findResult.getLiveDurationMs()).isEqualTo(liveDuration.toMillis());
         assertThat(findResult.isCacheMiss()).isTrue();
         assertThat(findResult.getCachedQueryResult()).isNull();
-        assertThat(findResult.getDateCached()).isNull();
+        assertThat(findResult.getTimestampWhenCached()).isNull();
 
         ArrayList<Map<String, Object>> resultToCache = new ArrayList<>();
         Map<String, Object> aRowOfData = new HashMap<>();
@@ -65,7 +65,7 @@ public class QueryResultCacheDaoIntegrationTest {
         cachedQuery.setCachedQueryResult(resultToCache);
 
         Date dateResultRetrieved = new Date();
-        cachedQuery.setDateCached(dateResultRetrieved);
+        cachedQuery.setDateWhenCached(dateResultRetrieved);
 
         queryResultCacheDao.updateQueryCacheResult(cachedQuery);
 
@@ -73,7 +73,7 @@ public class QueryResultCacheDaoIntegrationTest {
         assertThat(findCachedResult.getQueryName()).isEqualTo(query.getQueryName());
         assertThat(findCachedResult.getLiveDurationMs()).isEqualTo(liveDuration.toMillis());
         assertThat(findCachedResult.isCacheMiss()).isFalse();
-        assertThat(findCachedResult.getDateCached()).isEqualTo(dateResultRetrieved);
+        assertThat(findCachedResult.getTimestampWhenCached()).isEqualTo(dateResultRetrieved);
         assertThat(findCachedResult.getCachedQueryResult()).isEqualTo(resultToCache);
     }
 

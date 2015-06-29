@@ -24,7 +24,7 @@ public class QueryResultCacheMapper implements ResultSetMapper<CachedQuery> {
     public CachedQuery map(int index, ResultSet r, StatementContext ctx) throws SQLException {
         CachedQuery cachedQuery = new CachedQuery(r.getString(QueryResultCacheDao.COL_QUERY_NAME), r.getLong(QueryResultCacheDao.COL_LIVE_DURATION_MS));
         cachedQuery.setId(r.getLong(QueryResultCacheDao.COL_ID));
-        cachedQuery.setDateCached(r.getTimestamp(QueryResultCacheDao.COL_DATE_CACHED));
+        cachedQuery.setTimestampWhenCached(r.getTimestamp(QueryResultCacheDao.COL_DATE_CACHED));
 
         cachedQuery.setCachedQueryResult(
                 queryResultToClobConverter.deserialise(
