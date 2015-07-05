@@ -97,17 +97,17 @@ public class QueryResultToClobConverterTest {
         queryResult.add(aRowOfData);
 
         Map<String, Object> anotherRowOfData = new HashMap<>();
-        anotherRowOfData.put("string", "a string, with \"punctuation\".");
-        anotherRowOfData.put("integer", 123456789);
-        anotherRowOfData.put("floats", 987654321.123456789f);
-        anotherRowOfData.put("date", new Date(1434801713301l));
+        anotherRowOfData.put("string", "the quick brown fox.");
+        anotherRowOfData.put("integer", 123);
+        anotherRowOfData.put("floats", 987.123f);
+        anotherRowOfData.put("date", new Date(1433500022222l));
         queryResult.add(anotherRowOfData);
 
         String actual = queryResultToClobConverter.serialise(queryResult);
 
         String expected =
                 "[{\"date\":\"Jun 20, 2015 1:01:53 PM\",\"floats\":9.8765434E8,\"string\":\"a string, with \\\"punctuation\\\".\",\"integer\":123456789}" +
-                ",{\"date\":\"Jun 20, 2015 1:01:53 PM\",\"floats\":9.8765434E8,\"string\":\"a string, with \\\"punctuation\\\".\",\"integer\":123456789}]";
+                ",{\"date\":\"Jun 5, 2015 11:27:02 AM\",\"floats\":987.123,\"string\":\"the quick brown fox.\",\"integer\":123}]";
         JSONAssert.assertEquals(expected, actual, false);
     }
 
