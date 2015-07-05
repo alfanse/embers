@@ -8,8 +8,12 @@ import javax.sql.rowset.serial.SerialClob;
 import java.sql.Clob;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.ZoneId;
 import java.util.*;
 
+import static java.time.LocalDateTime.of;
 import static org.fest.assertions.api.Assertions.assertThat;
 
 
@@ -87,28 +91,31 @@ public class QueryResultToClobConverterTest {
     }
 
     @Test
-    public void seraliseMultipleRowsMultipleColumnsIntoJson() throws Exception {
+    public void seraliseMultipleRowsMultipleColumnsMultiTypesIntoJson() throws Exception {
         ArrayList<Map<String, Object>> queryResult = new ArrayList<>();
         Map<String, Object> aRowOfData = new HashMap<>();
         aRowOfData.put("string", "a string, with \"punctuation\".");
         aRowOfData.put("integer", 123456789);
         aRowOfData.put("floats", 987654321.123456789f);
-        aRowOfData.put("date", new Date(1434801713301l));
+        aRowOfData.put("date", convertToDate(of(2015, Month.OCTOBER, 31, 23, 59, 59)));
         queryResult.add(aRowOfData);
 
         Map<String, Object> anotherRowOfData = new HashMap<>();
-        anotherRowOfData.put("string", "the quick brown fox.");
-        anotherRowOfData.put("integer", 123);
+        anotherRowOfData.put("date", convertToDate(of(2015, Month.JANUARY, 5, 1, 2, 3)));
         anotherRowOfData.put("floats", 987.123f);
-        anotherRowOfData.put("date", new Date(1433500022222l));
+        anotherRowOfData.put("integer", 123);
+        anotherRowOfData.put("string", "the quick brown fox.");
         queryResult.add(anotherRowOfData);
 
         String actual = queryResultToClobConverter.serialise(queryResult);
-
         String expected =
-                "[{\"date\":\"Jun 20, 2015 1:01:53 PM\",\"floats\":9.8765434E8,\"string\":\"a string, with \\\"punctuation\\\".\",\"integer\":123456789}" +
-                ",{\"date\":\"Jun 5, 2015 11:27:02 AM\",\"floats\":987.123,\"string\":\"the quick brown fox.\",\"integer\":123}]";
+                "[{\"date\":\"Oct 31, 2015 11:59:59 PM\",\"floats\":9.8765434E8,\"string\":\"a string, with \\\"punctuation\\\".\",\"integer\":123456789}" +
+                ",{\"date\":\"Jan 5, 2015 1:02:03 AM\",\"floats\":987.123,\"string\":\"the quick brown fox.\",\"integer\":123}]";
         JSONAssert.assertEquals(expected, actual, false);
+    }
+
+    private Date convertToDate(LocalDateTime localDateTime) {
+        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
     }
 
 }

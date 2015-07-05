@@ -22,10 +22,10 @@ public class QueryResultToClobConverter {
         if (clob == null) {
             return null;
         }
-        return new Gson().fromJson(clobBackToJsonString(clob), TYPE_OF_RESULT.getClass());
+        return new Gson().fromJson(clobToString(clob), TYPE_OF_RESULT.getClass());
     }
 
-    private String clobBackToJsonString(java.sql.Clob data) {
+    private String clobToString(java.sql.Clob data) {
 
         try (final BufferedReader br = new BufferedReader(data.getCharacterStream())){
             final StringBuilder sb = new StringBuilder();
