@@ -53,6 +53,9 @@ subprojects {
             gson: [
                     'com.google.code.gson:gson:2.3.1'
             ],
+            json_assert: [
+                    'org.skyscreamer:jsonassert:1.2.3'
+            ],
             jetty: [
 //              beloved server
                 'org.eclipse.jetty:jetty-server:9.3.0.M1',

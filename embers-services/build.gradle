@@ -5,6 +5,7 @@ dependencies {
     compile libs.gson
     testCompile libs.unit_tests
     testCompile libs.jersey
+    testCompile libs.json_assert
 }
 
 jar {
