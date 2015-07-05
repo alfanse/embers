@@ -1,0 +1,5 @@
+# your build sir: https://circleci.com/
+
+machine:
+  java:
+    version: openjdk8
