@@ -1,6 +1,5 @@
-package adf.embers.query.persistence.cacheing;
+package adf.embers.cache.persistence;
 
-import adf.embers.cache.persistence.QueryResultToClobConverter;
 import com.google.gson.Gson;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;

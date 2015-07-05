@@ -3,3 +3,8 @@
 machine:
   java:
     version: oraclejdk8
+
+general:
+  artifacts:
+    - "embers-services/build/reports"
+    - "embers-acceptance-tests/build/reports"
