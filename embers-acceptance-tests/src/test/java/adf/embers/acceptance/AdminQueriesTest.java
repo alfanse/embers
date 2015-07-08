@@ -1,6 +1,7 @@
 package adf.embers.acceptance;
 
 import adf.embers.query.persistence.QueryDao;
+import adf.embers.tools.GetAndLogTables;
 import adf.embers.tools.YatspecHttpPostCommandBuilder;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
@@ -9,8 +10,6 @@ import org.hamcrest.BaseMatcher;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Description;
 import org.junit.Test;
-import org.skife.jdbi.v2.Handle;
-import org.skife.jdbi.v2.Query;
 import yatspec.http.YatspecHttpDeleteCommand;
 import yatspec.http.YatspecHttpGetCommand;
 import yatspec.http.YatspecHttpPostCommand;
@@ -125,14 +124,7 @@ public class AdminQueriesTest extends EmbersAcceptanceTestBase {
     }
 
     private StateExtractor<ResultSetWrapper> theQueriesTable() {
-        return inputAndOutputs -> {
-            try (Handle handle = embersServer.getEmbersDatabase().openDatabaseHandle()) {
-                Query<Map<String, Object>> q = handle.createQuery("select * from " + QueryDao.TABLE_QUERIES + " order by " + QueryDao.COL_ID);
-                ResultSetWrapper resultSetWrapper = new ResultSetWrapper(q.list());
-                log("Database - " + QueryDao.TABLE_QUERIES, resultSetWrapper);
-                return resultSetWrapper;
-            }
-        };
+        return new GetAndLogTables(this).queriesTable();
     }
 
     private BaseMatcher<ResultSetWrapper> hasTheQuery() {

@@ -59,4 +59,10 @@ public class Query {
     public Duration getCacheableDuration() {
         return cacheableDuration;
     }
+
+
+    @SuppressWarnings("unused") //used in QueryDao by name
+    public Long getCacheableDurationInMs() {
+        return cacheableDuration == null ? null : cacheableDuration.toMillis();
+    }
 }

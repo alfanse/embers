@@ -8,6 +8,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.skife.jdbi.v2.DBI;
 
+import java.time.Duration;
+
 import static org.fest.assertions.api.Assertions.assertThat;
 
 public class QueryDaoIntegrationTest {
@@ -31,7 +33,7 @@ public class QueryDaoIntegrationTest {
     }
 
     @Test
-    public void saveAndFindQueryByName() throws Exception {
+    public void saveAndFindQueryByName() {
         Query expectedQuery = new Query("testq", "some description", "select 1 from dual");
         queryDao.save(expectedQuery);
 
@@ -43,7 +45,7 @@ public class QueryDaoIntegrationTest {
     }
 
     @Test
-    public void saveAndUpdateQuery() throws Exception {
+    public void saveAndUpdateQuery() {
         Query expectedQuery = new Query("testq", "some description", "select 1 from dual");
         queryDao.save(expectedQuery);
 
@@ -58,7 +60,33 @@ public class QueryDaoIntegrationTest {
     }
 
     @Test
-    public void findUnknown() throws Exception {
+    public void cantUpdateWithoutSavingFirst() {
+        Query updatedQuery = new Query("testq", "changed description", "changed sql");
+        queryDao.update(updatedQuery);
+
+        final Query actualQuery = queryDao.findQueryByName(updatedQuery.getName());
+        assertThat(actualQuery).isNull();
+    }
+
+    @Test
+    public void saveAndUpdateQueryWithDuration() {
+        final Duration durationA = Duration.ofDays(1);
+        Query expectedQuery = new Query("testq", "some description", "select 1 from dual", durationA);
+        queryDao.save(expectedQuery);
+
+        final Query actualSavedQuery = queryDao.findQueryByName(expectedQuery.getName());
+        assertThat(actualSavedQuery.getCacheableDuration()).isEqualTo(durationA);
+
+        final Duration durationB = Duration.ofDays(2);
+        Query updatedQuery = new Query(expectedQuery.getName(), "changed description", "changed sql", durationB);
+        queryDao.update(updatedQuery);
+
+        final Query actualUpdatedQuery = queryDao.findQueryByName(expectedQuery.getName());
+        assertThat(actualUpdatedQuery.getCacheableDuration()).isEqualTo(durationB);
+    }
+
+    @Test
+    public void findUnknown() {
         final Query queryByName = queryDao.findQueryByName("unknown");
         assertThat(queryByName).isNull();
     }

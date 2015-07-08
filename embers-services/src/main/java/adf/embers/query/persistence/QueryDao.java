@@ -18,16 +18,22 @@ public interface QueryDao {
     String COL_NAME = "name";
     String COL_DESCRIPTION = "description";
     String COL_SQL = "sql";
+    String COL_CACHEABLE_DURATION = "cacheable_duration";
+    String METHOD_NAME_GET_CACHEABLE_DURATION_IN_MS = "cacheableDurationInMs";
 
     @SqlQuery("select * from " + TABLE_QUERIES + " where " + COL_NAME + " = :queryName")
     Query findQueryByName(@Bind(value = "queryName") String queryName);
 
     @SqlUpdate("Insert into " + TABLE_QUERIES + " ("
-            + COL_NAME + ", " + COL_DESCRIPTION + ", " + COL_SQL + ") values (:q.name, :q.description, :q.sql)")
+            + COL_NAME + ", " + COL_DESCRIPTION + ", " + COL_SQL + "," +COL_CACHEABLE_DURATION
+            + ") values (:q.name, :q.description, :q.sql, :q." + METHOD_NAME_GET_CACHEABLE_DURATION_IN_MS + ")")
     void save(@BindBean("q") Query query);
 
     @SqlUpdate("Update "+TABLE_QUERIES
-            +" set "+COL_DESCRIPTION+"=:q.description, "+COL_SQL+"=:q.sql where "+COL_NAME+"=:q.name")
+            +" set " +COL_DESCRIPTION+"=:q.description, "
+                     +COL_SQL+"=:q.sql, "
+                     +COL_CACHEABLE_DURATION+ "=:q." + METHOD_NAME_GET_CACHEABLE_DURATION_IN_MS + " " +
+            " where "+COL_NAME+"=:q.name")
     void update(@BindBean("q") Query query);
 
     @SqlUpdate("Delete from "+TABLE_QUERIES+" where "+COL_NAME+"=:queryName")

@@ -1,6 +1,7 @@
 package adf.embers.tools;
 
 import adf.embers.admin.AdminQueryHandler;
+import adf.embers.cache.QueryResultCacheHandler;
 import adf.embers.query.QueryHandler;
 
 import javax.sql.DataSource;
@@ -44,16 +45,16 @@ public class EmbersServer {
         return embersDatabase;
     }
 
-    public String embersCachedQueryPath() {
-        return getEmbersContextPath() + "/" + QueryHandler.PATH+"/"+"cached";
+    public String embersAdminPath() {
+        return getEmbersContextPath() + AdminQueryHandler.PATH;
     }
 
     public String embersQueryPath() {
         return getEmbersContextPath() + "/" + QueryHandler.PATH;
     }
 
-    public String embersAdminPath() {
-        return getEmbersContextPath() + AdminQueryHandler.PATH;
+    public String embersCachedQueryPath() {
+        return getEmbersContextPath() + "/" + QueryResultCacheHandler.PATH;
     }
 
     /**
