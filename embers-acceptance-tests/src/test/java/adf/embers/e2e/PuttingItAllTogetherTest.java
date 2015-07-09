@@ -1,8 +1,8 @@
 package adf.embers.e2e;
 
 import adf.embers.acceptance.EmbersAcceptanceTestBase;
+import adf.embers.tools.GetAndLogTables;
 import adf.embers.tools.YatspecHttpPostCommandBuilder;
-import adf.embers.tools.functions.QueryFunctions;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
 import com.googlecode.yatspec.state.givenwhenthen.GivensBuilder;
@@ -161,7 +161,7 @@ public class PuttingItAllTogetherTest extends EmbersAcceptanceTestBase {
 
 
     private StateExtractor<List<Map<String, Object>>> theUserCheckesTheQueriesPerformance() {
-        return QueryFunctions.getAndLogQueryStatistics(embersServer.getEmbersDatabase().getDataSource(), this, "Performance Results");
+        return new GetAndLogTables(this, embersServer.getEmbersDatabase().getDataSource()).getAndLogQueryStatistics("Performance Results");
     }
 
     private TypeSafeDiagnosingMatcher<List<Map<String, Object>>> andIsHappyItsFastEnough() {

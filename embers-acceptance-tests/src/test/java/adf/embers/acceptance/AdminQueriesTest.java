@@ -124,7 +124,7 @@ public class AdminQueriesTest extends EmbersAcceptanceTestBase {
     }
 
     private StateExtractor<ResultSetWrapper> theQueriesTable() {
-        return new GetAndLogTables(this).queriesTable();
+        return new GetAndLogTables(this, embersServer.getEmbersDatabase().getDataSource()).queriesTable();
     }
 
     private BaseMatcher<ResultSetWrapper> hasTheQuery() {

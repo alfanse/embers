@@ -1,22 +1,37 @@
 package adf.embers.tools;
 
-import adf.embers.acceptance.EmbersAcceptanceTestBase;
 import adf.embers.cache.persistence.QueryResultCacheDao;
 import adf.embers.query.persistence.QueryDao;
 import com.googlecode.yatspec.state.givenwhenthen.StateExtractor;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
+import org.skife.jdbi.v2.DBI;
 import org.skife.jdbi.v2.Handle;
 import org.skife.jdbi.v2.Query;
 import yatspec.renderers.ResultSetWrapper;
 
+import javax.sql.DataSource;
+import java.util.List;
 import java.util.Map;
+
+import static adf.embers.query.persistence.QueryStatisticsDao.TABLE_QUERIES_STATISTICS;
 
 public class GetAndLogTables {
 
     private final TestState testState;
+    private final DataSource dataSource;
 
-    public GetAndLogTables(TestState testState) {
+    public GetAndLogTables(TestState testState, DataSource dataSource) {
         this.testState = testState;
+        this.dataSource = dataSource;
+    }
+
+    public StateExtractor<List<Map<String, Object>>> getAndLogQueryStatistics(String logKey) {
+        return inputAndOutputs -> {
+            final String sql = "select * from " + TABLE_QUERIES_STATISTICS + " order by id desc";
+            final ResultSetWrapper resultSetWrapper = selectRows(sql);
+            testState.log(logKey, resultSetWrapper);
+            return resultSetWrapper.getResultSet();
+        };
     }
 
     public StateExtractor<ResultSetWrapper> queriesTable() {
@@ -40,7 +55,7 @@ public class GetAndLogTables {
     }
 
     private ResultSetWrapper selectRows(String sql) {
-        try (Handle handle = EmbersAcceptanceTestBase.embersServer.getEmbersDatabase().openDatabaseHandle()) {
+        try (Handle handle = new DBI(dataSource).open()) {
             Query<Map<String, Object>> q = handle.createQuery(sql);
             return new ResultSetWrapper(q.list());
         }

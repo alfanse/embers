@@ -35,7 +35,7 @@ public class CachedQueriesTest extends EmbersAcceptanceTestBase {
 
     private final YatspecQueryInserter yatspecQueryInserter = new YatspecQueryInserter(this, embersServer.getEmbersDatabase().getDataSource());
     private final YatspecHttpCommand http = new YatspecHttpGetCommand(this);
-    private final GetAndLogTables getAndLogTables = new GetAndLogTables(this);
+    private final GetAndLogTables getAndLogTables = new GetAndLogTables(this, embersServer.getEmbersDatabase().getDataSource());
 
     @Test
     public void aCachableQueryIsCalledWhenTheCacheIsEmpty() throws Exception {

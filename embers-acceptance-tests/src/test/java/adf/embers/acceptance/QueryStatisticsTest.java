@@ -1,5 +1,6 @@
 package adf.embers.acceptance;
 
+import adf.embers.tools.GetAndLogTables;
 import adf.embers.tools.YatspecQueryInserter;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
@@ -15,7 +16,6 @@ import java.util.Map;
 
 import static adf.embers.query.persistence.QueryStatisticsDao.*;
 import static adf.embers.tools.QueryInserter.ALL_QUERIES;
-import static adf.embers.tools.functions.QueryFunctions.getAndLogQueryStatistics;
 import static org.fest.assertions.api.Assertions.assertThat;
 
 @Notes("Performance of Embers Queries is audited to a database table.")
@@ -31,13 +31,13 @@ public class QueryStatisticsTest extends EmbersAcceptanceTestBase {
         then(thePerformanceAudit(), showsUsefulStatisticsAboutTheExecutedQuery());
     }
 
-    private ActionUnderTest httpGetRequestFor(String query){
+    private ActionUnderTest httpGetRequestFor(String query) {
         http.setUrl(embersServer.embersQueryPath() + "/" + query);
         return http;
     }
 
     private StateExtractor<List<Map<String, Object>>> thePerformanceAudit() {
-        return getAndLogQueryStatistics(embersServer.getEmbersDatabase().getDataSource(), this, "Database Table - " + TABLE_QUERIES_STATISTICS);
+        return new GetAndLogTables(this, embersServer.getEmbersDatabase().getDataSource()).getAndLogQueryStatistics("Database Table - " + TABLE_QUERIES_STATISTICS);
     }
 
     private TypeSafeDiagnosingMatcher<List<Map<String, Object>>> showsUsefulStatisticsAboutTheExecutedQuery() {
