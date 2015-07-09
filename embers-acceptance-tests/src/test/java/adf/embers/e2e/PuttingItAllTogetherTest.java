@@ -11,6 +11,7 @@ import org.fest.assertions.core.Condition;
 import org.fest.assertions.data.MapEntry;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
+import org.junit.Before;
 import org.junit.Test;
 import org.skife.jdbi.v2.Handle;
 import yatspec.http.YatspecHttpGetCommand;
@@ -35,6 +36,12 @@ public class PuttingItAllTogetherTest extends EmbersAcceptanceTestBase {
 
     private YatspecHttpPostCommand httpPost;
     private YatspecHttpGetCommand httpGet;
+    private GetAndLogTables getAndLogTables;
+
+    @Before
+    public void setUp() throws Exception {
+        getAndLogTables = new GetAndLogTables(this, embersServer.getEmbersDatabase().getDataSource());
+    }
 
     @Test
     public void maintainAReportAgainstADatabase() throws Exception {
@@ -160,21 +167,22 @@ public class PuttingItAllTogetherTest extends EmbersAcceptanceTestBase {
     }
 
 
-    private StateExtractor<List<Map<String, Object>>> theUserCheckesTheQueriesPerformance() {
-        return new GetAndLogTables(this, embersServer.getEmbersDatabase().getDataSource()).getAndLogQueryStatistics("Performance Results");
+    private StateExtractor<ResultSetWrapper> theUserCheckesTheQueriesPerformance() {
+        return getAndLogTables.getAndLogQueryStatistics("Performance Results");
     }
 
-    private TypeSafeDiagnosingMatcher<List<Map<String, Object>>> andIsHappyItsFastEnough() {
-        return new TypeSafeDiagnosingMatcher<List<Map<String, Object>>>() {
+    private TypeSafeDiagnosingMatcher<ResultSetWrapper> andIsHappyItsFastEnough() {
+        return new TypeSafeDiagnosingMatcher<ResultSetWrapper>() {
             @Override
             public void describeTo(Description description) {
                 description.appendText("Not the expected result.");
             }
 
             @Override
-            protected boolean matchesSafely(List<Map<String, Object>> item, Description mismatchDescription) {
-                assertThat(item).hasSize(2);
-                final Map<String, Object> firstRow = item.get(0);
+            protected boolean matchesSafely(ResultSetWrapper item, Description mismatchDescription) {
+                final List<Map<String, Object>> resultSet = item.getResultSet();
+                assertThat(resultSet).hasSize(2);
+                final Map<String, Object> firstRow = resultSet.get(0);
                 assertThat(firstRow).contains(MapEntry.entry(COL_QUERY_NAME, QUERY_MOST_RENTED_ITEMS));
                 assertThat(firstRow.get(COL_DURATION)).is(new Condition<Object>() {
                     @Override

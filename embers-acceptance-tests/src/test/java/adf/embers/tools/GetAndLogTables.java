@@ -10,7 +10,6 @@ import org.skife.jdbi.v2.Query;
 import yatspec.renderers.ResultSetWrapper;
 
 import javax.sql.DataSource;
-import java.util.List;
 import java.util.Map;
 
 import static adf.embers.query.persistence.QueryStatisticsDao.TABLE_QUERIES_STATISTICS;
@@ -25,12 +24,12 @@ public class GetAndLogTables {
         this.dataSource = dataSource;
     }
 
-    public StateExtractor<List<Map<String, Object>>> getAndLogQueryStatistics(String logKey) {
+    public StateExtractor<ResultSetWrapper> getAndLogQueryStatistics(String logKey) {
         return inputAndOutputs -> {
             final String sql = "select * from " + TABLE_QUERIES_STATISTICS + " order by id desc";
             final ResultSetWrapper resultSetWrapper = selectRows(sql);
             testState.log(logKey, resultSetWrapper);
-            return resultSetWrapper.getResultSet();
+            return resultSetWrapper;
         };
     }
 

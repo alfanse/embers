@@ -10,6 +10,7 @@ import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.junit.Test;
 import yatspec.http.YatspecHttpGetCommand;
+import yatspec.renderers.ResultSetWrapper;
 
 import java.util.List;
 import java.util.Map;
@@ -36,21 +37,22 @@ public class QueryStatisticsTest extends EmbersAcceptanceTestBase {
         return http;
     }
 
-    private StateExtractor<List<Map<String, Object>>> thePerformanceAudit() {
+    private StateExtractor<ResultSetWrapper> thePerformanceAudit() {
         return new GetAndLogTables(this, embersServer.getEmbersDatabase().getDataSource()).getAndLogQueryStatistics("Database Table - " + TABLE_QUERIES_STATISTICS);
     }
 
-    private TypeSafeDiagnosingMatcher<List<Map<String, Object>>> showsUsefulStatisticsAboutTheExecutedQuery() {
-        return new TypeSafeDiagnosingMatcher<List<Map<String, Object>>>() {
+    private TypeSafeDiagnosingMatcher<ResultSetWrapper> showsUsefulStatisticsAboutTheExecutedQuery() {
+        return new TypeSafeDiagnosingMatcher<ResultSetWrapper>() {
             @Override
             public void describeTo(Description description) {
                 description.appendText("Not the expected result.");
             }
 
             @Override
-            protected boolean matchesSafely(List<Map<String, Object>> item, Description mismatchDescription) {
-                assertThat(item).hasSize(1);
-                final Map<String, Object> firstRow = item.get(0);
+            protected boolean matchesSafely(ResultSetWrapper item, Description mismatchDescription) {
+                final List<Map<String, Object>> resultSet = item.getResultSet();
+                assertThat(resultSet).hasSize(1);
+                final Map<String, Object> firstRow = resultSet.get(0);
                 assertThat(firstRow).contains(MapEntry.entry(COL_QUERY_NAME, ALL_QUERIES));
                 assertThat(firstRow).containsKey(COL_DATE_EXECUTED).containsKey(COL_DURATION).containsKey(COL_RESULT);
                 assertThat(firstRow.get(COL_DATE_EXECUTED)).isNotNull();
