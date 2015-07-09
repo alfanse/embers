@@ -38,7 +38,7 @@ public class QueryStatisticsTest extends EmbersAcceptanceTestBase {
     }
 
     private StateExtractor<ResultSetWrapper> thePerformanceAudit() {
-        return new GetAndLogTables(this, embersServer.getEmbersDatabase().getDataSource()).getAndLogQueryStatistics("Database Table - " + TABLE_QUERIES_STATISTICS);
+        return new GetAndLogTables(this, embersServer.getEmbersDatabase().getDataSource()).queryStatisticsTable("Database Table - " + TABLE_QUERIES_STATISTICS);
     }
 
     private TypeSafeDiagnosingMatcher<ResultSetWrapper> showsUsefulStatisticsAboutTheExecutedQuery() {

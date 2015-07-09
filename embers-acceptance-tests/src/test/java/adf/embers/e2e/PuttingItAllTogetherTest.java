@@ -168,7 +168,7 @@ public class PuttingItAllTogetherTest extends EmbersAcceptanceTestBase {
 
 
     private StateExtractor<ResultSetWrapper> theUserCheckesTheQueriesPerformance() {
-        return getAndLogTables.getAndLogQueryStatistics("Performance Results");
+        return getAndLogTables.queryStatisticsTable("Database after - ");
     }
 
     private TypeSafeDiagnosingMatcher<ResultSetWrapper> andIsHappyItsFastEnough() {

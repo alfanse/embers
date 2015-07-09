@@ -24,15 +24,6 @@ public class GetAndLogTables {
         this.dataSource = dataSource;
     }
 
-    public StateExtractor<ResultSetWrapper> getAndLogQueryStatistics(String logKey) {
-        return inputAndOutputs -> {
-            final String sql = "select * from " + TABLE_QUERIES_STATISTICS + " order by id desc";
-            final ResultSetWrapper resultSetWrapper = selectRows(sql);
-            testState.log(logKey, resultSetWrapper);
-            return resultSetWrapper;
-        };
-    }
-
     public StateExtractor<ResultSetWrapper> queriesTable() {
         return inputAndOutputs -> getAndLogRowsOnQueriesTable();
     }
@@ -45,11 +36,27 @@ public class GetAndLogTables {
         return rowsOnQueriesTable;
     }
 
-    public ResultSetWrapper getAndLogRowsOnQueryResultCacheTable() {
+    public StateExtractor<ResultSetWrapper> queryStatisticsTable(String logKeyPrefix) {
+        return inputAndOutputs -> getAndLogQueryStatistics(logKeyPrefix);
+    }
+
+    public ResultSetWrapper getAndLogQueryStatistics(String logKeyPrefix) {
+        final String sql = "select * from " + TABLE_QUERIES_STATISTICS + " order by id desc";
+        final ResultSetWrapper resultSetWrapper = selectRows(sql);
+        testState.log(logKeyPrefix+TABLE_QUERIES_STATISTICS, resultSetWrapper);
+        return resultSetWrapper;
+    }
+
+
+    public StateExtractor<ResultSetWrapper> queryResultCacheTable(String logKeyPrefix) {
+        return inputAndOutputs -> getAndLogRowsOnQueryResultCacheTable(logKeyPrefix);
+    }
+
+    public ResultSetWrapper getAndLogRowsOnQueryResultCacheTable(String logKeyPrefix) {
         final String sql = "select * from " + QueryResultCacheDao.TABLE_QUERIES_RESULT_CACHE
                 + " order by " + QueryResultCacheDao.COL_ID;
         final ResultSetWrapper resultSetWrapper = selectRows(sql);
-        testState.log("Database - " + QueryResultCacheDao.TABLE_QUERIES_RESULT_CACHE, resultSetWrapper);
+        testState.log(logKeyPrefix + QueryResultCacheDao.TABLE_QUERIES_RESULT_CACHE, resultSetWrapper);
         return resultSetWrapper;
     }
 
