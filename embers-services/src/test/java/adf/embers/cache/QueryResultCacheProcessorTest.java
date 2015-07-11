@@ -10,8 +10,8 @@ import adf.embers.query.persistence.Query;
 import adf.embers.query.persistence.QueryDao;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
 
+import java.sql.Timestamp;
 import java.time.Duration;
 import java.util.Date;
 import java.util.List;
@@ -62,7 +62,9 @@ public class QueryResultCacheProcessorTest {
     }
 
     @Test
+    //todo stop using mocked CachedQuery
     public void noCacheRecordAndQueryExistsAndCanBeCached() throws Exception {
+        final Date startTime = new Date();
         when(queryResultCacheDao.findCachedQueryResult(queryRequest)).thenReturn(null);
 
         Duration cachableDuration = givenAQueryWithACachableDuration();
@@ -93,12 +95,15 @@ public class QueryResultCacheProcessorTest {
 
         assertThat(cachedQueryResult.hasErrors()).isFalse();
         assertThat(cachedQueryResult.getResult()).isEmpty();
+        assertThat(cachedQueryResult.getCachedOn()).isAfterOrEqualsTo(startTime);
     }
 
     @Test
     public void cachedRecordAndWithinLiveDuration() throws Exception {
         when(cachedQuery.hasCachedQueryResult()).thenReturn(true);
         when(cachedQuery.getCachedQueryResult()).thenReturn(emptyList());
+        final Timestamp cachedDate = new Timestamp(555555555L);
+        when(cachedQuery.getTimestampWhenCached()).thenReturn(cachedDate);
 
         when(queryResultCacheDao.findCachedQueryResult(queryRequest)).thenReturn(cachedQuery);
         when(cachedQuery.isCacheMiss()).thenReturn(false);
@@ -110,30 +115,38 @@ public class QueryResultCacheProcessorTest {
 
         assertThat(queryResult.hasErrors()).isFalse();
         assertThat(queryResult.getResult()).contains("");
+        assertThat(queryResult.getCachedOn()).isEqualTo(cachedDate);
     }
 
     @Test
     public void cachedRecordButExpired() throws Exception {
-        when(queryResultCacheDao.findCachedQueryResult(queryRequest)).thenReturn(cachedQuery);
-        when(cachedQuery.isCacheMiss()).thenReturn(true);
-        when(cachedQuery.hasCachedQueryResult()).thenReturn(true);
-        when(cachedQuery.getCachedQueryResult()).thenReturn(emptyList());
-
+        final Date startTime = new Date();
         Duration cachableDuration = givenAQueryWithACachableDuration();
+
+        final CachedQuery cachedQuery = new CachedQuery(QUERY_NAME, cachableDuration.toMillis());
+        cachedQuery.setCachedQueryResult(emptyList());
+        cachedQuery.setDateWhenCached(new Date(555555555L));
+        when(queryResultCacheDao.findCachedQueryResult(queryRequest)).thenReturn(cachedQuery);
+
         List<Map<String, Object>> queryResult = givenTheResultOfExecutingAQuery();
 
         QueryResult cachedQueryResult = queryResultCacheProcessor.placeQuery(queryRequest);
 
         verify(queryResultCacheDao, never()).save(any(CachedQuery.class));
 
-        verify(queryResultCacheDao).updateQueryCacheResult(Mockito.eq(cachedQuery));
+        final ArgumentCaptor<CachedQuery> cachedQueryArgumentCaptor = ArgumentCaptor.forClass(CachedQuery.class);
+        verify(queryResultCacheDao).updateQueryCacheResult(cachedQueryArgumentCaptor.capture());
 
-        verify(cachedQuery).setLiveDurationMs(cachableDuration.toMillis());
-        verify(cachedQuery).setCachedQueryResult(queryResult);
-        verify(cachedQuery).setDateWhenCached(any(Date.class));
+        final CachedQuery updatedCachedQuery = cachedQueryArgumentCaptor.getValue();
+        assertThat(updatedCachedQuery.getQueryName()).isEqualTo(QUERY_NAME);
+        assertThat(updatedCachedQuery.getLiveDurationMs()).isEqualTo(cachableDuration.toMillis());
+        assertThat(updatedCachedQuery.getCachedQueryResult()).isEqualTo(queryResult);
+        assertThat(updatedCachedQuery.getTimestampWhenCached()).isAfterOrEqualsTo(startTime);
+
 
         assertThat(cachedQueryResult.hasErrors()).isFalse();
         assertThat(cachedQueryResult.getResult()).isEmpty();
+        assertThat(cachedQueryResult.getCachedOn()).isAfterOrEqualsTo(startTime);
     }
 
     private Duration givenAQueryWithACachableDuration() {

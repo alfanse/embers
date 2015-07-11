@@ -1,5 +1,6 @@
 package adf.embers.query;
 
+import java.util.Date;
 import java.util.List;
 
 public interface QueryResult {
@@ -8,4 +9,6 @@ public interface QueryResult {
     boolean hasErrors();
 
     List<String> getErrors();
+
+    Date getCachedOn();
 }

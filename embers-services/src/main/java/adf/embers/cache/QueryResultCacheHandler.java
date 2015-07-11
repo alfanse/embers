@@ -19,6 +19,7 @@ import static adf.embers.statics.UrlTools.decodeString;
 public class QueryResultCacheHandler {
 
     public static final String PATH = "cached";
+    public static final String HEADER_WHEN_CHACHED = "REPORT_CACHED_AT";
 
     private final QueryProcessor queryProcessor;
 
@@ -38,6 +39,9 @@ public class QueryResultCacheHandler {
             return Response.status(HttpURLConnection.HTTP_NOT_FOUND).type(MediaType.TEXT_PLAIN_TYPE).entity(errorsString.get()).build();
         }
 
-        return Response.ok(queryResult.getResult()).build();
+        return Response
+                .ok(queryResult.getResult())
+                .header(HEADER_WHEN_CHACHED, queryResult.getCachedOn())
+                .build();
     }
 }

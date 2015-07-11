@@ -3,15 +3,22 @@ package adf.embers.query.impl;
 import adf.embers.query.QueryResult;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class QueryResultBuilder {
 
-    private String result;
     private final ArrayList<String> errors = new ArrayList<>();
+    private String result;
+    private Date cachedDate;
 
     public QueryResultBuilder withResult(String result) {
         this.result = result;
+        return this;
+    }
+
+    public QueryResultBuilder withCachedDate(Date cachedDate) {
+        this.cachedDate = cachedDate;
         return this;
     }
 
@@ -39,6 +46,11 @@ public class QueryResultBuilder {
             @Override
             public List<String> getErrors() {
                 return errors;
+            }
+
+            @Override
+            public Date getCachedOn() {
+                return cachedDate;
             }
         };
     }

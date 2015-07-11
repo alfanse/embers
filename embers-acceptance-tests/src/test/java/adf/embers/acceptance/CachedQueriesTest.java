@@ -3,6 +3,7 @@ package adf.embers.acceptance;
 import adf.embers.cache.persistence.QueryResultCacheDao;
 import adf.embers.query.persistence.Query;
 import adf.embers.query.persistence.QueryDao;
+import adf.embers.tools.AssertionMatcher;
 import adf.embers.tools.GetAndLogTables;
 import adf.embers.tools.ResultSetWrapperMatcher;
 import adf.embers.tools.YatspecQueryInserter;
@@ -11,9 +12,7 @@ import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.fest.assertions.core.Condition;
 import org.fest.assertions.data.MapEntry;
-import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 import org.junit.Ignore;
 import org.junit.Test;
 import yatspec.http.YatspecHttpCommand;
@@ -26,6 +25,7 @@ import java.util.Map;
 
 import static adf.embers.query.persistence.QueryStatisticsDao.COL_DATE_EXECUTED;
 import static adf.embers.query.persistence.QueryStatisticsDao.COL_QUERY_NAME;
+import static com.googlecode.yatspec.matchers.Matchers.has;
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.startsWith;
@@ -56,7 +56,7 @@ public class CachedQueriesTest extends EmbersAcceptanceTestBase {
 
         then(http.responseCode(), is(200));
         then(http.responseBody(), startsWith(QUERY_COLUMN));
-//        then(http.responseHeaders(), has(entryCachedReportTrue()));
+        then(http.responseHeaders(), has(entryCachedReportTrue()));
 
         thenQueryStasticsShowsTheQueryWasExecuted();
         thenQueryResultCacheShowsTheQueryHasJustBeenCached();
@@ -71,7 +71,7 @@ public class CachedQueriesTest extends EmbersAcceptanceTestBase {
 
         then(http.responseCode(), is(200));
         then(http.responseBody(), startsWith(QUERY_COLUMN));
-//        then(http.responseHeaders(), has(entryCachedReportTrue()));
+        then(http.responseHeaders(), has(entryCachedReportTrue()));
 
         thenQueryStasticsShowsTheQueryWasNotExecuted();
         thenQueryResultCacheShowsTheQueryWasCachedBeforeTheQueryWasMade();
@@ -124,9 +124,9 @@ public class CachedQueriesTest extends EmbersAcceptanceTestBase {
 
     private TestState thenQueryStasticsShowsTheQueryWasExecuted() throws Exception {
         return then(getAndLogTables.queryStatisticsTable("Database after - "),
-                new ResultSetWrapperMatcher(assertionFunction -> {
-                    assertThat(assertionFunction).hasSize(1);
-                    final Map<String, Object> firstRow = assertionFunction.get(0);
+                new ResultSetWrapperMatcher(resultSet -> {
+                    assertThat(resultSet).hasSize(1);
+                    final Map<String, Object> firstRow = resultSet.get(0);
                     assertThat(firstRow).contains(MapEntry.entry(COL_QUERY_NAME, NAME_OF_CACHED_QUERY));
                     assertThat(firstRow.get(COL_DATE_EXECUTED)).isNotNull();
                 }));
@@ -158,18 +158,9 @@ public class CachedQueriesTest extends EmbersAcceptanceTestBase {
     }
 
     private Matcher<Map<String, Object>> entryCachedReportTrue() {
-        return new TypeSafeMatcher<Map<String, Object>>() {
-            @Override
-            protected boolean matchesSafely(Map<String, Object> item) {
-                assertThat(item).contains(MapEntry.entry(HEADER_KEY_REPORT_CACHED_AT, Boolean.TRUE));
-                return true;
-            }
-
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Expected headers map to contain key/value: ").appendValue(HEADER_KEY_REPORT_CACHED_AT);
-            }
-        };
+        return new AssertionMatcher<>(item -> {
+            assertThat(item).containsKey(HEADER_KEY_REPORT_CACHED_AT);
+        });
     }
 
 }

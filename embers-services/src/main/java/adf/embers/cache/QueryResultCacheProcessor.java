@@ -65,6 +65,7 @@ public class QueryResultCacheProcessor implements QueryProcessor {
         if(hasResultThatNeedsFormatting(queryResultBuilder, cachedQuery)) {
             final String formattedResult = new CsvFormatter().format(cachedQuery.getCachedQueryResult());
             queryResultBuilder.withResult(formattedResult);
+            queryResultBuilder.withCachedDate(cachedQuery.getTimestampWhenCached());
         }
 
         return queryResultBuilder.build();
