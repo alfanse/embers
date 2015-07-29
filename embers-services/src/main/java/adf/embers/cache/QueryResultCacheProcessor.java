@@ -87,7 +87,7 @@ public class QueryResultCacheProcessor implements QueryProcessor {
         return query == null || query.getCacheableDuration() == null;
     }
 
-    private boolean hasNeverBeenCachedBefore(CachedQuery cachedQueryResult) {
-        return cachedQueryResult == null;
+    private boolean hasNeverBeenCachedBefore(CachedQuery cachedQuery) {
+        return cachedQuery == null;
     }
 }
