@@ -3,24 +3,34 @@ A java library that exposes a restful api for the management and consumption of 
 
 * **embers/admin/** - allows reports to be added, updated or deleted dynamically.
 * **embers/query/<query name>** - run the report and return the result via http - as CSV.
-* **embers/cached/<query name>** - fetched a cached result, or run and cache if cache miss.
+* **embers/cached/<query name>** - fetch a cached result, or run and cache if cache miss.
 
-### Requires:
+### Requirments:
 Embed it in a http container that works with javax.ws.rs, i.e. jetty.
 
-Injection of a Datasource to EmbersConfiguration. 
+Inject a Datasource to EmbersConfiguration.
 
-This datasource should have access to the 3 tables required by embers, and have read only access to the schema the reports are to be run against.
+The datasource should have access to the 3 tables required by embers, and have read access to the schema the reports are to be run against.
 
 Database tables:
 
-* **queries** - Holds details of the queries that the Embers QueryHandler can run.
+* **queries** - Holds details of the queries that embers/query can run.
 * **queries_statistics** - Audit information about calls made to embers/query.
 * **query_result_cache** - Caches results for embers/cache service to re-use.
 
+## Build
+You can see the build here: https://circleci.com/gh/alfanse/embers
 
-### Backlog
+The acceptance tests produce html documentation, my thanks to Dan Bodart for Yatspec that makes this possible (https://github.com/bodar/yatspec):
+
+* https://circle-artifacts.com/gh/alfanse/embers/68/artifacts/0/home/ubuntu/embers/embers-acceptance-tests/build/reports/acceptance/adf/embers/acceptance/AdminQueriesTest.html
+* https://circle-artifacts.com/gh/alfanse/embers/68/artifacts/0/home/ubuntu/embers/embers-acceptance-tests/build/reports/acceptance/adf/embers/acceptance/QueryStatisticsTest.html
+* https://circle-artifacts.com/gh/alfanse/embers/68/artifacts/0/home/ubuntu/embers/embers-acceptance-tests/build/reports/acceptance/adf/embers/acceptance/CachedQueriesTest.html
+
+
+## Backlog
 
 Add security around admin
 
-Add who ran  a query to query_statistics.
+Add who ran a query to query_statistics.
+
