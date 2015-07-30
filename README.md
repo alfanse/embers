@@ -23,9 +23,10 @@ You can see the build here: https://circleci.com/gh/alfanse/embers
 
 The acceptance tests produce html documentation, my thanks to Dan Bodart for Yatspec that makes this possible (https://github.com/bodar/yatspec):
 
-* https://circle-artifacts.com/gh/alfanse/embers/68/artifacts/0/home/ubuntu/embers/embers-acceptance-tests/build/reports/acceptance/adf/embers/acceptance/AdminQueriesTest.html
-* https://circle-artifacts.com/gh/alfanse/embers/68/artifacts/0/home/ubuntu/embers/embers-acceptance-tests/build/reports/acceptance/adf/embers/acceptance/QueryStatisticsTest.html
-* https://circle-artifacts.com/gh/alfanse/embers/68/artifacts/0/home/ubuntu/embers/embers-acceptance-tests/build/reports/acceptance/adf/embers/acceptance/CachedQueriesTest.html
+* admin - https://circle-artifacts.com/gh/alfanse/embers/68/artifacts/0/home/ubuntu/embers/embers-acceptance-tests/build/reports/acceptance/adf/embers/acceptance/AdminQueriesTest.html
+* query - https://circle-artifacts.com/gh/alfanse/embers/69/artifacts/0/home/ubuntu/embers/embers-acceptance-tests/build/reports/acceptance/adf/embers/acceptance/QueryTest.html
+* query statistics - https://circle-artifacts.com/gh/alfanse/embers/68/artifacts/0/home/ubuntu/embers/embers-acceptance-tests/build/reports/acceptance/adf/embers/acceptance/QueryStatisticsTest.html
+* cached - https://circle-artifacts.com/gh/alfanse/embers/68/artifacts/0/home/ubuntu/embers/embers-acceptance-tests/build/reports/acceptance/adf/embers/acceptance/CachedQueriesTest.html
 
 
 ## Backlog
