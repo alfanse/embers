@@ -9,7 +9,7 @@ import java.util.Date;
 
 public class CachedQueryTest {
 
-    public static final long CACHE_DURATION_MS = 1000l;
+    private static final long CACHE_DURATION_MS = 1000l;
     private final CachedQuery cachedQuery = new CachedQuery("name", CACHE_DURATION_MS);
 
     @Test
@@ -19,7 +19,7 @@ public class CachedQueryTest {
 
     @Test
     public void isCacheMissWhenOneMsMoreThanCachebleDuration() throws Exception {
-        cachedQuery.setCachedQueryResult(Collections.emptyList());
+        cachedQuery.setResult(Collections.emptyList());
         Date expiredCacheDate = getDate(Calendar.MILLISECOND, -(CACHE_DURATION_MS +1));
         cachedQuery.setDateWhenCached(expiredCacheDate);
 
@@ -28,7 +28,7 @@ public class CachedQueryTest {
 
     @Test
     public void isCacheHitWhenOnCachebleDuration() throws Exception {
-        cachedQuery.setCachedQueryResult(Collections.emptyList());
+        cachedQuery.setResult(Collections.emptyList());
         Date expiredCacheDate = getDate(Calendar.MILLISECOND, -CACHE_DURATION_MS);
         cachedQuery.setDateWhenCached(expiredCacheDate);
 
@@ -37,7 +37,7 @@ public class CachedQueryTest {
 
     @Test
     public void isCacheHitWhenWithinCachebleDuration() throws Exception {
-        cachedQuery.setCachedQueryResult(Collections.emptyList());
+        cachedQuery.setResult(Collections.emptyList());
         Date expiredCacheDate = getDate(Calendar.MILLISECOND, -(CACHE_DURATION_MS/2));
         cachedQuery.setDateWhenCached(expiredCacheDate);
 
@@ -46,7 +46,7 @@ public class CachedQueryTest {
 
     @Test
     public void isCacheHitWhenJustBeenCached() throws Exception {
-        cachedQuery.setCachedQueryResult(Collections.emptyList());
+        cachedQuery.setResult(Collections.emptyList());
         cachedQuery.setDateWhenCached(new Date());
 
         Assertions.assertThat(cachedQuery.isCacheMiss()).isFalse();

@@ -26,7 +26,7 @@ public class QueryResultCacheMapper implements ResultSetMapper<CachedQuery> {
         cachedQuery.setId(r.getLong(QueryResultCacheDao.COL_ID));
         cachedQuery.setTimestampWhenCached(r.getTimestamp(QueryResultCacheDao.COL_DATE_CACHED));
 
-        cachedQuery.setCachedQueryResult(
+        cachedQuery.setResult(
                 queryResultToClobConverter.deserialise(
                         r.getClob(QueryResultCacheDao.COL_RESULT)));
         return cachedQuery;

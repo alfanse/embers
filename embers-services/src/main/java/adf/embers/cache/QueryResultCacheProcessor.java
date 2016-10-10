@@ -57,13 +57,13 @@ public class QueryResultCacheProcessor implements QueryProcessor {
             Query query = findQuery(queryRequest);
             List<Map<String, Object>> queryResult = executeQuery(query);
             cachedQuery.setLiveDurationMs(query.getCacheableDuration().toMillis());
-            cachedQuery.setCachedQueryResult(queryResult);
+            cachedQuery.setResult(queryResult);
             cachedQuery.setDateWhenCached(new Date());
             queryResultCacheDao.updateQueryCacheResult(cachedQuery);
         }
 
         if(hasResultThatNeedsFormatting(queryResultBuilder, cachedQuery)) {
-            final String formattedResult = new CsvFormatter().format(cachedQuery.getCachedQueryResult());
+            final String formattedResult = new CsvFormatter().format(cachedQuery.getResult());
             queryResultBuilder.withResult(formattedResult);
             queryResultBuilder.withCachedDate(cachedQuery.getTimestampWhenCached());
         }

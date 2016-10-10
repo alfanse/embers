@@ -10,7 +10,7 @@ public class CachedQuery {
     private String queryName;
     private long liveDurationMs;
     private Timestamp timestampWhenCached;
-    private List<Map<String, Object>> cachedQueryResult;
+    private List<Map<String, Object>> result;
     private long id;
 
     public CachedQuery(String queryName, long liveDurationMs) {
@@ -35,21 +35,21 @@ public class CachedQuery {
     }
 
     public boolean isCacheMiss() {
-        return cachedQueryResult == null || hasCacheExpired();
+        return result == null || hasCacheExpired();
     }
 
-    public List<Map<String, Object>> getCachedQueryResult() {
-        return cachedQueryResult;
+    public List<Map<String, Object>> getResult() {
+        return result;
     }
 
-    public void setCachedQueryResult(List<Map<String, Object>> queryResult) {
-        this.cachedQueryResult = queryResult;
+    public void setResult(List<Map<String, Object>> queryResult) {
+        this.result = queryResult;
     }
 
     /** Called by QueryResultCacheDao.updateQueryCacheResult */
     @SuppressWarnings("unused")
     public String getCachedQueryResultAsJsonString(){
-        return new QueryResultToClobConverter().serialise(cachedQueryResult);
+        return new QueryResultToClobConverter().serialise(result);
     }
 
     public Timestamp getTimestampWhenCached() {
@@ -65,7 +65,7 @@ public class CachedQuery {
     }
 
     public boolean hasCachedQueryResult() {
-        return cachedQueryResult!=null;
+        return result !=null;
     }
 
     private boolean hasCacheExpired() {
@@ -73,7 +73,7 @@ public class CachedQuery {
     }
 
     private Date caclulateCacheExpirationTime() {
-        return new CalculateFutureDate(timestampWhenCached, liveDurationMs).invoke();
+        return new CacheExpiryDateCalculator(timestampWhenCached, liveDurationMs).invoke();
     }
 
 }

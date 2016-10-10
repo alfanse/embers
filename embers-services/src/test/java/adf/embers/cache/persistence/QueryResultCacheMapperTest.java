@@ -28,7 +28,7 @@ public class QueryResultCacheMapperTest {
 
         CachedQuery cachedQuery = queryResultCacheMapper.map(0, resultSet, statementContext);
 
-        assertThat(cachedQuery.getCachedQueryResult()).isEqualTo(resultToCache);
+        assertThat(cachedQuery.getResult()).isEqualTo(resultToCache);
     }
 
 

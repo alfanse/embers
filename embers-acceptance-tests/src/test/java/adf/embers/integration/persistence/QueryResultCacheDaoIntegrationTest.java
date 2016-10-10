@@ -45,7 +45,7 @@ public class QueryResultCacheDaoIntegrationTest {
         CachedQuery cachedQuery = new CachedQuery(query.getQueryName(), liveDuration.toMillis());
         assertThat(cachedQuery.getQueryName()).isEqualTo(query.getQueryName());
         assertThat(cachedQuery.getTimestampWhenCached()).isNull();
-        assertThat(cachedQuery.getCachedQueryResult()).isNull();
+        assertThat(cachedQuery.getResult()).isNull();
         assertThat(cachedQuery.getLiveDurationMs()).isEqualTo(liveDuration.toMillis());
         assertThat(cachedQuery.isCacheMiss()).isTrue();
 
@@ -55,14 +55,14 @@ public class QueryResultCacheDaoIntegrationTest {
         assertThat(findResult.getQueryName()).isEqualTo(query.getQueryName());
         assertThat(findResult.getLiveDurationMs()).isEqualTo(liveDuration.toMillis());
         assertThat(findResult.isCacheMiss()).isTrue();
-        assertThat(findResult.getCachedQueryResult()).isNull();
+        assertThat(findResult.getResult()).isNull();
         assertThat(findResult.getTimestampWhenCached()).isNull();
 
         ArrayList<Map<String, Object>> resultToCache = new ArrayList<>();
         Map<String, Object> aRowOfData = new HashMap<>();
         aRowOfData.put("string", "a string, with \"punctuation\".");
         resultToCache.add(aRowOfData);
-        cachedQuery.setCachedQueryResult(resultToCache);
+        cachedQuery.setResult(resultToCache);
 
         Date dateResultRetrieved = new Date();
         cachedQuery.setDateWhenCached(dateResultRetrieved);
@@ -74,7 +74,7 @@ public class QueryResultCacheDaoIntegrationTest {
         assertThat(findCachedResult.getLiveDurationMs()).isEqualTo(liveDuration.toMillis());
         assertThat(findCachedResult.isCacheMiss()).isFalse();
         assertThat(findCachedResult.getTimestampWhenCached()).isEqualTo(dateResultRetrieved);
-        assertThat(findCachedResult.getCachedQueryResult()).isEqualTo(resultToCache);
+        assertThat(findCachedResult.getResult()).isEqualTo(resultToCache);
     }
 
 }

@@ -23,7 +23,7 @@ import static org.mockito.Mockito.*;
 
 public class QueryResultCacheProcessorTest {
 
-    public static final String QUERY_NAME = "queryName";
+    private static final String QUERY_NAME = "queryName";
     private final QueryResultCacheDao queryResultCacheDao = mock(QueryResultCacheDao.class);
     private final QueryDao queryDao = mock(QueryDao.class);
     private final QueryExecutor queryExecutor = mock(QueryExecutor.class);
@@ -88,7 +88,7 @@ public class QueryResultCacheProcessorTest {
         CachedQuery updatedCachedQuery = updateArgumentCaptor.getValue();
         assertThat(updatedCachedQuery.getQueryName()).isEqualTo(QUERY_NAME);
         assertThat(updatedCachedQuery.getLiveDurationMs()).isEqualTo(cachableDuration.toMillis());
-        assertThat(updatedCachedQuery.getCachedQueryResult()).isEqualTo(queryResult);
+        assertThat(updatedCachedQuery.getResult()).isEqualTo(queryResult);
         assertThat(updatedCachedQuery.getTimestampWhenCached()).isNotNull();
         //hmmm not sure mockito ArgumentCapture is playing fair.
         assertThat(savedCachedQuery).isSameAs(updatedCachedQuery);
@@ -101,7 +101,7 @@ public class QueryResultCacheProcessorTest {
     @Test
     public void cachedRecordAndWithinLiveDuration() throws Exception {
         when(cachedQuery.hasCachedQueryResult()).thenReturn(true);
-        when(cachedQuery.getCachedQueryResult()).thenReturn(emptyList());
+        when(cachedQuery.getResult()).thenReturn(emptyList());
         final Timestamp cachedDate = new Timestamp(555555555L);
         when(cachedQuery.getTimestampWhenCached()).thenReturn(cachedDate);
 
@@ -124,7 +124,7 @@ public class QueryResultCacheProcessorTest {
         Duration cachableDuration = givenAQueryWithACachableDuration();
 
         final CachedQuery cachedQuery = new CachedQuery(QUERY_NAME, cachableDuration.toMillis());
-        cachedQuery.setCachedQueryResult(emptyList());
+        cachedQuery.setResult(emptyList());
         cachedQuery.setDateWhenCached(new Date(555555555L));
         when(queryResultCacheDao.findCachedQueryResult(queryRequest)).thenReturn(cachedQuery);
 
@@ -140,7 +140,7 @@ public class QueryResultCacheProcessorTest {
         final CachedQuery updatedCachedQuery = cachedQueryArgumentCaptor.getValue();
         assertThat(updatedCachedQuery.getQueryName()).isEqualTo(QUERY_NAME);
         assertThat(updatedCachedQuery.getLiveDurationMs()).isEqualTo(cachableDuration.toMillis());
-        assertThat(updatedCachedQuery.getCachedQueryResult()).isEqualTo(queryResult);
+        assertThat(updatedCachedQuery.getResult()).isEqualTo(queryResult);
         assertThat(updatedCachedQuery.getTimestampWhenCached()).isAfterOrEqualsTo(startTime);
 
 

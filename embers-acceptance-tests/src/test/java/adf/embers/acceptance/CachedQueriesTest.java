@@ -33,17 +33,17 @@ import static org.fest.assertions.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.startsWith;
 
-@Notes("As many users of a long running report" +
-        "I want access speed to be really fast." +
-        "I don't mind if the first user experiences a slow report, " +
-        "I will trigger that first call from a timed job." +
-        "I want the cached report to timeout on a frequency of my specification." +
+@Notes("As many users of a long running report<br/>" +
+        "I want access speed to be really fast.<br/>" +
+        "I don't mind if the first user experiences a slow report, <br/>" +
+        "I will trigger that first call from a timed job.<br/>" +
+        "I want the cached report to timeout on a frequency of my specification.<br/>" +
         "The calling client needs to know its a cached report, but end user need not.")
 public class CachedQueriesTest extends EmbersAcceptanceTestBase {
 
     private static final String NAME_OF_CACHED_QUERY = "cachedQuery";
     private static final String HEADER_KEY_REPORT_CACHED_AT = "REPORT_CACHED_AT";
-    private static final String QUERY_COLUMN = "servertime";
+    private static final String QUERY_COLUMN = "firstcolumn";
     private static final Duration CACHE_DURATION_1_DAY = Duration.ofDays(1);
 
     private final YatspecQueryInserter yatspecQueryInserter = new YatspecQueryInserter(this, embersServer.getEmbersDatabase().getDataSource());
@@ -69,7 +69,7 @@ public class CachedQueriesTest extends EmbersAcceptanceTestBase {
 
     @SuppressWarnings("unchecked")
     @Test
-    @Ignore("Test in need of setup help")
+    @Ignore("Test in need of setup help, currently its a cache miss")
     public void aCachedQueryIsUsedWhileStillWithinExpirationTime() throws Exception {
         givenACacheableQuery();
         givenTheReportHasRecentlyBeenCached();
@@ -139,9 +139,13 @@ public class CachedQueriesTest extends EmbersAcceptanceTestBase {
     }
 
     private void givenACacheableQuery() throws Exception {
-        yatspecQueryInserter.insertQuery(new Query(
-                NAME_OF_CACHED_QUERY, "timestamp on database", "select current_timestamp as " + QUERY_COLUMN + " from " + QueryDao.TABLE_QUERIES, CACHE_DURATION_1_DAY))
-                .build(interestingGivens);
+        yatspecQueryInserter.insertQuery(
+            new Query(
+                NAME_OF_CACHED_QUERY,
+                "get 'something' from database",
+                "select 'something' as " + QUERY_COLUMN + " from " + QueryDao.TABLE_QUERIES,
+                CACHE_DURATION_1_DAY))
+        .build(interestingGivens);
         getAndLogTables.getAndLogRowsOnQueriesTable();
     }
 
@@ -151,12 +155,13 @@ public class CachedQueriesTest extends EmbersAcceptanceTestBase {
         final CachedQuery cachedQuery = new CachedQuery(NAME_OF_CACHED_QUERY, CACHE_DURATION_1_DAY.toMillis());
         cacheDao.save(cachedQuery);
 
-        cachedQuery.setCachedQueryResult(new ArrayList<Map<String, Object>>() {{
+        cachedQuery.setResult(new ArrayList<Map<String, Object>>() {{
             add(new HashMap<String, Object>() {{
                 put("heading", "value");
             }});
         }});
-        cachedQuery.setDateWhenCached(new Date(System.currentTimeMillis() - 3600 * 1000));
+        int fiveHoursAgo = 5 * 60 * 60 * 1000;
+        cachedQuery.setDateWhenCached(new Date(System.currentTimeMillis() - fiveHoursAgo));
         cacheDao.updateQueryCacheResult(cachedQuery);
         dbi.close(cacheDao);
 
