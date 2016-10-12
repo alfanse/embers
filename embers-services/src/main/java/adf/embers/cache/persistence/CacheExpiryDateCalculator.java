@@ -1,7 +1,7 @@
 package adf.embers.cache.persistence;
 
-import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
@@ -11,10 +11,16 @@ class CacheExpiryDateCalculator {
     private static final long MILLIS_IN_DAY = MILLIS_IN_HOUR * 24;
     private Date startingDate;
     private long millisToAdd;
+    private ZoneId zone;
 
-    public CacheExpiryDateCalculator(Date startingDate, long millisToAdd) {
+    public CacheExpiryDateCalculator(Date startingDate, long millisToAdd, ZoneId zone) {
         this.startingDate = startingDate;
         this.millisToAdd = millisToAdd;
+        this.zone = zone;
+    }
+
+    public CacheExpiryDateCalculator(Date startingDate, long millisToAdd) {
+        this(startingDate, millisToAdd, ZoneId.systemDefault());
     }
 
     public Date invoke() {
@@ -26,9 +32,9 @@ class CacheExpiryDateCalculator {
     }
 
     private Date calculatingFutureDateWithDateTime() {
-        LocalDateTime ldt = LocalDateTime.ofInstant(startingDate.toInstant(), ZoneId.systemDefault());
-        LocalDateTime plus = ldt.plus(millisToAdd, ChronoUnit.MILLIS);
-        return  Date.from(plus.atZone(ZoneId.systemDefault()).toInstant());
+        ZonedDateTime now = ZonedDateTime.ofInstant(startingDate.toInstant(), zone);
+        ZonedDateTime future = now.plus(millisToAdd, ChronoUnit.MILLIS);
+        return  Date.from(future.toInstant());
     }
 
     private boolean isCacheTimeBiggerThanIntegerMaxValueInDays() {
