@@ -5,6 +5,7 @@ Hosted on github: https://github.com/alfanse/embers.git"""
 allprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
+    apply plugin: 'jacoco'
 
     sourceCompatibility = 1.8
 
@@ -23,11 +24,36 @@ allprojects {
     version = System.getProperty('build.number', 'DEV-SNAPSHOT')
 }
 
+task codeCoverageReport(type: JacocoReport) {
+//swiped from http://csiebler.github.io/blog/2014/02/09/multi-project-code-coverage-using-gradle-and-jacoco/
+
+    // Gather execution data from all subprojects
+    // (change this if you e.g. want to calculate unit test/integration test coverage separately)
+    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+
+    // Add all relevant sourcesets from the subprojects
+    subprojects.each {
+        sourceSets it.sourceSets.main
+    }
+
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.enabled true
+        html.destination "${buildDir}/reports/jacoco"
+    }
+}
+
+// always run the tests before generating the report
+codeCoverageReport.dependsOn {
+    subprojects*.test
+}
+
 subprojects {
 
     extensions.add("libs", [
             core: [
-                //the only libraries the production jar depends on
+//            the only libraries the production jar depends on
                 'javax.ws.rs:javax.ws.rs-api:2.0.1',
                 'javax.inject:javax.inject:1',
                 'org.jdbi:jdbi:2.56'
@@ -39,10 +65,11 @@ subprojects {
                 'org.mockito:mockito-core:1.10.17'
             ],
             acceptance_tests: [
+//            the bdd framework, makes pretty html reports from Junit tests
                 'com.googlecode.yatspec:yatspec:217'
             ],
             jersey: [
-//              implements javax.ws.rs
+//            implements javax.ws.rs
                 'org.glassfish.jersey.core:jersey-server:2.2',
                 'org.glassfish.jersey.containers:jersey-container-servlet:2.2'
             ],
