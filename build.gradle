@@ -37,8 +37,6 @@ task codeCoverageReport(type: JacocoReport) {
     }
 
     reports {
-        xml.enabled false
-        csv.enabled false
         html.enabled true
         html.destination "${buildDir}/reports/jacoco"
     }
@@ -48,6 +46,9 @@ task codeCoverageReport(type: JacocoReport) {
 codeCoverageReport.dependsOn {
     subprojects*.test
 }
+
+check.dependsOn jacocoTestReport
+
 
 subprojects {
 

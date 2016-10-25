@@ -5,7 +5,7 @@ A java library that exposes a restful api for the management and consumption of 
 * **embers/query/<query name>** - run the report and return the result via http - as CSV.
 * **embers/cached/<query name>** - fetch a cached result, or run and cache if cache miss.
 
-### Requirments:
+### Requirements:
 Embed it in a http container that works with javax.ws.rs, i.e. jetty.
 
 Inject a Datasource to EmbersConfiguration.
@@ -28,6 +28,12 @@ The acceptance tests produce html documentation, my thanks to Dan Bodart for Yat
 * query statistics - https://circle-artifacts.com/gh/alfanse/embers/68/artifacts/0/home/ubuntu/embers/embers-acceptance-tests/build/reports/acceptance/adf/embers/acceptance/QueryStatisticsTest.html
 * cached - https://circle-artifacts.com/gh/alfanse/embers/68/artifacts/0/home/ubuntu/embers/embers-acceptance-tests/build/reports/acceptance/adf/embers/acceptance/CachedQueriesTest.html
 
+## Code Coverage
+powered by jacoco plugin
+run:
+ gradle clean codeCoverageReport
+see reports here:
+ embers/build/reports/jacoco/index.html
 
 ## Backlog
 
