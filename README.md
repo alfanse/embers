@@ -19,7 +19,9 @@ Database tables:
 * **query_result_cache** - Caches results for embers/cache service to re-use.
 
 ## Build
-You can see the build here: https://circleci.com/gh/alfanse/embers
+[![Build Status](https://circleci.com/gh/alfanse/embers.svg?branch=master)](https://circleci.com/gh/alfanse/embers)
+
+Thanks to circleci, you can see the build here: https://circleci.com/gh/alfanse/embers
 
 The acceptance tests produce html documentation, my thanks to Dan Bodart for Yatspec that makes this possible (https://github.com/bodar/yatspec):
 
