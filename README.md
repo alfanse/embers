@@ -1,4 +1,7 @@
 # Embedded Sql Reports
+[![Build Status](https://circleci.com/gh/alfanse/embers.svg?branch=master)](https://circleci.com/gh/alfanse/embers)
+[![Language](http://img.shields.io/badge/language-java-brightgreen.svg)](https://www.java.com/)
+
 A java library that exposes a restful api for the management and consumption of sql reports.
 
 * **embers/admin/** - allows reports to be added, updated or deleted dynamically.
@@ -19,8 +22,6 @@ Database tables:
 * **query_result_cache** - Caches results for embers/cache service to re-use.
 
 ## Build
-[![Build Status](https://circleci.com/gh/alfanse/embers.svg?branch=master)](https://circleci.com/gh/alfanse/embers)
-
 Thanks to circleci, you can see the build here: https://circleci.com/gh/alfanse/embers
 
 The acceptance tests produce html documentation, my thanks to Dan Bodart for Yatspec that makes this possible (https://github.com/bodar/yatspec):
