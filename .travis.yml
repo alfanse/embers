@@ -1,6 +1,0 @@
-# your build sir: https://travis-ci.org/alfanse/embers
-
-language: java
-jdk:
- - oraclejdk8
-
