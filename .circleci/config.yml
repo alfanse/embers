@@ -18,54 +18,16 @@ jobs:
     # see https://circleci.com/docs/2.0/circleci-images/
     docker:
     - image: circleci/openjdk:8-jdk-node-browsers
-#      command: /sbin/init
     steps:
-    # Machine Setup
-    #   If you break your build into multiple jobs with workflows, you will probably want to do the parts of this that are relevant in each
-    # The following `checkout` command checks out your code to your working directory.
-    # In 1.0 we did this implicitly.
-    # In 2.0 you can choose where in the course of a job your code should be checked out.
     - checkout
     # Prepare for artifact and test results  collection equivalent to how it was done on 1.0.
     # In many cases you can simplify this from what is generated here.
     # 'See docs on artifact collection here https://circleci.com/docs/2.0/artifacts/'
     - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
-    # This is based on your 1.0 configuration file or project settings
     - run:
         working_directory: ~/alfanse/embers
         # for diagnostics, show me the version, includes JVM, and Gradle.
         command: ./gradlew --version
-        # AF - failing due to not the location of Java, lets see if its needed.
-#        command: sudo update-alternatives --set java /usr/lib/jvm/jdk1.8.0/bin/java;
-#                 sudo update-alternatives --set javac /usr/lib/jvm/jdk1.8.0/bin/javac;
-#                 echo -e "export JAVA_HOME=/usr/lib/jvm/jdk1.8.0" >> $BASH_ENV
-#    # Dependencies
-    #   This would typically go in either a build or a build-and-test job when using workflows
-    # Restore the dependency cache
-#    - restore_cache:
-#        keys:
-        # This branch if available
-#        - v1-dep-{{ .Branch }}-
-        # Default branch if not
-#        - v1-dep-master-
-        # Any branch if there are none on the default branch - this should be unnecessary if you have your default branch configured correctly
-#        - v1-dep-
-    # cache dependencies?
-#    - run: ./gradlew dependencies
-    # Save dependency cache
-#    - save_cache:
-#        key: v1-dep-{{ .Branch }}-{{ epoch }}
-#        paths:
-        # This is a broad list of cache paths to include many possible development environments
-        # You can probably delete some of these entries
-#        - vendor/bundle
-#        - ~/virtualenvs
-#        - ~/.m2
-#        - ~/.ivy2
-#        - ~/.bundle
-#        - ~/.go_workspace
-#        - ~/.gradle
-
     # Build
     - run: ./gradlew build
     # Teardown
