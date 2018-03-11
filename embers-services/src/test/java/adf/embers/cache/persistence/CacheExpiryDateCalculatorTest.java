@@ -21,7 +21,7 @@ public class CacheExpiryDateCalculatorTest {
     private Date startingDate;
 
     @Before
-    public void safeDateThatWontCrossDST() throws Exception {
+    public void safeDateThatWontCrossDST() {
         startingDate = createLocalDate(2016, Month.APRIL, 30);
     }
 
@@ -38,7 +38,7 @@ public class CacheExpiryDateCalculatorTest {
     }
 
     @Test
-    public void addingMillisWhenBstFallsBack() throws Exception {
+    public void addingMillisWhenBstFallsBack() {
         long millisToAdd = ONE_HOUR_MS*48;
         //the day before British Summer Time fallback
         Date start = createLocalDate(2016, Month.OCTOBER, 29);
@@ -67,20 +67,20 @@ public class CacheExpiryDateCalculatorTest {
     }
 
     @Test
-    public void addingMillisOneMilliMoreThanMaxInteger() throws Exception {
+    public void addingMillisOneMilliMoreThanMaxInteger() {
         long millisToAdd = Integer.MAX_VALUE+1L;
         didItWork(startingDate, millisToAdd);
     }
 
     @Test
-    public void addingOneYearOfMillis() throws Exception {
+    public void addingOneYearOfMillis() {
         long millisToAdd = 1000*60*60*24*365L;
         didItWork(startingDate, millisToAdd);
     }
 
     @Test (expected = RuntimeException.class)
     //cache limit = max int in days
-    public void blowTheCacheableLimit() throws Exception {
+    public void blowTheCacheableLimit() {
         long millisToAdd = Long.MAX_VALUE;
         new CacheExpiryDateCalculator(startingDate, millisToAdd).invoke();
     }

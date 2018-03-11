@@ -10,22 +10,21 @@ import javax.ws.rs.core.Response;
 import java.net.HttpURLConnection;
 
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 public class AdminQueryHandlerTest {
 
-    public static final String PLAIN_QUERY_NAME = "new query";
-    public static final String ENCODED_QUERY_NAME = "new+query";
-    public static final String PLAIN_DESCRIPTION = "this encoded description, should change";
-    public static final String PLAIN_SQL = "select systimestamp from dual";
+    private static final String PLAIN_QUERY_NAME = "new query";
+    private static final String ENCODED_QUERY_NAME = "new+query";
+    private static final String PLAIN_DESCRIPTION = "this encoded description, should change";
+    private static final String PLAIN_SQL = "select systimestamp from dual";
     private final QueryDao queryDao = mock(QueryDao.class);
 
     private final AdminQueryHandler adminQueryHandler = new AdminQueryHandler(queryDao);
     private Query postedQuery;
 
     @Test
-    public void saveRetunsOkWithSuccessMessage() throws Exception {
+    public void saveRetunsOkWithSuccessMessage() {
 
         this.postedQuery = new Query("newQuery", "Description", "select timestamp from dual");
 
@@ -38,7 +37,7 @@ public class AdminQueryHandlerTest {
     }
 
     @Test
-    public void saveWillUseDecodedQuerySql() throws Exception {
+    public void saveWillUseDecodedQuerySql() {
         this.postedQuery = encodedQuery();
         whenAdminQueryHandlerAddQueryIsCalled(postedQuery);
 
@@ -49,7 +48,7 @@ public class AdminQueryHandlerTest {
     }
 
     @Test
-    public void saveWillUseDecodedQueryDescription() throws Exception {
+    public void saveWillUseDecodedQueryDescription() {
         this.postedQuery = encodedQuery();
         whenAdminQueryHandlerAddQueryIsCalled(postedQuery);
 
@@ -60,7 +59,7 @@ public class AdminQueryHandlerTest {
     }
 
     @Test
-    public void saveWillUseDecodedQueryName() throws Exception {
+    public void saveWillUseDecodedQueryName() {
         this.postedQuery = encodedQuery();
         whenAdminQueryHandlerAddQueryIsCalled(postedQuery);
 

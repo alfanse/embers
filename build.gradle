@@ -55,15 +55,17 @@ subprojects {
     extensions.add("libs", [
             core: [
 //            the only libraries the production jar depends on
-                'javax.ws.rs:javax.ws.rs-api:2.0.1',
+                'javax.ws.rs:javax.ws.rs-api:2.1',
                 'javax.inject:javax.inject:1',
-                'org.jdbi:jdbi:2.56'
+                'org.jdbi:jdbi:2.78',
+                'javax.xml.bind:jaxb-api:2.3.0',
+                'com.sun.xml.bind:jaxb-core:2.3.0',
+                'com.sun.xml.bind:jaxb-impl:2.3.0'
             ],
             unit_tests: [
-                'junit:junit:4.11',
+                'junit:junit:4.12',
                 'org.easytesting:fest-assert-core:2.0M10',
-                'org.hamcrest:hamcrest-core:1.3',
-                'org.mockito:mockito-core:1.10.17'
+                'org.mockito:mockito-core:2.15.0'
             ],
             acceptance_tests: [
 //            the bdd framework, makes pretty html reports from Junit tests
@@ -79,10 +81,11 @@ subprojects {
                 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.5.2'
             ],
             gson: [
-                    'com.google.code.gson:gson:2.3.1'
+                //serialise java to json
+                'com.google.code.gson:gson:2.8.2'
             ],
             json_assert: [
-                    'org.skyscreamer:jsonassert:1.2.3'
+                'org.skyscreamer:jsonassert:1.2.3'
             ],
             jetty: [
 //              beloved server
