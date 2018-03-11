@@ -31,8 +31,8 @@ jobs:
     # 'See docs on artifact collection here https://circleci.com/docs/2.0/artifacts/'
     - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
     # This is based on your 1.0 configuration file or project settings
-    - run:
-        working_directory: ~/alfanse/embers
+#    - run:
+#        working_directory: ~/alfanse/embers
         # AF - failing due to not the location of Java, lets see if its needed.
 #        command: sudo update-alternatives --set java /usr/lib/jvm/jdk1.8.0/bin/java;
 #                 sudo update-alternatives --set javac /usr/lib/jvm/jdk1.8.0/bin/javac;
