@@ -43,7 +43,7 @@ public class QueryResultToClobConverter {
             }
             return sb.toString();
         } catch (Exception e) {
-            throw new RuntimeException("Failed to deserialise the cached query result from the database");
+            throw new RuntimeException("Failed to deserialise the cached query result from the database", e);
         }
 
     }
