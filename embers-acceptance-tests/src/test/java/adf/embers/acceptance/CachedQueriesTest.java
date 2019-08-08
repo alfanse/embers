@@ -49,7 +49,7 @@ public class CachedQueriesTest extends EmbersAcceptanceTestBase {
     private final YatspecQueryInserter yatspecQueryInserter = new YatspecQueryInserter(this, embersServer.getEmbersDatabase().getDataSource());
     private final YatspecHttpCommand http = new YatspecHttpGetCommand(this);
     private final GetAndLogTables getAndLogTables = new GetAndLogTables(this, embersServer.getEmbersDatabase().getDataSource());
-    private Date timeRequestMade;
+    private long timeRequestMade;
 
     @SuppressWarnings("unchecked")
     @Test
@@ -69,7 +69,7 @@ public class CachedQueriesTest extends EmbersAcceptanceTestBase {
 
     @SuppressWarnings("unchecked")
     @Test
-    @Ignore("Test in need of setup help, currently its a cache miss")
+//    @Ignore("Test in need of setup help, currently its a cache miss")
     public void aCachedQueryIsUsedWhileStillWithinExpirationTime() throws Exception {
         givenACacheableQuery();
         givenTheReportHasRecentlyBeenCached();
@@ -95,7 +95,7 @@ public class CachedQueriesTest extends EmbersAcceptanceTestBase {
                         @Override
                         public boolean matches(Object value) {
                             final long actualTime = ((Timestamp) value).getTime();
-                            final long startTime = timeRequestMade.getTime();
+                            final long startTime = timeRequestMade;
                             assertThat(startTime).isLessThanOrEqualTo(actualTime);
                             return true;
                         }
@@ -115,8 +115,7 @@ public class CachedQueriesTest extends EmbersAcceptanceTestBase {
                         @Override
                         public boolean matches(Object value) {
                             final long timeResultCached = ((Timestamp) value).getTime();
-                            final long httpRequestTime = timeRequestMade.getTime();
-                            assertThat(httpRequestTime).isGreaterThanOrEqualTo(timeResultCached);
+                            assertThat(timeRequestMade).isGreaterThanOrEqualTo(timeResultCached);
                             return true;
                         }
                     });
@@ -174,8 +173,8 @@ public class CachedQueriesTest extends EmbersAcceptanceTestBase {
 
 
     private ActionUnderTest httpGetRequestForCacheableQuery() {
+        timeRequestMade = System.currentTimeMillis();
         http.setUrl(embersServer.embersCachedQueryPath() + "/" + CachedQueriesTest.NAME_OF_CACHED_QUERY);
-        timeRequestMade = new Date();
         return http;
     }
 
