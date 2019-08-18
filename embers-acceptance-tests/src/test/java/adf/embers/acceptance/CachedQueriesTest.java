@@ -1,6 +1,5 @@
 package adf.embers.acceptance;
 
-import adf.embers.cache.persistence.CachedQuery;
 import adf.embers.cache.persistence.QueryResultCacheDao;
 import adf.embers.query.persistence.Query;
 import adf.embers.query.persistence.QueryDao;
@@ -13,18 +12,14 @@ import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
 import org.fest.assertions.core.Condition;
 import org.fest.assertions.data.MapEntry;
 import org.hamcrest.Matcher;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.skife.jdbi.v2.DBI;
 import yatspec.http.YatspecHttpCommand;
 import yatspec.http.YatspecHttpGetCommand;
 
 import java.sql.Timestamp;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 import static adf.embers.query.persistence.QueryStatisticsDao.COL_DATE_EXECUTED;
 import static adf.embers.query.persistence.QueryStatisticsDao.COL_QUERY_NAME;
@@ -69,18 +64,23 @@ public class CachedQueriesTest extends EmbersAcceptanceTestBase {
 
     @SuppressWarnings("unchecked")
     @Test
-//    @Ignore("Test in need of setup help, currently its a cache miss")
     public void aCachedQueryIsUsedWhileStillWithinExpirationTime() throws Exception {
         givenACacheableQuery();
+        //todo fix test by setting CachedQuery.result to not null
         givenTheReportHasRecentlyBeenCached();
 
-        when(httpGetRequestForCacheableQuery());
+        IntStream.of(3).forEach(i-> {
+            try {
+                when(httpGetRequestForCacheableQuery());
+                then(http.responseCode(), is(200));
+                then(http.responseBody(), startsWith(QUERY_COLUMN));
+                then(http.responseHeaders(), has(entryCachedReportTrue()));
+                thenQueryResultCacheShowsTheQueryWasCachedBeforeTheQueryWasMade();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
 
-        then(http.responseCode(), is(200));
-        then(http.responseBody(), startsWith(QUERY_COLUMN));
-        then(http.responseHeaders(), has(entryCachedReportTrue()));
-
-        thenQueryResultCacheShowsTheQueryWasCachedBeforeTheQueryWasMade();
         thenQueryStasticsShowsTheQueryWasNotExecuted();
     }
 
@@ -124,7 +124,7 @@ public class CachedQueriesTest extends EmbersAcceptanceTestBase {
 
     private void thenQueryStasticsShowsTheQueryWasNotExecuted() throws Exception {
         then(getAndLogTables.queryStatisticsTable("Database after - "),
-                new ResultSetWrapperMatcher(assertionFunction -> assertThat(assertionFunction).hasSize(0)));
+                new ResultSetWrapperMatcher(assertionFunction -> assertThat(assertionFunction).hasSize(1)));
     }
 
     private void thenQueryStasticsShowsTheQueryWasExecuted() throws Exception {
@@ -148,21 +148,8 @@ public class CachedQueriesTest extends EmbersAcceptanceTestBase {
         getAndLogTables.getAndLogRowsOnQueriesTable();
     }
 
-    private void givenTheReportHasRecentlyBeenCached() {
-        DBI dbi = new DBI(embersServer.getEmbersDatabase().getDataSource());
-        QueryResultCacheDao cacheDao = dbi.open(QueryResultCacheDao.class);
-        final CachedQuery cachedQuery = new CachedQuery(NAME_OF_CACHED_QUERY, CACHE_DURATION_1_DAY.toMillis());
-        cacheDao.save(cachedQuery);
-
-        cachedQuery.setResult(new ArrayList<Map<String, Object>>() {{
-            add(new HashMap<String, Object>() {{
-                put("heading", "value");
-            }});
-        }});
-        int fiveHoursAgo = 5 * 60 * 60 * 1000;
-        cachedQuery.setDateWhenCached(new Date(System.currentTimeMillis() - fiveHoursAgo));
-        cacheDao.updateQueryCacheResult(cachedQuery);
-        dbi.close(cacheDao);
+    private void givenTheReportHasRecentlyBeenCached() throws Exception {
+        when(httpGetRequestForCacheableQuery());
 
         getAndLogTables.getAndLogRowsOnQueryResultCacheTable("Database Before - ");
     }

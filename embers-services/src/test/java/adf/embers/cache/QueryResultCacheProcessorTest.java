@@ -10,6 +10,7 @@ import adf.embers.query.persistence.Query;
 import adf.embers.query.persistence.QueryDao;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.BDDMockito;
 
 import java.sql.Timestamp;
 import java.time.Duration;
@@ -36,7 +37,7 @@ public class QueryResultCacheProcessorTest {
 
     @Test
     public void noCacheRecordAndNoQuery() throws Exception {
-        when(queryResultCacheDao.findCachedQueryResult(queryRequest)).thenReturn(null);
+        givenFindCachedQuery().willReturn(null);
         when(queryDao.findQueryByName(QUERY_NAME)).thenReturn(null);
 
         QueryResult queryResult = queryResultCacheProcessor.placeQuery(queryRequest);
@@ -49,7 +50,7 @@ public class QueryResultCacheProcessorTest {
 
     @Test
     public void noCacheRecordAndQueryExistsButNoCacheDurationSet() throws Exception {
-        when(queryResultCacheDao.findCachedQueryResult(queryRequest)).thenReturn(null);
+        givenFindCachedQuery().willReturn(null);
         when(queryDao.findQueryByName(QUERY_NAME)).thenReturn(query);
         when(query.getCacheableDuration()).thenReturn(null);
 
@@ -65,7 +66,7 @@ public class QueryResultCacheProcessorTest {
     //todo stop using mocked CachedQuery
     public void noCacheRecordAndQueryExistsAndCanBeCached() throws Exception {
         final Date startTime = new Date();
-        when(queryResultCacheDao.findCachedQueryResult(queryRequest)).thenReturn(null);
+        givenFindCachedQuery().willReturn(null);
 
         Duration cachableDuration = givenAQueryWithACachableDuration();
         List<Map<String, Object>> queryResult = givenTheResultOfExecutingAQuery();
@@ -105,7 +106,7 @@ public class QueryResultCacheProcessorTest {
         final Timestamp cachedDate = new Timestamp(555555555L);
         when(cachedQuery.getTimestampWhenCached()).thenReturn(cachedDate);
 
-        when(queryResultCacheDao.findCachedQueryResult(queryRequest)).thenReturn(cachedQuery);
+        givenFindCachedQuery().willReturn(cachedQuery);
         when(cachedQuery.isCacheMiss()).thenReturn(false);
 
         QueryResult queryResult = queryResultCacheProcessor.placeQuery(queryRequest);
@@ -126,7 +127,7 @@ public class QueryResultCacheProcessorTest {
         final CachedQuery cachedQuery = new CachedQuery(QUERY_NAME, cachableDuration.toMillis());
         cachedQuery.setResult(emptyList());
         cachedQuery.setDateWhenCached(new Date(555555555L));
-        when(queryResultCacheDao.findCachedQueryResult(queryRequest)).thenReturn(cachedQuery);
+        givenFindCachedQuery().willReturn(cachedQuery);
 
         List<Map<String, Object>> queryResult = givenTheResultOfExecutingAQuery();
 
@@ -147,6 +148,10 @@ public class QueryResultCacheProcessorTest {
         assertThat(cachedQueryResult.hasErrors()).isFalse();
         assertThat(cachedQueryResult.getResult()).isEmpty();
         assertThat(cachedQueryResult.getCachedOn()).isAfterOrEqualsTo(startTime);
+    }
+
+    private BDDMockito.BDDMyOngoingStubbing<CachedQuery> givenFindCachedQuery() {
+        return BDDMockito.given(queryResultCacheDao.findCachedQueryResult(queryRequest));
     }
 
     private Duration givenAQueryWithACachableDuration() {

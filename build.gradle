@@ -2,10 +2,22 @@ description = """Embers - Embedded Sql Reporting.
 Embeddable servlets that expose a restricted set of queries for an sql database.
 Hosted on github: https://github.com/alfanse/embers.git"""
 
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "com.adarshr:gradle-test-logger-plugin:1.7.0"
+    }
+}
+
 allprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
     apply plugin: 'jacoco'
+    apply plugin: 'com.adarshr.test-logger'
 
     sourceCompatibility = 1.8
 
