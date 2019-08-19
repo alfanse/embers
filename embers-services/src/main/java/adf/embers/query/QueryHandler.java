@@ -7,8 +7,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.HttpURLConnection;
-import java.util.List;
-import java.util.Optional;
 
 import static adf.embers.statics.UrlTools.decodeString;
 
@@ -30,9 +28,10 @@ public class QueryHandler {
         QueryResult queryResult = queryProcessor.placeQuery(() -> decodeString(queryName));
 
         if (queryResult.hasErrors()) {
-            List<String> errors = queryResult.getErrors();
-            Optional<String> errorsString = errors.stream().reduce((s, s2) -> s + "\n" + s2);
-            return Response.status(HttpURLConnection.HTTP_NOT_FOUND).type(MediaType.TEXT_PLAIN_TYPE).entity(errorsString.get()).build();
+            return Response.status(HttpURLConnection.HTTP_NOT_FOUND)
+                    .type(MediaType.TEXT_PLAIN_TYPE)
+                    .entity(queryResult.getErrorMessages())
+                    .build();
         }
 
         return Response.ok(queryResult.getResult()).build();

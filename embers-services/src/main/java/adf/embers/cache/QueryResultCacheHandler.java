@@ -9,8 +9,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static adf.embers.statics.UrlTools.decodeString;
 
@@ -35,7 +33,7 @@ public class QueryResultCacheHandler {
         if (queryResult.hasErrors()) {
             return Response.status(Response.Status.NOT_FOUND)
                     .type(MediaType.TEXT_PLAIN_TYPE)
-                    .entity(joined(queryResult.getErrors()))
+                    .entity(queryResult.getErrorMessages())
                     .build();
         }
 
@@ -45,7 +43,4 @@ public class QueryResultCacheHandler {
                 .build();
     }
 
-    private String joined(List<String> strings) {
-        return strings.stream().collect(Collectors.joining(System.lineSeparator()));
-    }
 }

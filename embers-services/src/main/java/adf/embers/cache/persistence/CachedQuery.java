@@ -46,9 +46,11 @@ public class CachedQuery {
         this.result = queryResult;
     }
 
-    /** Called by QueryResultCacheDao.updateQueryCacheResult */
+    /**
+     * Called by QueryResultCacheDao.updateQueryCacheResult
+     */
     @SuppressWarnings("unused")
-    public String getCachedQueryResultAsJsonString(){
+    public String getCachedQueryResultAsJsonString() {
         return new QueryResultToClobConverter().serialise(result);
     }
 
@@ -65,7 +67,7 @@ public class CachedQuery {
     }
 
     public boolean hasCachedQueryResult() {
-        return result !=null;
+        return result != null;
     }
 
     private boolean hasCacheExpired() {

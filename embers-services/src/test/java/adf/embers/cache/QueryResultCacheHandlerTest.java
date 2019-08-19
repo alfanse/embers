@@ -5,17 +5,16 @@ import adf.embers.query.QueryRequest;
 import adf.embers.query.QueryResult;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.ws.rs.core.Response;
-import java.net.HttpURLConnection;
-import java.util.Arrays;
 
+import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 public class QueryResultCacheHandlerTest {
@@ -30,15 +29,15 @@ public class QueryResultCacheHandlerTest {
     QueryResultCacheHandler queryResultCacheHandler;
 
     @Test
-    public void whenServiceErrors_respondWithListofErrorsAnd404() {
-        BDDMockito.given(serviceResponse.hasErrors()).willReturn(true);
-        BDDMockito.given(serviceResponse.getErrors()).willReturn(Arrays.asList("first error", "second error", "third error"));
+    public void whenServiceErrors_respondWith404AndErrorMessage() {
+        given(serviceResponse.hasErrors()).willReturn(true);
+        given(serviceResponse.getErrorMessages()).willReturn("bunch of errors");
 
-        BDDMockito.given(queryProcessor.placeQuery(any(QueryRequest.class))).willReturn(serviceResponse);
+        given(queryProcessor.placeQuery(any(QueryRequest.class))).willReturn(serviceResponse);
 
         Response response = queryResultCacheHandler.executeQuery("some query");
 
-        assertThat(response.getStatus()).isEqualTo(HttpURLConnection.HTTP_NOT_FOUND);
-        assertThat(response.getEntity()).isEqualTo("first error\nsecond error\nthird error");
+        assertThat(response.getStatus()).isEqualTo(HTTP_NOT_FOUND);
+        assertThat(response.getEntity()).isEqualTo("bunch of errors");
     }
 }
