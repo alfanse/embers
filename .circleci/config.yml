@@ -17,7 +17,7 @@ jobs:
     # To see the list of pre-built images that CircleCI provides for most common languages
     # see https://circleci.com/docs/2.0/circleci-images/
     docker:
-    - image: circleci/openjdk:8-jdk-node-browsers
+    - image: circleci/openjdk:8-jdk
     steps:
     - checkout
     # Prepare for artifact and test results  collection equivalent to how it was done on 1.0.
