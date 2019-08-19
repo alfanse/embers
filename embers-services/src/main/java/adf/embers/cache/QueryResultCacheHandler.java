@@ -10,7 +10,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static adf.embers.statics.UrlTools.decodeString;
 
@@ -33,14 +33,19 @@ public class QueryResultCacheHandler {
         QueryResult queryResult = queryProcessor.placeQuery(() -> decodeString(queryName));
 
         if (queryResult.hasErrors()) {
-            List<String> errors = queryResult.getErrors();
-            Optional<String> errorsString = errors.stream().reduce((s, s2) -> s + "\n" + s2);
-            return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN_TYPE).entity(errorsString.get()).build();
+            return Response.status(Response.Status.NOT_FOUND)
+                    .type(MediaType.TEXT_PLAIN_TYPE)
+                    .entity(joined(queryResult.getErrors()))
+                    .build();
         }
 
         return Response
                 .ok(queryResult.getResult())
                 .header(HEADER_WHEN_CHACHED, queryResult.getCachedOn())
                 .build();
+    }
+
+    private String joined(List<String> strings) {
+        return strings.stream().collect(Collectors.joining(System.lineSeparator()));
     }
 }
