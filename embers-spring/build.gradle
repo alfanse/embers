@@ -1,0 +1,19 @@
+plugins {
+    id 'org.springframework.boot' version '2.1.8.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+}
+
+description = """Example project showing how to mix embers into a spring-boot application."""
+
+dependencies {
+
+    compile project(":embers-services")
+    implementation 'org.springframework.boot:spring-boot-dependencies:2.1.8.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-jersey'
+    implementation libs.database
+
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation libs.unit_tests
+}

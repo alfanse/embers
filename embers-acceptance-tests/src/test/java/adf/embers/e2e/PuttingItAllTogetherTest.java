@@ -52,7 +52,7 @@ public class PuttingItAllTogetherTest extends EmbersAcceptanceTestBase {
         when(theUserWantsTheQueryChangedSoThatItWill("Find number of times each item has been rented, sorted least rented first"));
         thenTheUserCanRunTheQuery();
 
-        then(theUserCheckesTheQueriesPerformance(), andIsHappyItsFastEnough());
+        then(theUserChecksTheQueriesPerformance(), andIsHappyItsFastEnough());
     }
 
     private ActionUnderTest aUserQueryIsCreatedThatWill(String description) {
@@ -167,7 +167,7 @@ public class PuttingItAllTogetherTest extends EmbersAcceptanceTestBase {
     }
 
 
-    private StateExtractor<ResultSetWrapper> theUserCheckesTheQueriesPerformance() {
+    private StateExtractor<ResultSetWrapper> theUserChecksTheQueriesPerformance() {
         return getAndLogTables.queryStatisticsTable("Database after - ");
     }
 

@@ -7,69 +7,43 @@ import adf.embers.cache.persistence.QueryResultCacheDao;
 import adf.embers.query.QueryExecutor;
 import adf.embers.query.QueryHandler;
 import adf.embers.query.QueryProcessor;
-import adf.embers.query.impl.QueryExecutorRecordingStatistics;
 import adf.embers.query.persistence.QueryDao;
-import adf.embers.query.persistence.QueryStatisticsDao;
-import org.skife.jdbi.v2.DBI;
 
 import javax.sql.DataSource;
 
 public class EmbersConfiguration {
 
-    private final DataSource dataSource;
-    private final DBI dbi;
+    private final EmbersRepositoryConfiguration  embersRepositoryConfiguration;
+    private final QueryDao queryDao;
+    private final QueryResultCacheDao queryResultCacheDao;
+    private final QueryExecutor queryExecutor;
 
     public EmbersConfiguration(DataSource dataSource) {
-        this.dataSource = dataSource;
-        this.dbi = dbi();
+        embersRepositoryConfiguration = new EmbersRepositoryConfiguration(dataSource);
+        queryDao = embersRepositoryConfiguration.queryDao();
+        queryResultCacheDao = embersRepositoryConfiguration.queryResultCacheDao();
+        queryExecutor = embersRepositoryConfiguration.auditingQueryExecutor();
     }
 
     public QueryHandler getQueryHandler() {
-        return queryHandler();
-    }
-
-    public AdminQueryHandler getAdminQueryHandler() {
-        return new AdminQueryHandler(queryDao());
-    }
-
-    public QueryResultCacheHandler getQueryResultCacheHandler() {
-        return new QueryResultCacheHandler(new QueryResultCacheProcessor(queryResultCacheDao(), queryDao(), auditingQueryExecutor()));
-    }
-
-    private DBI dbi() {
-        return new DBI(dataSource);
-    }
-
-    private QueryHandler queryHandler() {
         return new QueryHandler(queryProcessor());
     }
 
+    public AdminQueryHandler getAdminQueryHandler() {
+        return new AdminQueryHandler(queryDao);
+    }
+
+    public QueryResultCacheHandler getQueryResultCacheHandler() {
+        return new QueryResultCacheHandler(cachedQueryProcessor());
+    }
+
+    private QueryResultCacheProcessor cachedQueryProcessor() {
+        return new QueryResultCacheProcessor(queryResultCacheDao, queryDao, queryExecutor);
+    }
+
     private QueryProcessor queryProcessor() {
-        return new adf.embers.query.impl.QueryProcessor(queryDao(), auditingQueryExecutor());
-    }
-
-    private QueryExecutor auditingQueryExecutor() {
-        return new QueryExecutorRecordingStatistics(queryExecutor(), queriesExecutedDao());
-    }
-
-    private QueryExecutor queryExecutor() {
-        return new adf.embers.query.impl.QueryExecutor(dbiFactory());
-    }
-
-    private DbiHandleFactory dbiFactory() {
-        return new DbiHandleFactory(dbi);
-    }
-
-    private QueryDao queryDao() {
-        return dbi.open(QueryDao.class);
+        return new adf.embers.query.impl.QueryProcessor(queryDao, queryExecutor);
     }
 
 
-    private QueryStatisticsDao queriesExecutedDao() {
-        return dbi.open(QueryStatisticsDao.class);
-    }
-
-    private QueryResultCacheDao queryResultCacheDao() {
-        return dbi.open(QueryResultCacheDao.class);
-    }
 }
