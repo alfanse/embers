@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+@Caching
 public class QueryResultCacheProcessor implements QueryProcessor {
     private QueryResultCacheDao queryResultCacheDao;
     private QueryDao queryDao;

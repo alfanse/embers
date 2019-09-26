@@ -23,23 +23,23 @@ public class EmbersRepositoryConfiguration {
         return new DBI(dataSource);
     }
 
-    QueryExecutor auditingQueryExecutor() {
+    public QueryExecutor auditingQueryExecutor() {
         return new QueryExecutorRecordingStatistics(queryExecutor(), queryStatisticsDao());
     }
 
-    QueryDao queryDao() {
+    public QueryDao queryDao() {
         return dbi.open(QueryDao.class);
     }
 
-    QueryStatisticsDao queryStatisticsDao() {
+    public QueryStatisticsDao queryStatisticsDao() {
         return dbi.open(QueryStatisticsDao.class);
     }
 
-    QueryResultCacheDao queryResultCacheDao() {
+    public QueryResultCacheDao queryResultCacheDao() {
         return dbi.open(QueryResultCacheDao.class);
     }
 
-    QueryExecutor queryExecutor() {
+    public QueryExecutor queryExecutor() {
         return new adf.embers.query.impl.QueryExecutor(dbi);
     }
 }

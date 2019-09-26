@@ -10,10 +10,10 @@ import java.net.HttpURLConnection;
 
 import static adf.embers.statics.UrlTools.decodeString;
 
-@Path("/" + QueryHandler.PATH)
+@Path(QueryHandler.PATH)
 public class QueryHandler {
 
-    public static final String PATH = "query";
+    public static final String PATH = "/query";
 
     private final QueryProcessor queryProcessor;
 

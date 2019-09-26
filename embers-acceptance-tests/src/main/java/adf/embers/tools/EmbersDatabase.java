@@ -20,8 +20,8 @@ import static adf.embers.query.persistence.QueryStatisticsDao.TABLE_QUERIES_STAT
 public class EmbersDatabase {
 
     public static final String JDBC_URL = "jdbc:hsqldb:mem:acceptance-test";
-    private static final String USERNAME = "sa";
-    private static final String PASSWORD = "";
+    public static final String USERNAME = "sa";
+    public static final String PASSWORD = "";
     private final String jdbcUrl;
     private DataSource dataSource;
 

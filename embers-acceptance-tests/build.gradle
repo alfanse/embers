@@ -12,10 +12,11 @@ test.mustRunAfter ":embers-services:build"
 dependencies {
     compile project(":embers-services")
     compile libs.acceptance_tests
+    compile libs.database
+
     testCompile libs.unit_tests
     testCompile libs.acceptance_tests
     testCompile libs.jersey
     testCompile libs.jaxson
     testCompile libs.jetty
-    testCompile libs.database
 }

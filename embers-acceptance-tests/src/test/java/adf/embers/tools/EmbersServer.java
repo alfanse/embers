@@ -50,11 +50,11 @@ public class EmbersServer {
     }
 
     public String embersQueryPath() {
-        return getEmbersContextPath() + "/" + QueryHandler.PATH;
+        return getEmbersContextPath() + QueryHandler.PATH;
     }
 
     public String embersCachedQueryPath() {
-        return getEmbersContextPath() + "/" + QueryResultCacheHandler.PATH;
+        return getEmbersContextPath() + QueryResultCacheHandler.PATH;
     }
 
     /**

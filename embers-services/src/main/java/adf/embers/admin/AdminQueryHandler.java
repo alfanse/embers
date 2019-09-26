@@ -3,6 +3,7 @@ package adf.embers.admin;
 import adf.embers.query.persistence.Query;
 import adf.embers.query.persistence.QueryDao;
 
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -14,8 +15,10 @@ import static adf.embers.statics.UrlTools.decodeString;
 public class AdminQueryHandler {
     public static final String PATH = "/admin";
     public static final String PATH_PARAM_QUERY_NAME = "queryName";
+
     private QueryDao queryDao;
 
+    @Inject
     public AdminQueryHandler(QueryDao queryDao) {
         this.queryDao = queryDao;
     }

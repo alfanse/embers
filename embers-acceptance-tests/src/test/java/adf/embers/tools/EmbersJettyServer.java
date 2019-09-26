@@ -1,6 +1,8 @@
 package adf.embers.tools;
 
-import adf.embers.configuration.EmbersConfiguration;
+import adf.embers.configuration.EmbersHandlerConfiguration;
+import adf.embers.configuration.EmbersProcessorConfiguration;
+import adf.embers.configuration.EmbersRepositoryConfiguration;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -21,7 +23,11 @@ public class EmbersJettyServer {
 
     public void startHttpServer(DataSource dataSource) throws Exception {
         System.out.println("Starting the Embers Server");
-        EmbersConfiguration embersConfiguration = new EmbersConfiguration(dataSource);
+
+        EmbersRepositoryConfiguration embersRepositoryConfiguration = new EmbersRepositoryConfiguration(dataSource);
+        EmbersProcessorConfiguration embersProcessorConfiguration = new EmbersProcessorConfiguration(embersRepositoryConfiguration);
+        EmbersHandlerConfiguration embersConfiguration = new EmbersHandlerConfiguration(embersProcessorConfiguration);
+
         Servlet jerseyServlet = createJerseyServletWithEmbersHandlers(embersConfiguration);
 
         server.setHandler(createEmbersHandler(jerseyServlet));
@@ -37,7 +43,7 @@ public class EmbersJettyServer {
         }
     }
 
-    private Servlet createJerseyServletWithEmbersHandlers(EmbersConfiguration embersConfiguration) {
+    private Servlet createJerseyServletWithEmbersHandlers(EmbersHandlerConfiguration embersConfiguration) {
         ResourceConfig resourceConfig = new ResourceConfig();
         resourceConfig.register(embersConfiguration.getQueryHandler());
         resourceConfig.register(embersConfiguration.getAdminQueryHandler());

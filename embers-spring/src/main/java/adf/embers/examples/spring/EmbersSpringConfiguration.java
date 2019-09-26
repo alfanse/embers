@@ -1,44 +1,62 @@
 package adf.embers.examples.spring;
 
-import adf.embers.admin.AdminQueryHandler;
-import adf.embers.cache.QueryResultCacheHandler;
-import adf.embers.cache.QueryResultCacheProcessor;
-import adf.embers.configuration.EmbersConfiguration;
-import adf.embers.query.QueryHandler;
-import adf.embers.query.QueryProcessor;
-import adf.embers.query.persistence.QueryDao;
+import adf.embers.configuration.EmbersHandlerConfiguration;
+import adf.embers.configuration.EmbersProcessorConfiguration;
+import adf.embers.configuration.EmbersRepositoryConfiguration;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.servlet.ServletContainer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
+import javax.annotation.PostConstruct;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.sql.DataSource;
 
-@Component
-public class EmbersSpringConfiguration extends ResourceConfig {
+@Configuration
+public class EmbersSpringConfiguration {
 
-    public EmbersSpringConfiguration(@Autowired DataSource dataSource) {
-        EmbersConfiguration embersConfiguration = new EmbersConfiguration(dataSource);
+    @Autowired
+    DataSource dataSource;
 
-        register(QueryHandler.class);
-        register(AdminQueryHandler.class);
-        register(QueryResultCacheHandler.class);
+    @Autowired
+    ServletRegistrationBean jerseyServletRegistration;
 
-        register(embersConfiguration.getQueryHandler());
-        register(embersConfiguration.getAdminQueryHandler());
-        register(embersConfiguration.getQueryResultCacheHandler());
+    @Autowired
+    ServletContext servletContext;
 
-        System.out.println("EmbersSpringConfig loaded.");
+    @Bean EmbersHandlerConfiguration embersHandlerConfiguration() {
+        EmbersRepositoryConfiguration embersRepositoryConfiguration = new EmbersRepositoryConfiguration(dataSource);
+        EmbersProcessorConfiguration embersProcessorConfiguration = new EmbersProcessorConfiguration(embersRepositoryConfiguration);
+        return new EmbersHandlerConfiguration(embersProcessorConfiguration);
     }
 
-    public QueryHandler getQueryHandler(@Autowired QueryProcessor queryProcessor) {
-        return new QueryHandler(queryProcessor);
+    @Bean
+    ResourceConfig resourceConfig(
+            @Autowired EmbersHandlerConfiguration handlerConfiguration
+    ) {
+        ResourceConfig resourceConfig = new ResourceConfig();
+        resourceConfig.register(handlerConfiguration.getQueryHandler());
+        resourceConfig.register(handlerConfiguration.getAdminQueryHandler());
+        resourceConfig.register(handlerConfiguration.getQueryResultCacheHandler());
+        return resourceConfig;
     }
 
-    public AdminQueryHandler getAdminQueryHandler(@Autowired QueryDao queryDao) {
-        return new AdminQueryHandler(queryDao);
+    @Bean
+    org.springframework.boot.web.servlet.ServletContextInitializer servletContextInitializer(
+            @Autowired ResourceConfig resourceConfig
+    ){
+        ServletContainer servlet = new ServletContainer(resourceConfig);
+        return servletContext -> {
+            servletContext.addServlet("embers", servlet);
+        };
     }
 
-    public QueryResultCacheHandler getQueryResultCacheHandler(@Autowired QueryResultCacheProcessor queryProcessor) {
-        return new QueryResultCacheHandler(queryProcessor);
+    @PostConstruct
+    void initContext() throws ServletException {
+        jerseyServletRegistration.onStartup(servletContext);
     }
+
 }

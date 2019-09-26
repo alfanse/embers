@@ -12,15 +12,15 @@ import javax.ws.rs.core.Response;
 
 import static adf.embers.statics.UrlTools.decodeString;
 
-@Path("/" + QueryResultCacheHandler.PATH)
+@Path(QueryResultCacheHandler.PATH)
 public class QueryResultCacheHandler {
 
-    public static final String PATH = "cached";
+    public static final String PATH = "/cached";
     public static final String HEADER_WHEN_CHACHED = "REPORT_CACHED_AT";
 
     private final QueryProcessor queryProcessor;
 
-    @Inject
+    @Inject @Caching
     public QueryResultCacheHandler(QueryProcessor queryProcessor) {
         this.queryProcessor = queryProcessor;
     }
