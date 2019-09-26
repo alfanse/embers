@@ -6,35 +6,31 @@ import adf.embers.configuration.EmbersRepositoryConfiguration;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.sql.DataSource;
 
 @Configuration
 public class EmbersSpringConfiguration {
 
+    public static final String EMBERS = "embers";
+
     @Autowired
     DataSource dataSource;
 
-    @Autowired
-    ServletRegistrationBean jerseyServletRegistration;
-
-    @Autowired
-    ServletContext servletContext;
-
-    @Bean EmbersHandlerConfiguration embersHandlerConfiguration() {
+    @Bean
+    EmbersHandlerConfiguration embersHandlerConfiguration() {
         EmbersRepositoryConfiguration embersRepositoryConfiguration = new EmbersRepositoryConfiguration(dataSource);
         EmbersProcessorConfiguration embersProcessorConfiguration = new EmbersProcessorConfiguration(embersRepositoryConfiguration);
         return new EmbersHandlerConfiguration(embersProcessorConfiguration);
     }
 
     @Bean
-    ResourceConfig resourceConfig(
+    @Qualifier(EMBERS)
+    public ResourceConfig resourceConfig(
             @Autowired EmbersHandlerConfiguration handlerConfiguration
     ) {
         ResourceConfig resourceConfig = new ResourceConfig();
@@ -44,19 +40,14 @@ public class EmbersSpringConfiguration {
         return resourceConfig;
     }
 
+    /**
+     * Registers the ResourceConfig to path /embers/*
+     */
     @Bean
-    org.springframework.boot.web.servlet.ServletContextInitializer servletContextInitializer(
-            @Autowired ResourceConfig resourceConfig
-    ){
-        ServletContainer servlet = new ServletContainer(resourceConfig);
-        return servletContext -> {
-            servletContext.addServlet("embers", servlet);
-        };
+    public ServletRegistrationBean servletRegistrationBean(
+            @Autowired @Qualifier(EMBERS) ResourceConfig resourceConfig
+    ) {
+        ServletContainer servletContainer = new ServletContainer(resourceConfig);
+        return new ServletRegistrationBean(servletContainer, "/embers/*");
     }
-
-    @PostConstruct
-    void initContext() throws ServletException {
-        jerseyServletRegistration.onStartup(servletContext);
-    }
-
 }

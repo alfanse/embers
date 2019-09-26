@@ -7,15 +7,12 @@ description = """Example project showing how to mix embers into a spring-boot ap
 
 dependencies {
 
-    compile project(":embers-services")
-    implementation 'org.springframework.boot:spring-boot-dependencies:2.1.8.RELEASE'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation project(":embers-services")
     implementation 'org.springframework.boot:spring-boot-starter-jersey'
-    implementation libs.database
-
+    implementation "org.springframework.boot:spring-boot-starter-web"
 
     testImplementation project(":embers-acceptance-tests")
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.apache.httpcomponents:fluent-hc:4.5.10'
+    testImplementation libs.database
     testImplementation libs.unit_tests
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
 }

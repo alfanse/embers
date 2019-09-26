@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 )
 public class Application {
 
+    /** main is required by spring boot, otherwise I'd have moved it to src/test/java */
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
         System.out.println("started");

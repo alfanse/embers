@@ -25,9 +25,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ApplicationTest {
 
     @Test
-    public void queryGet_whenNotExists_response404() throws IOException, InterruptedException {
+    public void query_accessible() throws IOException, InterruptedException {
         HttpRequest request = HttpRequest
-                .newBuilder(embersUri("http://localhost:8080", QueryHandler.PATH))
+                .newBuilder(embersUri(QueryHandler.PATH + "/unknownQuery"))
                 .GET()
                 .build();
         whenRequest(request, response -> {
@@ -36,21 +36,10 @@ public class ApplicationTest {
         });
     }
 
-    private URI embersUri(String s, String path) {
-        return URI.create(s + path + "/unknownQuery");
-    }
-
-    private void whenRequest(HttpRequest request, Consumer<HttpResponse<String>> assertThatFn) throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newBuilder().build();
-        HttpResponse<String> response =
-                client.send(request, HttpResponse.BodyHandlers.ofString());
-        assertThatFn.accept(response);
-    }
-
     @Test
-    public void adminDelete_WhenNotExists_respondsOk() throws IOException, InterruptedException {
+    public void admin_accessible() throws IOException, InterruptedException {
         HttpRequest request = HttpRequest
-                .newBuilder(embersUri("http://localhost:8080", AdminQueryHandler.PATH))
+                .newBuilder(embersUri(AdminQueryHandler.PATH + "/unknownQuery"))
                 .DELETE()
                 .build();
         whenRequest(request, response -> {
@@ -60,9 +49,9 @@ public class ApplicationTest {
     }
 
     @Test
-    public void cachedGetQuery_WhenNotExists_responds404() throws IOException, InterruptedException {
+    public void cached_accessible() throws IOException, InterruptedException {
         HttpRequest request = HttpRequest
-                .newBuilder(embersUri("http://localhost:8080", QueryResultCacheHandler.PATH))
+                .newBuilder(embersUri(QueryResultCacheHandler.PATH + "/unknownQuery"))
                 .GET()
                 .build();
 
@@ -70,6 +59,17 @@ public class ApplicationTest {
             assertThat(response.statusCode()).isEqualTo(404);
             assertThat(response.body()).isEqualTo("Query not found: unknownQuery");
         });
+    }
+
+    private URI embersUri(String endpoint) {
+        return URI.create("http://localhost:8080/embers" + endpoint);
+    }
+
+    private void whenRequest(HttpRequest request, Consumer<HttpResponse<String>> assertThatFn) throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newBuilder().build();
+        HttpResponse<String> response =
+                client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertThatFn.accept(response);
     }
 
 
