@@ -3,6 +3,7 @@ package adf.embers.examples.spring;
 import adf.embers.admin.AdminQueryHandler;
 import adf.embers.cache.QueryResultCacheHandler;
 import adf.embers.query.QueryHandler;
+import io.restassured.RestAssured;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,10 +11,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,51 +23,37 @@ public class ApplicationTest {
 
     @Test
     public void query_accessible() throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest
-                .newBuilder(embersUri(QueryHandler.PATH + "/unknownQuery"))
-                .GET()
-                .build();
-        whenRequest(request, response -> {
-            assertThat(response.statusCode()).isEqualTo(404);
-            assertThat(response.body()).isEqualTo("Query not found: unknownQuery");
-        });
+        String responseBody =
+                RestAssured.when()
+                        .get(embersUri(QueryHandler.PATH + "/unknownQuery")).
+                        then().statusCode(404)
+                        .extract().response().body().asString();
+
+        assertThat(responseBody).isEqualTo("Query not found: unknownQuery");
     }
 
     @Test
     public void admin_accessible() throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest
-                .newBuilder(embersUri(AdminQueryHandler.PATH + "/unknownQuery"))
-                .DELETE()
-                .build();
-        whenRequest(request, response -> {
-            assertThat(response.statusCode()).isEqualTo(200);
-            assertThat(response.body()).isEqualTo("Successfully deleted query");
-        });
+        String responseBody = RestAssured.when()
+                .delete(embersUri(AdminQueryHandler.PATH + "/unknownQuery"))
+                .then().statusCode(200)
+                .extract().response().body().asString();
+
+        assertThat(responseBody).isEqualTo("Successfully deleted query");
     }
 
     @Test
     public void cached_accessible() throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest
-                .newBuilder(embersUri(QueryResultCacheHandler.PATH + "/unknownQuery"))
-                .GET()
-                .build();
+        String responseBody = RestAssured.when()
+                .get(embersUri(QueryResultCacheHandler.PATH + "/unknownQuery"))
+                .then().statusCode(404)
+                .extract().response().body().asString();
 
-        whenRequest(request, response -> {
-            assertThat(response.statusCode()).isEqualTo(404);
-            assertThat(response.body()).isEqualTo("Query not found: unknownQuery");
-        });
+            assertThat(responseBody).isEqualTo("Query not found: unknownQuery");
     }
 
     private URI embersUri(String endpoint) {
         return URI.create("http://localhost:8080/embers" + endpoint);
     }
-
-    private void whenRequest(HttpRequest request, Consumer<HttpResponse<String>> assertThatFn) throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newBuilder().build();
-        HttpResponse<String> response =
-                client.send(request, HttpResponse.BodyHandlers.ofString());
-        assertThatFn.accept(response);
-    }
-
 
 }
