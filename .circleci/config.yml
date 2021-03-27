@@ -35,16 +35,14 @@ jobs:
     # Save test results
     - store_test_results:
         path: embers-services/build/test-results
+    - store_test_results:
+        path: embers-acceptance-tests/build/test-results
+    - store_test_results:
+        path: embers-spring/build/test-results
     # Save artifacts
     - store_artifacts:
-        name: store embers-services reports
-        path: embers-services/build/reports
-    - store_artifacts:
-        name: store embers-spring reports
-        path: embers-spring/build/reports
-    - store_artifacts:
         name: store embers-acceptance-tests reports
-        path: embers-acceptance-tests/build/reports
+        path: embers-acceptance-tests/build/yatspec
         destination: yatspec
     - store_artifacts:
         name: store jacoco reports
