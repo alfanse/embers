@@ -2,7 +2,7 @@ description = """The Acceptance Tests for Embers.
 Demonstrating hosting embers services on jetty, with jersey and in-memory database"""
 
 test {
-    def yatspecOutputDirectory = "${buildDir}/reports/acceptance"
+    def yatspecOutputDirectory = "${buildDir}/yatspec"
     systemProperty "yatspec.output.dir", yatspecOutputDirectory
     println 'Acceptance Test Reports: ' + yatspecOutputDirectory
     useJUnitPlatform()
