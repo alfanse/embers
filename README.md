@@ -5,13 +5,17 @@
 A java library that exposes a restful api for the management and consumption of sql reports.
 
 * **embers/admin/** - allows reports to be added, updated or deleted dynamically.
-* **embers/query/<query name>** - run the report and return the result via http - as CSV.
+* **embers/query/<query name>** - run the named sql select query and return the result via http - as CSV.
 * **embers/cached/<query name>** - fetch a cached result, or run and cache if cache miss.
 
 ### Requirements:
-Embed it in a http container that works with javax.ws.rs, i.e. jetty.
+Embed embers in a http container that works with `javax.ws.rs`, i.e. jetty.
 
-Inject a Datasource to EmbersConfiguration.
+It needs a `javax.sql.DataSource` injected into `adf.embers.configuration.EmbersRepositoryConfiguration`
+
+And a Servlet: 
+* A Jetty example: [EmbersJettyServer](embers-acceptance-tests/src/test/java/adf/embers/tools/EmbersJettyServer.java)
+* A Spring example: [EmbersSpringConfiguration](embers-spring/src/main/java/adf/embers/examples/spring/EmbersSpringConfiguration.java)
 
 The datasource should have access to the 3 tables required by embers, and have read access to the schema the reports are to be run against.
 
@@ -21,23 +25,28 @@ Database tables:
 * **queries_statistics** - Audit information about calls made to embers/query.
 * **query_result_cache** - Caches results for embers/cache service to re-use.
 
+Example of DDL for tables: [EmbersDatabase](embers-acceptance-tests/src/main/java/adf/embers/tools/EmbersDatabase.java)
+
+I've not written any DDL scripts as not sure what databases to support.
+
 ## Build
 Thanks to circleci, you can see the build here: https://circleci.com/gh/alfanse/embers
 
-The acceptance tests produce html documentation, my thanks to Dan Bodart for Yatspec that makes this possible (https://github.com/bodar/yatspec):
+The acceptance tests produce html documentation with sequence diagrams, thanks to [Yatspec](https://github.com/nickmcdowall/yatspec).
+
 To find the documentation, on circle-ci, latest green build / artifacts tab and drill down to:
 * admin - /embers/embers-acceptance-tests/build/reports/acceptance/adf/embers/acceptance/AdminQueriesTest.html
 * query - /embers/embers-acceptance-tests/build/reports/acceptance/adf/embers/acceptance/QueryTest.html
 * query statistics - /embers/embers-acceptance-tests/build/reports/acceptance/adf/embers/acceptance/QueryStatisticsTest.html
 * cached - /embers/embers-acceptance-tests/build/reports/acceptance/adf/embers/acceptance/CachedQueriesTest.html
-* e2e - a worked examples, maintaining a query - https://92-28635373-gh.circle-artifacts.com/0/home/circleci/alfanse/embers/embers-acceptance-tests/build/reports/acceptance/adf/embers/e2e/PuttingItAllTogetherTest.html
+* e2e - a worked examples, maintaining a query - /embers/embers-acceptance-tests/build/reports/acceptance/adf/embers/e2e/PuttingItAllTogetherTest.html
 
 ## Code Coverage
-powered by jacoco plugin
-run:
- gradlew clean codeCoverageReport
-see reports here:
- embers/build/reports/jacoco/index.html
+powered by jacoco plugin, run:
+```shell
+gradlew clean codeCoverageReport
+```
+see reports here: `embers/build/reports/jacoco/index.html`
 
 ## Backlog
 
