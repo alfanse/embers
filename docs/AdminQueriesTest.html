@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <title>LSD</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js" type="text/javascript"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css" type="text/css" media="all"/>
+        <link rel="stylesheet" href="https://static.jquery.com/ui/css/demo-docs-theme/ui.theme.css" type="text/css" media="all"/>
+        <link rel="stylesheet" id="theme" type="text/css" href="yatspec_alt.css">
+    </head>
+    <body>
+        <div class="hd-switch">
+            <input type="checkbox" id="switch-id" name="myswitch" onchange="toggleTheme()">
+            <label for="switch-id">Classic</label>
+            <span class="hd-switch-knob"></span>
+        </div>
+        <div class="logo">
+            <h5 class="logo1">L</h5>iving &nbsp;<h5 class="logo2">S</h5>equence &nbsp;<h5 class="logo3">D</h5>iagrams
+        </div>
+
+        <header>
+            <h1>Admin queries</h1>
+            <pre class="notes">As an admin user<br/>I can: add, update and delete queries<br/>So that users can instantly use the changed query.</pre>
+            <nav class="contents">
+                <h2>Contents</h2>
+                <ul class="contents">
+                        <li class='test-passed icon-check'>
+                            <a href="#usersCanAddNewReports">Users can add new reports</a>
+                        </li>
+                        <li class='test-passed icon-check'>
+                            <a href="#usersCanUpdateExistingReports">Users can update existing reports</a>
+                        </li>
+                        <li class='test-passed icon-check'>
+                            <a href="#usersCanDeleteExistingReports">Users can delete existing reports</a>
+                        </li>
+                </ul>
+            </nav>
+        </header>
+        <main role="main">
+            <article class="testmethod section">
+                <header>
+                    <a id="usersCanAddNewReports"></a>
+                    <h2 class="section-header">Users can add new reports</h2>
+                </header>
+                <section class="section-body">
+                        <section class="scenario" id="1899532216_0_690473777">
+                            <section class="specification">
+                                <h2>Specification<a id=""></a></h2>
+                                <pre class="highlight specification">When a new query is created
+Then http post response code is http_ok
+Then http post response body core matchers contains string &quot;successfully added query&quot;
+
+Then the queries table has the query
+
+When the new query is called
+Then http get response code is http_ok
+Then http get response body core matchers contains string &quot;today now&quot;</pre>
+                            </section>
+                            <section class="results">
+                                <h3 class="logKey">Test result:</h3>
+                                <pre class='highlight results test-passed icon-check'>Test passed</pre>
+                            </section>
+                            <section class="diagram">
+                                <h3 logkey="Sequence_Diagram">Sequence Diagram</h3>
+                                <div class="highlight SvgWrapper" ><?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" contentScriptType="application/ecmascript" contentStyleType="text/css" height="311px" preserveAspectRatio="none" style="width:238px;height:311px;" version="1.1" viewBox="0 0 238 311" width="238px" zoomAndPan="magnify">
+  <defs>
+    <filter height="300%" id="f147o1vl0jgt7j" width="300%" x="-1" y="-1">
+      <feGaussianBlur result="blurOut" stdDeviation="2.0" />
+      <feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0" />
+      <feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3" />
+      <feBlend in="SourceGraphic" in2="blurOut3" mode="normal" />
+    </filter>
+  </defs>
+  <g>
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="31" x2="31" y1="86.4883" y2="223.7305" />
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="196.5" x2="196.5" y1="86.4883" y2="223.7305" />
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="8" y="83.5352">Client</text>
+    <ellipse cx="31" cy="13" fill="#FEFECE" filter="url(#f147o1vl0jgt7j)" rx="8" ry="8" style="stroke: #A80036; stroke-width: 2.0;" />
+    <path d="M31,21 L31,48 M18,29 L44,29 M31,48 L18,63 M31,48 L44,63 " fill="none" filter="url(#f147o1vl0jgt7j)" style="stroke: #A80036; stroke-width: 2.0;" />
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="8" y="236.2656">Client</text>
+    <ellipse cx="31" cy="249.2188" fill="#FEFECE" filter="url(#f147o1vl0jgt7j)" rx="8" ry="8" style="stroke: #A80036; stroke-width: 2.0;" />
+    <path d="M31,257.2188 L31,284.2188 M18,265.2188 L44,265.2188 M31,284.2188 L18,299.2188 M31,284.2188 L44,299.2188 " fill="none" filter="url(#f147o1vl0jgt7j)" style="stroke: #A80036; stroke-width: 2.0;" />
+    <rect fill="#FEFECE" filter="url(#f147o1vl0jgt7j)" height="30.4883" style="stroke: #A80036; stroke-width: 1.5;" width="65" x="162.5" y="51" />
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="51" x="169.5" y="71.5352">Embers</text>
+    <rect fill="#FEFECE" filter="url(#f147o1vl0jgt7j)" height="30.4883" style="stroke: #A80036; stroke-width: 1.5;" width="65" x="162.5" y="222.7305" />
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="51" x="169.5" y="243.2656">Embers</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="195" x2="185" y1="117.7988" y2="113.7988" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="195" x2="185" y1="117.7988" y2="121.7988" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="196" y1="117.7988" y2="117.7988" />
+    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="Create_Query_request_from_Client_to_Embers" textLength="132" x="38" y="113.0566">Create Query request</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="41" y1="147.1094" y2="143.1094" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="41" y1="147.1094" y2="151.1094" />
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 2.0,2.0;" x1="31" x2="196" y1="147.1094" y2="147.1094" />
+    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="Create_Query_response_from_Embers_to_Client" textLength="142" x="48" y="142.3672">Create Query response</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="195" x2="185" y1="176.4199" y2="172.4199" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="195" x2="185" y1="176.4199" y2="180.4199" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="196" y1="176.4199" y2="176.4199" />
+    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="Run_Query_request_from_Client_to_Embers" textLength="116" x="38" y="171.6777">Run Query request</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="41" y1="205.7305" y2="201.7305" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="41" y1="205.7305" y2="209.7305" />
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 2.0,2.0;" x1="31" x2="196" y1="205.7305" y2="205.7305" />
+    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="Run_Query_response_from_Embers_to_Client" textLength="126" x="48" y="200.9883">Run Query response</text>
+  </g>
+</svg>
+
+</div>
+                            </section>
+                            <section class="interestingGivens">
+                                <h3 class="logKey">Interesting Givens</h3>
+                                <table class="interestingGivens">
+                                    <tr>
+                                        <th class="key">Url</th>
+                                        <td class="interestingGiven">http://localhost:8001/embers/query/new+Query</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="key">name</th>
+                                        <td class="interestingGiven">new Query</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="key">sql</th>
+                                        <td class="interestingGiven">SELECT CURRENT_DATE AS today, CURRENT_TIME AS now FROM (VALUES(0))</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="key">description</th>
+                                        <td class="interestingGiven">this query returns the date,time</td>
+                                    </tr>
+                                </table>
+                            </section>
+                            <footer>
+                                <section class="interactions">
+                                <details>
+                                    <summary>Captured Interactions</summary>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Create_Query_request_from_Client_to_Embers">Create Query request from Client to Embers</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight HttpRequestWrapper">POST http://localhost:8001/embers/admin
+Headers: {Accept-Charset=[UTF-8], Content-Type=[application/json]}
+Body: {&quot;name&quot;:&quot;new+Query&quot;, &quot;sql&quot;:&quot;SELECT+CURRENT_DATE+AS+today%2C+CURRENT_TIME+AS+now+FROM+%28VALUES%280%29%29&quot;, &quot;description&quot;:&quot;this+query+returns+the+date%2Ctime&quot;}</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Create_Query_response_from_Embers_to_Client">Create Query response from Embers to Client</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight HttpResponseWrapper">Response Code: 200
+Headers: {null=[HTTP/1.1 200 OK], Server=[Jetty(9.3.0.M1)], Content-Length=[24], Date=[Sat, 27 Mar 2021 18:21:13 GMT], Content-Type=[text/html]}
+Body: Successfully added query
+</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Database___queries">Database - queries</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight ResultSetWrapper">&lt;table&gt;&lt;tr&gt;&lt;th&gt;name&lt;/th&gt;&lt;th&gt;description&lt;/th&gt;&lt;th&gt;id&lt;/th&gt;&lt;th&gt;cacheable_duration&lt;/th&gt;&lt;th&gt;sql&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;new Query&lt;/td&gt;&lt;td&gt;this query returns the date,time&lt;/td&gt;&lt;td&gt;7&lt;/td&gt;&lt;td&gt;null&lt;/td&gt;&lt;td&gt;SELECT CURRENT_DATE AS today, CURRENT_TIME AS now FROM (VALUES(0))&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Run_Query_request_from_Client_to_Embers">Run Query request from Client to Embers</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight HttpRequestWrapper">GET http://localhost:8001/embers/query/new+Query
+Headers: null
+Body: null</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Run_Query_response_from_Embers_to_Client">Run Query response from Embers to Client</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight HttpResponseWrapper">Response Code: 200
+Headers: {null=[HTTP/1.1 200 OK], Server=[Jetty(9.3.0.M1)], Content-Length=[30], Date=[Sat, 27 Mar 2021 18:21:13 GMT], Content-Type=[text/html]}
+Body: today,now
+2021-03-27,18:21:13
+</div>
+                                    </details>
+                                </details>
+                            </section>
+                            </footer>
+                        </section>
+                </section>
+            </article>
+            <article class="testmethod section">
+                <header>
+                    <a id="usersCanUpdateExistingReports"></a>
+                    <h2 class="section-header">Users can update existing reports</h2>
+                </header>
+                <section class="section-body">
+                        <section class="scenario" id="-766045725_0_591081908">
+                            <section class="specification">
+                                <h2>Specification<a id=""></a></h2>
+                                <pre class="highlight specification">Given an existing report
+
+When an update to the query is posted
+Then http post response code is http_ok
+Then http post response body core matchers contains string &quot;successfully updated query&quot;
+
+Then the queries table has the query</pre>
+                            </section>
+                            <section class="results">
+                                <h3 class="logKey">Test result:</h3>
+                                <pre class='highlight results test-passed icon-check'>Test passed</pre>
+                            </section>
+                            <section class="diagram">
+                                <h3 logkey="Sequence_Diagram">Sequence Diagram</h3>
+                                <div class="highlight SvgWrapper" ><?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" contentScriptType="application/ecmascript" contentStyleType="text/css" height="311px" preserveAspectRatio="none" style="width:242px;height:311px;" version="1.1" viewBox="0 0 242 311" width="242px" zoomAndPan="magnify">
+  <defs>
+    <filter height="300%" id="f1fp5s2l7waj5h" width="300%" x="-1" y="-1">
+      <feGaussianBlur result="blurOut" stdDeviation="2.0" />
+      <feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0" />
+      <feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3" />
+      <feBlend in="SourceGraphic" in2="blurOut3" mode="normal" />
+    </filter>
+  </defs>
+  <g>
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="31" x2="31" y1="86.4883" y2="223.7305" />
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="200.5" x2="200.5" y1="86.4883" y2="223.7305" />
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="8" y="83.5352">Client</text>
+    <ellipse cx="31" cy="13" fill="#FEFECE" filter="url(#f1fp5s2l7waj5h)" rx="8" ry="8" style="stroke: #A80036; stroke-width: 2.0;" />
+    <path d="M31,21 L31,48 M18,29 L44,29 M31,48 L18,63 M31,48 L44,63 " fill="none" filter="url(#f1fp5s2l7waj5h)" style="stroke: #A80036; stroke-width: 2.0;" />
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="8" y="236.2656">Client</text>
+    <ellipse cx="31" cy="249.2188" fill="#FEFECE" filter="url(#f1fp5s2l7waj5h)" rx="8" ry="8" style="stroke: #A80036; stroke-width: 2.0;" />
+    <path d="M31,257.2188 L31,284.2188 M18,265.2188 L44,265.2188 M31,284.2188 L18,299.2188 M31,284.2188 L44,299.2188 " fill="none" filter="url(#f1fp5s2l7waj5h)" style="stroke: #A80036; stroke-width: 2.0;" />
+    <rect fill="#FEFECE" filter="url(#f1fp5s2l7waj5h)" height="30.4883" style="stroke: #A80036; stroke-width: 1.5;" width="65" x="166.5" y="51" />
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="51" x="173.5" y="71.5352">Embers</text>
+    <rect fill="#FEFECE" filter="url(#f1fp5s2l7waj5h)" height="30.4883" style="stroke: #A80036; stroke-width: 1.5;" width="65" x="166.5" y="222.7305" />
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="51" x="173.5" y="243.2656">Embers</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="199" x2="189" y1="117.7988" y2="113.7988" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="199" x2="189" y1="117.7988" y2="121.7988" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="200" y1="117.7988" y2="117.7988" />
+    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="Create_Query_request_from_Client_to_Embers" textLength="132" x="38" y="113.0566">Create Query request</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="41" y1="147.1094" y2="143.1094" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="41" y1="147.1094" y2="151.1094" />
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 2.0,2.0;" x1="31" x2="200" y1="147.1094" y2="147.1094" />
+    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="Create_Query_response_from_Embers_to_Client" textLength="142" x="48" y="142.3672">Create Query response</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="199" x2="189" y1="176.4199" y2="172.4199" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="199" x2="189" y1="176.4199" y2="180.4199" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="200" y1="176.4199" y2="176.4199" />
+    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="Update_Query_request_from_Client_to_Embers" textLength="136" x="38" y="171.6777">Update Query request</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="41" y1="205.7305" y2="201.7305" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="41" y1="205.7305" y2="209.7305" />
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 2.0,2.0;" x1="31" x2="200" y1="205.7305" y2="205.7305" />
+    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="Update_Query_response_from_Embers_to_Client" textLength="146" x="48" y="200.9883">Update Query response</text>
+  </g>
+</svg>
+
+</div>
+                            </section>
+                            <section class="interestingGivens">
+                                <h3 class="logKey">Interesting Givens</h3>
+                                <table class="interestingGivens">
+                                    <tr>
+                                        <th class="key">Url</th>
+                                        <td class="interestingGiven">http://localhost:8001/embers/admin</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="key">name</th>
+                                        <td class="interestingGiven">new Query</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="key">sql</th>
+                                        <td class="interestingGiven">SELECT CURRENT_DATE AS date, CURRENT_TIME AS time FROM (VALUES(0))</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="key">description</th>
+                                        <td class="interestingGiven">this query returns the date and time</td>
+                                    </tr>
+                                </table>
+                            </section>
+                            <footer>
+                                <section class="interactions">
+                                <details>
+                                    <summary>Captured Interactions</summary>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Create_Query_request_from_Client_to_Embers">Create Query request from Client to Embers</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight HttpRequestWrapper">POST http://localhost:8001/embers/admin
+Headers: {Accept-Charset=[UTF-8], Content-Type=[application/json]}
+Body: {&quot;name&quot;:&quot;new+Query&quot;, &quot;sql&quot;:&quot;SELECT+CURRENT_DATE+AS+today%2C+CURRENT_TIME+AS+now+FROM+%28VALUES%280%29%29&quot;, &quot;description&quot;:&quot;this+query+returns+the+date%2Ctime&quot;}</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Create_Query_response_from_Embers_to_Client">Create Query response from Embers to Client</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight HttpResponseWrapper">Response Code: 200
+Headers: {null=[HTTP/1.1 200 OK], Server=[Jetty(9.3.0.M1)], Content-Length=[24], Date=[Sat, 27 Mar 2021 18:21:13 GMT], Content-Type=[text/html]}
+Body: Successfully added query
+</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Update_Query_request_from_Client_to_Embers">Update Query request from Client to Embers</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight HttpRequestWrapper">POST http://localhost:8001/embers/admin
+Headers: {Accept-Charset=[UTF-8], Content-Type=[application/json]}
+Body: {&quot;name&quot;:&quot;new+Query&quot;, &quot;sql&quot;:&quot;SELECT+CURRENT_DATE+AS+date%2C+CURRENT_TIME+AS+time+FROM+%28VALUES%280%29%29&quot;, &quot;description&quot;:&quot;this+query+returns+the+date+and+time&quot;}</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Update_Query_response_from_Embers_to_Client">Update Query response from Embers to Client</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight HttpResponseWrapper">Response Code: 200
+Headers: {null=[HTTP/1.1 200 OK], Server=[Jetty(9.3.0.M1)], Content-Length=[26], Date=[Sat, 27 Mar 2021 18:21:13 GMT], Content-Type=[text/html]}
+Body: Successfully updated query
+</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Database___queries">Database - queries</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight ResultSetWrapper">&lt;table&gt;&lt;tr&gt;&lt;th&gt;name&lt;/th&gt;&lt;th&gt;description&lt;/th&gt;&lt;th&gt;id&lt;/th&gt;&lt;th&gt;cacheable_duration&lt;/th&gt;&lt;th&gt;sql&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;new Query&lt;/td&gt;&lt;td&gt;this query returns the date and time&lt;/td&gt;&lt;td&gt;6&lt;/td&gt;&lt;td&gt;null&lt;/td&gt;&lt;td&gt;SELECT CURRENT_DATE AS date, CURRENT_TIME AS time FROM (VALUES(0))&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</div>
+                                    </details>
+                                </details>
+                            </section>
+                            </footer>
+                        </section>
+                </section>
+            </article>
+            <article class="testmethod section">
+                <header>
+                    <a id="usersCanDeleteExistingReports"></a>
+                    <h2 class="section-header">Users can delete existing reports</h2>
+                </header>
+                <section class="section-body">
+                        <section class="scenario" id="-2016074559_0_-1566347072">
+                            <section class="specification">
+                                <h2>Specification<a id=""></a></h2>
+                                <pre class="highlight specification">Given an existing report
+Then the queries table has the query
+
+When the query is deleted
+Then http delete response code is http_ok
+Then http delete response body core matchers contains string &quot;successfully deleted query&quot;
+
+Then the queries table is missing the query</pre>
+                            </section>
+                            <section class="results">
+                                <h3 class="logKey">Test result:</h3>
+                                <pre class='highlight results test-passed icon-check'>Test passed</pre>
+                            </section>
+                            <section class="diagram">
+                                <h3 logkey="Sequence_Diagram">Sequence Diagram</h3>
+                                <div class="highlight SvgWrapper" ><?xml version="1.0" encoding="UTF-8"?>
+                                    <svg xmlns="http://www.w3.org/2000/svg" contentScriptType="application/ecmascript"
+                                         contentStyleType="text/css" height="311px" preserveAspectRatio="none"
+                                         style="width:238px;height:311px;" version="1.1" viewBox="0 0 238 311"
+                                         width="238px" zoomAndPan="magnify">
+  <defs>
+    <filter height="300%" id="fjn57tzjx1ur5" width="300%" x="-1" y="-1">
+      <feGaussianBlur result="blurOut" stdDeviation="2.0" />
+      <feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0" />
+      <feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3" />
+      <feBlend in="SourceGraphic" in2="blurOut3" mode="normal" />
+    </filter>
+  </defs>
+  <g>
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="31" x2="31" y1="86.4883" y2="223.7305" />
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="196.5" x2="196.5" y1="86.4883" y2="223.7305" />
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="8" y="83.5352">Client</text>
+    <ellipse cx="31" cy="13" fill="#FEFECE" filter="url(#fjn57tzjx1ur5)" rx="8" ry="8" style="stroke: #A80036; stroke-width: 2.0;" />
+    <path d="M31,21 L31,48 M18,29 L44,29 M31,48 L18,63 M31,48 L44,63 " fill="none" filter="url(#fjn57tzjx1ur5)" style="stroke: #A80036; stroke-width: 2.0;" />
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="8" y="236.2656">Client</text>
+    <ellipse cx="31" cy="249.2188" fill="#FEFECE" filter="url(#fjn57tzjx1ur5)" rx="8" ry="8" style="stroke: #A80036; stroke-width: 2.0;" />
+    <path d="M31,257.2188 L31,284.2188 M18,265.2188 L44,265.2188 M31,284.2188 L18,299.2188 M31,284.2188 L44,299.2188 " fill="none" filter="url(#fjn57tzjx1ur5)" style="stroke: #A80036; stroke-width: 2.0;" />
+    <rect fill="#FEFECE" filter="url(#fjn57tzjx1ur5)" height="30.4883" style="stroke: #A80036; stroke-width: 1.5;" width="65" x="162.5" y="51" />
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="51" x="169.5" y="71.5352">Embers</text>
+    <rect fill="#FEFECE" filter="url(#fjn57tzjx1ur5)" height="30.4883" style="stroke: #A80036; stroke-width: 1.5;" width="65" x="162.5" y="222.7305" />
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="51" x="169.5" y="243.2656">Embers</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="195" x2="185" y1="117.7988" y2="113.7988" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="195" x2="185" y1="117.7988" y2="121.7988" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="196" y1="117.7988" y2="117.7988" />
+    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="Create_Query_request_from_Client_to_Embers" textLength="132" x="38" y="113.0566">Create Query request</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="41" y1="147.1094" y2="143.1094" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="41" y1="147.1094" y2="151.1094" />
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 2.0,2.0;" x1="31" x2="196" y1="147.1094" y2="147.1094" />
+    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="Create_Query_response_from_Embers_to_Client" textLength="142" x="48" y="142.3672">Create Query response</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="195" x2="185" y1="176.4199" y2="172.4199" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="195" x2="185" y1="176.4199" y2="180.4199" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="196" y1="176.4199" y2="176.4199" />
+    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="Delete_Query_request_from_Client_to_Embers" textLength="132" x="38" y="171.6777">Delete Query request</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="41" y1="205.7305" y2="201.7305" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="41" y1="205.7305" y2="209.7305" />
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 2.0,2.0;" x1="31" x2="196" y1="205.7305" y2="205.7305" />
+    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="Delete_Query_response_from_Embers_to_Client" textLength="142" x="48" y="200.9883">Delete Query response</text>
+  </g>
+</svg>
+
+</div>
+                            </section>
+                            <section class="interestingGivens">
+                                <h3 class="logKey">Interesting Givens</h3>
+                                <table class="interestingGivens">
+                                    <tr>
+                                        <th class="key">Url</th>
+                                        <td class="interestingGiven">http://localhost:8001/embers/admin/new+Query</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="key">name</th>
+                                        <td class="interestingGiven">new Query</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="key">sql</th>
+                                        <td class="interestingGiven">SELECT CURRENT_DATE AS today, CURRENT_TIME AS now FROM (VALUES(0))</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="key">description</th>
+                                        <td class="interestingGiven">this query returns the date,time</td>
+                                    </tr>
+                                </table>
+                            </section>
+                            <footer>
+                                <section class="interactions">
+                                <details>
+                                    <summary>Captured Interactions</summary>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Create_Query_request_from_Client_to_Embers">Create Query request from Client to Embers</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight HttpRequestWrapper">POST http://localhost:8001/embers/admin
+Headers: {Accept-Charset=[UTF-8], Content-Type=[application/json]}
+Body: {&quot;name&quot;:&quot;new+Query&quot;, &quot;sql&quot;:&quot;SELECT+CURRENT_DATE+AS+today%2C+CURRENT_TIME+AS+now+FROM+%28VALUES%280%29%29&quot;, &quot;description&quot;:&quot;this+query+returns+the+date%2Ctime&quot;}</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Create_Query_response_from_Embers_to_Client">Create Query response from Embers to Client</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight HttpResponseWrapper">Response Code: 200
+Headers: {null=[HTTP/1.1 200 OK], Server=[Jetty(9.3.0.M1)], Content-Length=[24], Date=[Sat, 27 Mar 2021 18:21:12 GMT], Content-Type=[text/html]}
+Body: Successfully added query
+</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Database___queries">Database - queries</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight ResultSetWrapper">&lt;table&gt;&lt;tr&gt;&lt;th&gt;name&lt;/th&gt;&lt;th&gt;description&lt;/th&gt;&lt;th&gt;id&lt;/th&gt;&lt;th&gt;cacheable_duration&lt;/th&gt;&lt;th&gt;sql&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;new Query&lt;/td&gt;&lt;td&gt;this query returns the date,time&lt;/td&gt;&lt;td&gt;5&lt;/td&gt;&lt;td&gt;null&lt;/td&gt;&lt;td&gt;SELECT CURRENT_DATE AS today, CURRENT_TIME AS now FROM (VALUES(0))&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Delete_Query_request_from_Client_to_Embers">Delete Query request from Client to Embers</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight HttpRequestWrapper">DELETE http://localhost:8001/embers/admin/new+Query
+Headers: null
+Body: null</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Delete_Query_response_from_Embers_to_Client">Delete Query response from Embers to Client</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight HttpResponseWrapper">Response Code: 200
+Headers: {null=[HTTP/1.1 200 OK], Server=[Jetty(9.3.0.M1)], Content-Length=[26], Date=[Sat, 27 Mar 2021 18:21:13 GMT], Content-Type=[text/html]}
+Body: Successfully deleted query
+</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="2_Database___queries">2 Database - queries</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight ResultSetWrapper"></div>
+                                    </details>
+                                </details>
+                            </section>
+                            </footer>
+                        </section>
+                </section>
+            </article>
+        </main>
+        <footer>
+            <div class="footer">
+                <script src="xregexp.js" type="text/javascript"></script>
+                <script src="yatspec.js" type="text/javascript"></script>
+            </div>
+        </footer>
+    </body>
+</html>

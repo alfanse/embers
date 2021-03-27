@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <title>LSD</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js" type="text/javascript"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css" type="text/css" media="all"/>
+        <link rel="stylesheet" href="https://static.jquery.com/ui/css/demo-docs-theme/ui.theme.css" type="text/css" media="all"/>
+        <link rel="stylesheet" id="theme" type="text/css" href="yatspec_alt.css">
+    </head>
+    <body>
+        <div class="hd-switch">
+            <input type="checkbox" id="switch-id" name="myswitch" onchange="toggleTheme()">
+            <label for="switch-id">Classic</label>
+            <span class="hd-switch-knob"></span>
+        </div>
+        <div class="logo">
+            <h5 class="logo1">L</h5>iving &nbsp;<h5 class="logo2">S</h5>equence &nbsp;<h5 class="logo3">D</h5>iagrams
+        </div>
+
+        <header>
+            <h1>Cached queries</h1>
+            <pre class="notes">As many users of a long running report<br/>I want access speed to be really fast.<br/>I don't mind if the first user experiences a slow report, <br/>I will trigger that first call from a timed job.<br/>I want the cached report to timeout on a frequency of my specification.<br/>The calling client needs to know its a cached report, but end user need not.</pre>
+            <nav class="contents">
+                <h2>Contents</h2>
+                <ul class="contents">
+                        <li class='test-passed icon-check'>
+                            <a href="#aCachableQueryIsCalledWhenTheCacheIsEmpty">A cachable query is called when the cache is empty</a>
+                        </li>
+                        <li class='test-passed icon-check'>
+                            <a href="#aCachedQueryIsUsedWhileStillWithinExpirationTime">A cached query is used while still within expiration time</a>
+                        </li>
+                </ul>
+            </nav>
+        </header>
+        <main role="main">
+            <article class="testmethod section">
+                <header>
+                    <a id="aCachableQueryIsCalledWhenTheCacheIsEmpty"></a>
+                    <h2 class="section-header">A cachable query is called when the cache is empty</h2>
+                </header>
+                <section class="section-body">
+                        <section class="scenario" id="1899688679_0_-124235135">
+                            <section class="specification">
+                                <h2>Specification<a id=""></a></h2>
+                                <pre class="highlight specification">Given a cacheable query
+Given the report has not been cached
+
+When http get request for cacheable query
+
+Then http response code is 200
+Then http response body starts with query_column
+Then http response headers has key header_key_report_cached_at
+
+Then query statics shows the query was executed
+Then query result cache shows the query has just been cached</pre>
+                            </section>
+                            <section class="results">
+                                <h3 class="logKey">Test result:</h3>
+                                <pre class='highlight results test-passed icon-check'>Test passed</pre>
+                            </section>
+                            <section class="diagram">
+                                <h3 logkey="Sequence_Diagram">Sequence Diagram</h3>
+                                <div class="highlight SvgWrapper" ><?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" contentScriptType="application/ecmascript" contentStyleType="text/css" height="252px" preserveAspectRatio="none" style="width:153px;height:252px;" version="1.1" viewBox="0 0 153 252" width="153px" zoomAndPan="magnify">
+  <defs>
+    <filter height="300%" id="f1rrjxfak1hqrk" width="300%" x="-1" y="-1">
+      <feGaussianBlur result="blurOut" stdDeviation="2.0" />
+      <feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0" />
+      <feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3" />
+      <feBlend in="SourceGraphic" in2="blurOut3" mode="normal" />
+    </filter>
+  </defs>
+  <g>
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="31" x2="31" y1="86.4883" y2="165.1094" />
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="111.5" x2="111.5" y1="86.4883" y2="165.1094" />
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="8" y="83.5352">Client</text>
+    <ellipse cx="31" cy="13" fill="#FEFECE" filter="url(#f1rrjxfak1hqrk)" rx="8" ry="8" style="stroke: #A80036; stroke-width: 2.0;" />
+    <path d="M31,21 L31,48 M18,29 L44,29 M31,48 L18,63 M31,48 L44,63 " fill="none" filter="url(#f1rrjxfak1hqrk)" style="stroke: #A80036; stroke-width: 2.0;" />
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="8" y="177.6445">Client</text>
+    <ellipse cx="31" cy="190.5977" fill="#FEFECE" filter="url(#f1rrjxfak1hqrk)" rx="8" ry="8" style="stroke: #A80036; stroke-width: 2.0;" />
+    <path d="M31,198.5977 L31,225.5977 M18,206.5977 L44,206.5977 M31,225.5977 L18,240.5977 M31,225.5977 L44,240.5977 " fill="none" filter="url(#f1rrjxfak1hqrk)" style="stroke: #A80036; stroke-width: 2.0;" />
+    <rect fill="#FEFECE" filter="url(#f1rrjxfak1hqrk)" height="30.4883" style="stroke: #A80036; stroke-width: 1.5;" width="65" x="77.5" y="51" />
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="51" x="84.5" y="71.5352">Embers</text>
+    <rect fill="#FEFECE" filter="url(#f1rrjxfak1hqrk)" height="30.4883" style="stroke: #A80036; stroke-width: 1.5;" width="65" x="77.5" y="164.1094" />
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="51" x="84.5" y="184.6445">Embers</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="110" x2="100" y1="117.7988" y2="113.7988" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="110" x2="100" y1="117.7988" y2="121.7988" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="111" y1="117.7988" y2="117.7988" />
+    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="_request_from_Client_to_Embers" textLength="47" x="38" y="113.0566">request</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="41" y1="147.1094" y2="143.1094" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="41" y1="147.1094" y2="151.1094" />
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 2.0,2.0;" x1="31" x2="111" y1="147.1094" y2="147.1094" />
+    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="_response_from_Embers_to_Client" textLength="57" x="48" y="142.3672">response</text>
+  </g>
+</svg>
+
+</div>
+                            </section>
+                            <section class="interestingGivens">
+                                <h3 class="logKey">Interesting Givens</h3>
+                                <table class="interestingGivens">
+                                    <tr>
+                                        <th class="key">Expected Query Name To Run</th>
+                                        <td class="interestingGiven">cachedQuery</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="key">Expected Query Sql To Run</th>
+                                        <td class="interestingGiven">select &#39;something&#39; as firstcolumn from queries</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="key">Url</th>
+                                        <td class="interestingGiven">http://localhost:8001/embers/cached/cachedQuery</td>
+                                    </tr>
+                                </table>
+                            </section>
+                            <footer>
+                                <section class="interactions">
+                                <details>
+                                    <summary>Captured Interactions</summary>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Database___queries">Database - queries</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight ResultSetWrapper">&lt;table&gt;&lt;tr&gt;&lt;th&gt;name&lt;/th&gt;&lt;th&gt;description&lt;/th&gt;&lt;th&gt;id&lt;/th&gt;&lt;th&gt;cacheable_duration&lt;/th&gt;&lt;th&gt;sql&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;cachedQuery&lt;/td&gt;&lt;td&gt;get &#39;something&#39; from database&lt;/td&gt;&lt;td&gt;8&lt;/td&gt;&lt;td&gt;86400000&lt;/td&gt;&lt;td&gt;select &#39;something&#39; as firstcolumn from queries&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Database___Query_Result_Cache">Database - Query_Result_Cache</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight ResultSetWrapper"></div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="_request_from_Client_to_Embers"> request from Client to Embers</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight HttpRequestWrapper">GET http://localhost:8001/embers/cached/cachedQuery
+Headers: null
+Body: null</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="_response_from_Embers_to_Client"> response from Embers to Client</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight HttpResponseWrapper">Response Code: 200
+Headers: {null=[HTTP/1.1 200 OK], Server=[Jetty(9.3.0.M1)], REPORT_CACHED_AT=[Sat, 27 Mar 2021 18:21:13 GMT], Content-Length=[22], Date=[Sat, 27 Mar 2021 18:21:13 GMT], Content-Type=[text/html]}
+Body: firstcolumn
+something
+</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Database_after___queries_statistics">Database after - queries_statistics</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight ResultSetWrapper">&lt;table&gt;&lt;tr&gt;&lt;th&gt;duration&lt;/th&gt;&lt;th&gt;result&lt;/th&gt;&lt;th&gt;date_executed&lt;/th&gt;&lt;th&gt;query_name&lt;/th&gt;&lt;th&gt;id&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;Number of rows returned: 1&lt;/td&gt;&lt;td&gt;2021-03-27 18:21:13.244&lt;/td&gt;&lt;td&gt;cachedQuery&lt;/td&gt;&lt;td&gt;5&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Database_after___Query_Result_Cache">Database after - Query_Result_Cache</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight ResultSetWrapper">&lt;table&gt;&lt;tr&gt;&lt;th&gt;result&lt;/th&gt;&lt;th&gt;date_cached&lt;/th&gt;&lt;th&gt;query_name&lt;/th&gt;&lt;th&gt;query_result_cache_id&lt;/th&gt;&lt;th&gt;live_duration_ms&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;org.hsqldb.jdbc.JDBCClobClient@7ddb637a&lt;/td&gt;&lt;td&gt;2021-03-27 18:21:13.245&lt;/td&gt;&lt;td&gt;cachedQuery&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;86400000&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</div>
+                                    </details>
+                                </details>
+                            </section>
+                            </footer>
+                        </section>
+                </section>
+            </article>
+            <article class="testmethod section">
+                <header>
+                    <a id="aCachedQueryIsUsedWhileStillWithinExpirationTime"></a>
+                    <h2 class="section-header">A cached query is used while still within expiration time</h2>
+                </header>
+                <section class="section-body">
+                        <section class="scenario" id="1934343210_0_810084115">
+                            <section class="specification">
+                                <h2>Specification<a id=""></a></h2>
+                                <pre class="highlight specification">Given a cacheable query
+//todo fix test by setting cached query result to not null
+Given the report has recently been cached
+
+Int stream of 3 .for each i-&gt;
+Try
+When http get request for cacheable query
+Then http response code is 200
+Then http response body starts with query_column
+Then http response headers has key header_key_report_cached_at
+Then query result cache shows the query was cached before the query was made
+Catch exception e
+Throw new runtime exception e
+
+
+
+Then query statics shows the query was not executed</pre>
+                            </section>
+                            <section class="results">
+                                <h3 class="logKey">Test result:</h3>
+                                <pre class='highlight results test-passed icon-check'>Test passed</pre>
+                            </section>
+                            <section class="diagram">
+                                <h3 logkey="Sequence_Diagram">Sequence Diagram</h3>
+                                <div class="highlight SvgWrapper" ><?xml version="1.0" encoding="UTF-8"?>
+                                    <svg xmlns="http://www.w3.org/2000/svg" contentScriptType="application/ecmascript"
+                                         contentStyleType="text/css" height="311px" preserveAspectRatio="none"
+                                         style="width:169px;height:311px;" version="1.1" viewBox="0 0 169 311"
+                                         width="169px" zoomAndPan="magnify">
+  <defs>
+    <filter height="300%" id="fzhirkg1984vb" width="300%" x="-1" y="-1">
+      <feGaussianBlur result="blurOut" stdDeviation="2.0" />
+      <feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0" />
+      <feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3" />
+      <feBlend in="SourceGraphic" in2="blurOut3" mode="normal" />
+    </filter>
+  </defs>
+  <g>
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="31" x2="31" y1="86.4883" y2="223.7305" />
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="127.5" x2="127.5" y1="86.4883" y2="223.7305" />
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="8" y="83.5352">Client</text>
+    <ellipse cx="31" cy="13" fill="#FEFECE" filter="url(#fzhirkg1984vb)" rx="8" ry="8" style="stroke: #A80036; stroke-width: 2.0;" />
+    <path d="M31,21 L31,48 M18,29 L44,29 M31,48 L18,63 M31,48 L44,63 " fill="none" filter="url(#fzhirkg1984vb)" style="stroke: #A80036; stroke-width: 2.0;" />
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="8" y="236.2656">Client</text>
+    <ellipse cx="31" cy="249.2188" fill="#FEFECE" filter="url(#fzhirkg1984vb)" rx="8" ry="8" style="stroke: #A80036; stroke-width: 2.0;" />
+    <path d="M31,257.2188 L31,284.2188 M18,265.2188 L44,265.2188 M31,284.2188 L18,299.2188 M31,284.2188 L44,299.2188 " fill="none" filter="url(#fzhirkg1984vb)" style="stroke: #A80036; stroke-width: 2.0;" />
+    <rect fill="#FEFECE" filter="url(#fzhirkg1984vb)" height="30.4883" style="stroke: #A80036; stroke-width: 1.5;" width="65" x="93.5" y="51" />
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="51" x="100.5" y="71.5352">Embers</text>
+    <rect fill="#FEFECE" filter="url(#fzhirkg1984vb)" height="30.4883" style="stroke: #A80036; stroke-width: 1.5;" width="65" x="93.5" y="222.7305" />
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="51" x="100.5" y="243.2656">Embers</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="126" x2="116" y1="117.7988" y2="113.7988" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="126" x2="116" y1="117.7988" y2="121.7988" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="127" y1="117.7988" y2="117.7988" />
+    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="_request_from_Client_to_Embers" textLength="47" x="38" y="113.0566">request</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="41" y1="147.1094" y2="143.1094" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="41" y1="147.1094" y2="151.1094" />
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 2.0,2.0;" x1="31" x2="127" y1="147.1094" y2="147.1094" />
+    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="_response_from_Embers_to_Client" textLength="57" x="48" y="142.3672">response</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="126" x2="116" y1="176.4199" y2="172.4199" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="126" x2="116" y1="176.4199" y2="180.4199" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="127" y1="176.4199" y2="176.4199" />
+    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="2__request_from_Client_to_Embers" textLength="63" x="38" y="171.6777">2  request</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="41" y1="205.7305" y2="201.7305" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="41" y1="205.7305" y2="209.7305" />
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 2.0,2.0;" x1="31" x2="127" y1="205.7305" y2="205.7305" />
+    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="2__response_from_Embers_to_Client" textLength="73" x="48" y="200.9883">2  response</text>
+  </g>
+</svg>
+
+</div>
+                            </section>
+                            <section class="interestingGivens">
+                                <h3 class="logKey">Interesting Givens</h3>
+                                <table class="interestingGivens">
+                                    <tr>
+                                        <th class="key">Expected Query Name To Run</th>
+                                        <td class="interestingGiven">cachedQuery</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="key">Expected Query Sql To Run</th>
+                                        <td class="interestingGiven">select &#39;something&#39; as firstcolumn from queries</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="key">Url</th>
+                                        <td class="interestingGiven">http://localhost:8001/embers/cached/cachedQuery</td>
+                                    </tr>
+                                </table>
+                            </section>
+                            <footer>
+                                <section class="interactions">
+                                <details>
+                                    <summary>Captured Interactions</summary>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Database___queries">Database - queries</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight ResultSetWrapper">&lt;table&gt;&lt;tr&gt;&lt;th&gt;name&lt;/th&gt;&lt;th&gt;description&lt;/th&gt;&lt;th&gt;id&lt;/th&gt;&lt;th&gt;cacheable_duration&lt;/th&gt;&lt;th&gt;sql&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;cachedQuery&lt;/td&gt;&lt;td&gt;get &#39;something&#39; from database&lt;/td&gt;&lt;td&gt;9&lt;/td&gt;&lt;td&gt;86400000&lt;/td&gt;&lt;td&gt;select &#39;something&#39; as firstcolumn from queries&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="_request_from_Client_to_Embers"> request from Client to Embers</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight HttpRequestWrapper">GET http://localhost:8001/embers/cached/cachedQuery
+Headers: null
+Body: null</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="_response_from_Embers_to_Client"> response from Embers to Client</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight HttpResponseWrapper">Response Code: 200
+Headers: {null=[HTTP/1.1 200 OK], Server=[Jetty(9.3.0.M1)], REPORT_CACHED_AT=[Sat, 27 Mar 2021 18:21:13 GMT], Content-Length=[22], Date=[Sat, 27 Mar 2021 18:21:13 GMT], Content-Type=[text/html]}
+Body: firstcolumn
+something
+</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Database_Before___Query_Result_Cache">Database Before - Query_Result_Cache</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight ResultSetWrapper">&lt;table&gt;&lt;tr&gt;&lt;th&gt;result&lt;/th&gt;&lt;th&gt;date_cached&lt;/th&gt;&lt;th&gt;query_name&lt;/th&gt;&lt;th&gt;query_result_cache_id&lt;/th&gt;&lt;th&gt;live_duration_ms&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;org.hsqldb.jdbc.JDBCClobClient@56b81cd5&lt;/td&gt;&lt;td&gt;2021-03-27 18:21:13.313&lt;/td&gt;&lt;td&gt;cachedQuery&lt;/td&gt;&lt;td&gt;2&lt;/td&gt;&lt;td&gt;86400000&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="2__request_from_Client_to_Embers">2  request from Client to Embers</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight HttpRequestWrapper">GET http://localhost:8001/embers/cached/cachedQuery
+Headers: null
+Body: null</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="2__response_from_Embers_to_Client">2  response from Embers to Client</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight HttpResponseWrapper">Response Code: 200
+Headers: {null=[HTTP/1.1 200 OK], Server=[Jetty(9.3.0.M1)], REPORT_CACHED_AT=[Sat, 27 Mar 2021 18:21:13 GMT], Content-Length=[22], Date=[Sat, 27 Mar 2021 18:21:13 GMT], Content-Type=[text/html]}
+Body: firstcolumn
+something
+</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Database_after___Query_Result_Cache">Database after - Query_Result_Cache</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight ResultSetWrapper">&lt;table&gt;&lt;tr&gt;&lt;th&gt;result&lt;/th&gt;&lt;th&gt;date_cached&lt;/th&gt;&lt;th&gt;query_name&lt;/th&gt;&lt;th&gt;query_result_cache_id&lt;/th&gt;&lt;th&gt;live_duration_ms&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;org.hsqldb.jdbc.JDBCClobClient@3f4bc155&lt;/td&gt;&lt;td&gt;2021-03-27 18:21:13.313&lt;/td&gt;&lt;td&gt;cachedQuery&lt;/td&gt;&lt;td&gt;2&lt;/td&gt;&lt;td&gt;86400000&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Database_after___queries_statistics">Database after - queries_statistics</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight ResultSetWrapper">&lt;table&gt;&lt;tr&gt;&lt;th&gt;duration&lt;/th&gt;&lt;th&gt;result&lt;/th&gt;&lt;th&gt;date_executed&lt;/th&gt;&lt;th&gt;query_name&lt;/th&gt;&lt;th&gt;id&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;Number of rows returned: 1&lt;/td&gt;&lt;td&gt;2021-03-27 18:21:13.312&lt;/td&gt;&lt;td&gt;cachedQuery&lt;/td&gt;&lt;td&gt;6&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</div>
+                                    </details>
+                                </details>
+                            </section>
+                            </footer>
+                        </section>
+                </section>
+            </article>
+        </main>
+        <footer>
+            <div class="footer">
+                <script src="xregexp.js" type="text/javascript"></script>
+                <script src="yatspec.js" type="text/javascript"></script>
+            </div>
+        </footer>
+    </body>
+</html>

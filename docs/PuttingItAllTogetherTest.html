@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <title>LSD</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js" type="text/javascript"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css" type="text/css" media="all"/>
+        <link rel="stylesheet" href="https://static.jquery.com/ui/css/demo-docs-theme/ui.theme.css" type="text/css" media="all"/>
+        <link rel="stylesheet" id="theme" type="text/css" href="yatspec_alt.css">
+    </head>
+    <body>
+        <div class="hd-switch">
+            <input type="checkbox" id="switch-id" name="myswitch" onchange="toggleTheme()">
+            <label for="switch-id">Classic</label>
+            <span class="hd-switch-knob"></span>
+        </div>
+        <div class="logo">
+            <h5 class="logo1">L</h5>iving &nbsp;<h5 class="logo2">S</h5>equence &nbsp;<h5 class="logo3">D</h5>iagrams
+        </div>
+
+        <header>
+            <h1>Putting it all together</h1>
+            <pre class="notes">As a developer on a app with a relational database,
+I want to maintain a set of user reports, 
+so that users can access the information they need directly.</pre>
+            <nav class="contents">
+                <h2>Contents</h2>
+                <ul class="contents">
+                        <li class='test-passed icon-check'>
+                            <a href="#maintainAReportAgainstADatabase">Maintain a report against a database</a>
+                        </li>
+                </ul>
+            </nav>
+        </header>
+        <main role="main">
+            <article class="testmethod section">
+                <header>
+                    <a id="maintainAReportAgainstADatabase"></a>
+                    <h2 class="section-header">Maintain a report against a database</h2>
+                </header>
+                <section class="section-body">
+                        <section class="scenario" id="208120133_0_-12778467">
+                            <section class="specification">
+                                <h2>Specification<a id=""></a></h2>
+                                <pre class="highlight specification">Given a rental database
+When a user query is created that will &quot;find number of times each item has been rented&quot;
+Then the user can run the query
+
+When the user wants the query changed so that it will &quot;find number of times each item has been rented sorted least rented first&quot;
+Then the user can run the query
+
+Then the user checks the queries performance and is happy its fast enough</pre>
+                            </section>
+                            <section class="results">
+                                <h3 class="logKey">Test result:</h3>
+                                <pre class='highlight results test-passed icon-check'>Test passed</pre>
+                            </section>
+                            <section class="diagram">
+                                <h3 logkey="Sequence_Diagram">Sequence Diagram</h3>
+                                <div class="highlight SvgWrapper" ><?xml version="1.0" encoding="UTF-8"?>
+                                    <svg xmlns="http://www.w3.org/2000/svg" contentScriptType="application/ecmascript"
+                                         contentStyleType="text/css" height="428px" preserveAspectRatio="none"
+                                         style="width:250px;height:428px;" version="1.1" viewBox="0 0 250 428"
+                                         width="250px" zoomAndPan="magnify">
+  <defs>
+    <filter height="300%" id="fmll30bfbptf7" width="300%" x="-1" y="-1">
+      <feGaussianBlur result="blurOut" stdDeviation="2.0" />
+      <feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0" />
+      <feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3" />
+      <feBlend in="SourceGraphic" in2="blurOut3" mode="normal" />
+    </filter>
+  </defs>
+  <g>
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="31" x2="31" y1="86.4883" y2="340.9727" />
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="208.5" x2="208.5" y1="86.4883" y2="340.9727" />
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="8" y="83.5352">Client</text>
+    <ellipse cx="31" cy="13" fill="#FEFECE" filter="url(#fmll30bfbptf7)" rx="8" ry="8" style="stroke: #A80036; stroke-width: 2.0;" />
+    <path d="M31,21 L31,48 M18,29 L44,29 M31,48 L18,63 M31,48 L44,63 " fill="none" filter="url(#fmll30bfbptf7)" style="stroke: #A80036; stroke-width: 2.0;" />
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="8" y="353.5078">Client</text>
+    <ellipse cx="31" cy="366.4609" fill="#FEFECE" filter="url(#fmll30bfbptf7)" rx="8" ry="8" style="stroke: #A80036; stroke-width: 2.0;" />
+    <path d="M31,374.4609 L31,401.4609 M18,382.4609 L44,382.4609 M31,401.4609 L18,416.4609 M31,401.4609 L44,416.4609 " fill="none" filter="url(#fmll30bfbptf7)" style="stroke: #A80036; stroke-width: 2.0;" />
+    <rect fill="#FEFECE" filter="url(#fmll30bfbptf7)" height="30.4883" style="stroke: #A80036; stroke-width: 1.5;" width="65" x="174.5" y="51" />
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="51" x="181.5" y="71.5352">Embers</text>
+    <rect fill="#FEFECE" filter="url(#fmll30bfbptf7)" height="30.4883" style="stroke: #A80036; stroke-width: 1.5;" width="65" x="174.5" y="339.9727" />
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="51" x="181.5" y="360.5078">Embers</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="207" x2="197" y1="117.7988" y2="113.7988" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="207" x2="197" y1="117.7988" y2="121.7988" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="208" y1="117.7988" y2="117.7988" />
+    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="Create_Query_request_from_Client_to_Embers" textLength="132" x="38" y="113.0566">Create Query request</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="41" y1="147.1094" y2="143.1094" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="41" y1="147.1094" y2="151.1094" />
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 2.0,2.0;" x1="31" x2="208" y1="147.1094" y2="147.1094" />
+    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="Create_Query_response_from_Embers_to_Client" textLength="142" x="48" y="142.3672">Create Query response</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="207" x2="197" y1="176.4199" y2="172.4199" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="207" x2="197" y1="176.4199" y2="180.4199" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="208" y1="176.4199" y2="176.4199" />
+    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="Get_Query_request_from_Client_to_Embers" textLength="113" x="38" y="171.6777">Get Query request</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="41" y1="205.7305" y2="201.7305" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="41" y1="205.7305" y2="209.7305" />
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 2.0,2.0;" x1="31" x2="208" y1="205.7305" y2="205.7305" />
+    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="Get_Query_response_from_Embers_to_Client" textLength="123" x="48" y="200.9883">Get Query response</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="207" x2="197" y1="235.041" y2="231.041" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="207" x2="197" y1="235.041" y2="239.041" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="208" y1="235.041" y2="235.041" />
+    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="Updated_Query_request_from_Client_to_Embers" textLength="144" x="38" y="230.2988">Updated Query request</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="41" y1="264.3516" y2="260.3516" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="41" y1="264.3516" y2="268.3516" />
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 2.0,2.0;" x1="31" x2="208" y1="264.3516" y2="264.3516" />
+    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="Updated_Query_response_from_Embers_to_Client" textLength="154" x="48" y="259.6094">Updated Query response</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="207" x2="197" y1="293.6621" y2="289.6621" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="207" x2="197" y1="293.6621" y2="297.6621" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="208" y1="293.6621" y2="293.6621" />
+    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="2_Get_Query_request_from_Client_to_Embers" textLength="125" x="38" y="288.9199">2 Get Query request</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="41" y1="322.9727" y2="318.9727" />
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="31" x2="41" y1="322.9727" y2="326.9727" />
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 2.0,2.0;" x1="31" x2="208" y1="322.9727" y2="322.9727" />
+    <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="2_Get_Query_response_from_Embers_to_Client" textLength="135" x="48" y="318.2305">2 Get Query response</text>
+  </g>
+</svg>
+
+</div>
+                            </section>
+                            <section class="interestingGivens">
+                                <h3 class="logKey">Interesting Givens</h3>
+                                <table class="interestingGivens">
+                                    <tr>
+                                        <th class="key">Url</th>
+                                        <td class="interestingGiven">http://localhost:8001/embers/query/findMostRentedItems</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="key">name</th>
+                                        <td class="interestingGiven">findMostRentedItems</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="key">sql</th>
+                                        <td class="interestingGiven">select i.name, nvl(count(r.item_id),0) as &quot;Rented Count&quot;   from items i   left outer join rentals r on r.item_id = i.item_id group by i.name order by 2 asc </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="key">description</th>
+                                        <td class="interestingGiven">Find number of times each item has been rented, sorted least rented first</td>
+                                    </tr>
+                                </table>
+                            </section>
+                            <footer>
+                                <section class="interactions">
+                                <details>
+                                    <summary>Captured Interactions</summary>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Table_of_Items">Table of Items</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight ResultSetWrapper">&lt;table&gt;&lt;tr&gt;&lt;th&gt;item_id&lt;/th&gt;&lt;th&gt;name&lt;/th&gt;&lt;th&gt;purchase_price&lt;/th&gt;&lt;th&gt;description&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;Thing&lt;/td&gt;&lt;td&gt;987&lt;/td&gt;&lt;td&gt;its a really shinny thing&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;2&lt;/td&gt;&lt;td&gt;Car&lt;/td&gt;&lt;td&gt;6000&lt;/td&gt;&lt;td&gt;a red car&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;3&lt;/td&gt;&lt;td&gt;Mac Book Pro&lt;/td&gt;&lt;td&gt;1501&lt;/td&gt;&lt;td&gt;A nice Shiny Mac book pro&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;4&lt;/td&gt;&lt;td&gt;Mouse Mat&lt;/td&gt;&lt;td&gt;2&lt;/td&gt;&lt;td&gt;Cause we really need Mouse mats&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;5&lt;/td&gt;&lt;td&gt;Gum&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;Spearmint gum&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Table_of_Customers">Table of Customers</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight ResultSetWrapper">&lt;table&gt;&lt;tr&gt;&lt;th&gt;name&lt;/th&gt;&lt;th&gt;description&lt;/th&gt;&lt;th&gt;customer_id&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Mr Grahame Brown&lt;/td&gt;&lt;td&gt;love this customer&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Miss Sweaty Betty&lt;/td&gt;&lt;td&gt;Our smelliest customer&lt;/td&gt;&lt;td&gt;2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Mrs Windome Meere&lt;/td&gt;&lt;td&gt;customer since 1993&lt;/td&gt;&lt;td&gt;3&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;John Doe&lt;/td&gt;&lt;td&gt;annonymous customers&lt;/td&gt;&lt;td&gt;4&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Table_of_Rentals">Table of Rentals</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight ResultSetWrapper">&lt;table&gt;&lt;tr&gt;&lt;th&gt;actually_back&lt;/th&gt;&lt;th&gt;item_id&lt;/th&gt;&lt;th&gt;rental_price&lt;/th&gt;&lt;th&gt;actually_out&lt;/th&gt;&lt;th&gt;customer_id&lt;/th&gt;&lt;th&gt;rentals_id&lt;/th&gt;&lt;th&gt;expected_out&lt;/th&gt;&lt;th&gt;expected_back&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;2021-06-25 18:21:13.379&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;16&lt;/td&gt;&lt;td&gt;2021-07-04 18:21:13.379&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;2021-07-05 18:21:13.379&lt;/td&gt;&lt;td&gt;2021-06-25 18:21:13.379&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;2021-05-06 18:21:13.379&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;17&lt;/td&gt;&lt;td&gt;2021-05-15 18:21:13.379&lt;/td&gt;&lt;td&gt;2&lt;/td&gt;&lt;td&gt;2&lt;/td&gt;&lt;td&gt;2021-05-16 18:21:13.379&lt;/td&gt;&lt;td&gt;2021-05-06 18:21:13.379&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;2021-04-06 18:21:13.379&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;17&lt;/td&gt;&lt;td&gt;2021-04-16 18:21:13.379&lt;/td&gt;&lt;td&gt;3&lt;/td&gt;&lt;td&gt;3&lt;/td&gt;&lt;td&gt;2021-04-16 18:21:13.379&lt;/td&gt;&lt;td&gt;2021-04-06 18:21:13.379&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;null&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;19&lt;/td&gt;&lt;td&gt;2021-04-01 18:21:13.379&lt;/td&gt;&lt;td&gt;4&lt;/td&gt;&lt;td&gt;4&lt;/td&gt;&lt;td&gt;2021-04-01 18:21:13.379&lt;/td&gt;&lt;td&gt;2021-03-22 18:21:13.379&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;2021-04-06 18:21:13.379&lt;/td&gt;&lt;td&gt;3&lt;/td&gt;&lt;td&gt;16&lt;/td&gt;&lt;td&gt;2021-04-16 18:21:13.379&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;5&lt;/td&gt;&lt;td&gt;2021-04-16 18:21:13.379&lt;/td&gt;&lt;td&gt;2021-04-06 18:21:13.379&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;null&lt;/td&gt;&lt;td&gt;3&lt;/td&gt;&lt;td&gt;16&lt;/td&gt;&lt;td&gt;2021-04-01 18:21:13.379&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;6&lt;/td&gt;&lt;td&gt;2021-04-01 18:21:13.379&lt;/td&gt;&lt;td&gt;2021-03-22 18:21:13.379&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;null&lt;/td&gt;&lt;td&gt;4&lt;/td&gt;&lt;td&gt;16&lt;/td&gt;&lt;td&gt;2021-04-01 18:21:13.379&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;7&lt;/td&gt;&lt;td&gt;2021-04-01 18:21:13.379&lt;/td&gt;&lt;td&gt;2021-03-22 18:21:13.379&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;2021-04-15 18:21:13.379&lt;/td&gt;&lt;td&gt;2&lt;/td&gt;&lt;td&gt;16&lt;/td&gt;&lt;td&gt;2021-05-05 18:21:13.379&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;8&lt;/td&gt;&lt;td&gt;2021-05-06 18:21:13.379&lt;/td&gt;&lt;td&gt;2021-04-16 18:21:13.379&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;2021-04-06 18:21:13.379&lt;/td&gt;&lt;td&gt;2&lt;/td&gt;&lt;td&gt;16&lt;/td&gt;&lt;td&gt;2021-04-15 18:21:13.379&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;9&lt;/td&gt;&lt;td&gt;2021-04-16 18:21:13.379&lt;/td&gt;&lt;td&gt;2021-04-06 18:21:13.379&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;null&lt;/td&gt;&lt;td&gt;2&lt;/td&gt;&lt;td&gt;16&lt;/td&gt;&lt;td&gt;2021-04-01 18:21:13.379&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;10&lt;/td&gt;&lt;td&gt;2021-04-01 18:21:13.379&lt;/td&gt;&lt;td&gt;2021-03-22 18:21:13.379&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Create_Query_request_from_Client_to_Embers">Create Query request from Client to Embers</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight HttpRequestWrapper">POST http://localhost:8001/embers/admin
+Headers: {Accept-Charset=[UTF-8], Content-Type=[application/json]}
+Body: {&quot;name&quot;:&quot;findMostRentedItems&quot;, &quot;sql&quot;:&quot;select+i.name%2C+nvl%28count%28r.item_id%29%2C0%29+as+%22Rented+Count%22+++from+items+i+++left+outer+join+rentals+r+on+r.item_id+%3D+i.item_id+group+by+i.name+order+by+2+desc+&quot;, &quot;description&quot;:&quot;Find+number+of+times+each+item+has+been+rented&quot;}</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Create_Query_response_from_Embers_to_Client">Create Query response from Embers to Client</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight HttpResponseWrapper">Response Code: 200
+Headers: {null=[HTTP/1.1 200 OK], Server=[Jetty(9.3.0.M1)], Content-Length=[24], Date=[Sat, 27 Mar 2021 18:21:13 GMT], Content-Type=[text/html]}
+Body: Successfully added query
+</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Get_Query_request_from_Client_to_Embers">Get Query request from Client to Embers</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight HttpRequestWrapper">GET http://localhost:8001/embers/query/findMostRentedItems
+Headers: null
+Body: null</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Get_Query_response_from_Embers_to_Client">Get Query response from Embers to Client</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight HttpResponseWrapper">Response Code: 200
+Headers: {null=[HTTP/1.1 200 OK], Server=[Jetty(9.3.0.M1)], Content-Length=[65], Date=[Sat, 27 Mar 2021 18:21:13 GMT], Content-Type=[text/html]}
+Body: name,rented count
+Thing,4
+Car,3
+Mac Book Pro,2
+Mouse Mat,1
+Gum,0
+</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Updated_Query_request_from_Client_to_Embers">Updated Query request from Client to Embers</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight HttpRequestWrapper">POST http://localhost:8001/embers/admin
+Headers: {Accept-Charset=[UTF-8], Content-Type=[application/json]}
+Body: {&quot;name&quot;:&quot;findMostRentedItems&quot;, &quot;sql&quot;:&quot;select+i.name%2C+nvl%28count%28r.item_id%29%2C0%29+as+%22Rented+Count%22+++from+items+i+++left+outer+join+rentals+r+on+r.item_id+%3D+i.item_id+group+by+i.name+order+by+2+asc+&quot;, &quot;description&quot;:&quot;Find+number+of+times+each+item+has+been+rented%2C+sorted+least+rented+first&quot;}</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Updated_Query_response_from_Embers_to_Client">Updated Query response from Embers to Client</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight HttpResponseWrapper">Response Code: 200
+Headers: {null=[HTTP/1.1 200 OK], Server=[Jetty(9.3.0.M1)], Content-Length=[26], Date=[Sat, 27 Mar 2021 18:21:13 GMT], Content-Type=[text/html]}
+Body: Successfully updated query
+</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="2_Get_Query_request_from_Client_to_Embers">2 Get Query request from Client to Embers</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight HttpRequestWrapper">GET http://localhost:8001/embers/query/findMostRentedItems
+Headers: null
+Body: null</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="2_Get_Query_response_from_Embers_to_Client">2 Get Query response from Embers to Client</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight HttpResponseWrapper">Response Code: 200
+Headers: {null=[HTTP/1.1 200 OK], Server=[Jetty(9.3.0.M1)], Content-Length=[65], Date=[Sat, 27 Mar 2021 18:21:13 GMT], Content-Type=[text/html]}
+Body: name,rented count
+Gum,0
+Mouse Mat,1
+Mac Book Pro,2
+Car,3
+Thing,4
+</div>
+                                    </details>
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="Database_after___queries_statistics">Database after - queries_statistics</summary>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight ResultSetWrapper">&lt;table&gt;&lt;tr&gt;&lt;th&gt;duration&lt;/th&gt;&lt;th&gt;result&lt;/th&gt;&lt;th&gt;date_executed&lt;/th&gt;&lt;th&gt;query_name&lt;/th&gt;&lt;th&gt;id&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;Number of rows returned: 5&lt;/td&gt;&lt;td&gt;2021-03-27 18:21:13.4&lt;/td&gt;&lt;td&gt;findMostRentedItems&lt;/td&gt;&lt;td&gt;8&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;3&lt;/td&gt;&lt;td&gt;Number of rows returned: 5&lt;/td&gt;&lt;td&gt;2021-03-27 18:21:13.388&lt;/td&gt;&lt;td&gt;findMostRentedItems&lt;/td&gt;&lt;td&gt;7&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</div>
+                                    </details>
+                                </details>
+                            </section>
+                            </footer>
+                        </section>
+                </section>
+            </article>
+        </main>
+        <footer>
+            <div class="footer">
+                <script src="xregexp.js" type="text/javascript"></script>
+                <script src="yatspec.js" type="text/javascript"></script>
+            </div>
+        </footer>
+    </body>
+</html>
