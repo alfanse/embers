@@ -4,13 +4,35 @@ import com.googlecode.yatspec.rendering.Renderer;
 import com.mitchellbosecke.pebble.extension.escaper.SafeString;
 
 /**
- * Yatspec renderer for List<Map<String, Object>>
- *     to render as html table with header row and data rows.
+ * Yatspec renderer for HttpUrlConnectionWrapper
+ *     to render Http request essentials.
  */
 public class HttpConnectionRenderer implements Renderer<HttpUrlConnectionWrapper> {
 
     @Override
     public String render(HttpUrlConnectionWrapper httpUrlConnectionWrapper) {
+
+        String exceptions = "";
+        if(!httpUrlConnectionWrapper.getExceptions().isEmpty()) {
+            exceptions = "\nExceptions: " + httpUrlConnectionWrapper.getExceptions();
+        }
+
+        String request = String.format("%s %s\nHeaders: %s\nBody: %s",
+                httpUrlConnectionWrapper.getRequestMethod(),
+                httpUrlConnectionWrapper.getRequestUrl(),
+                httpUrlConnectionWrapper.getRequestProperties(),
+                httpUrlConnectionWrapper.getRequestBody()
+        );
+
+        String response = String.format("Response Code: %s\nHeaders: %s\nBody: %s",
+                httpUrlConnectionWrapper.getResponseCode(),
+                httpUrlConnectionWrapper.getResponseHeaders(),
+                httpUrlConnectionWrapper.getResponseBody());
+
+        return request + "\n\n" + response + exceptions;
+    }
+
+    public String htmlRender(HttpUrlConnectionWrapper httpUrlConnectionWrapper) {
         String exceptions = "";
         if(!httpUrlConnectionWrapper.getExceptions().isEmpty()) {
             exceptions = "<br/>" +

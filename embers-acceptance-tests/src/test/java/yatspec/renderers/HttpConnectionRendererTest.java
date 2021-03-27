@@ -44,10 +44,9 @@ public class HttpConnectionRendererTest {
 
         String render = new HttpConnectionRenderer().render(httpUrlConnectionWrapper);
         assertThat(render)
-                .containsOnlyOnce("Request URL: "+requestUrl)
-                .containsOnlyOnce("Request Method: "+requestMethod)
-                .containsOnlyOnce("Request Properties: "+"{reqProp1=[reqProp1Value1, reqProp1Value2]}")
-                .containsOnlyOnce("Request Body: "+requestBody);
+                .containsOnlyOnce(requestMethod + " " +requestUrl)
+                .containsOnlyOnce("Headers: "+"{reqProp1=[reqProp1Value1, reqProp1Value2]}")
+                .containsOnlyOnce("Body: "+requestBody);
     }
 
     @Test
@@ -63,8 +62,8 @@ public class HttpConnectionRendererTest {
         String render = new HttpConnectionRenderer().render(httpUrlConnectionWrapper);
         assertThat(render)
                 .containsOnlyOnce("Response Code: "+200)
-                .containsOnlyOnce("Response Body: "+responseBody)
-                .containsOnlyOnce("Response Headers: {header1=header1Value}");
+                .containsOnlyOnce("Headers: {header1=header1Value}")
+                .containsOnlyOnce("Body: "+responseBody);
     }
 
 

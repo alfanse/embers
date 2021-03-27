@@ -1,6 +1,6 @@
 package yatspec.http;
 
-import com.googlecode.yatspec.state.givenwhenthen.*;
+import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import yatspec.renderers.HttpUrlConnectionWrapper;
 
 import java.io.IOException;
@@ -9,7 +9,7 @@ import java.net.URL;
 import java.util.Map;
 
 public abstract class YatspecHttpCommand {
-    public static final String LOG_KEY_SUFFIX_FOR_HTTP = "Http Details";
+    public static final String LOG_KEY_SUFFIX_FOR_HTTP = "http request from Client to Embers";
     protected final TestState testState;
     private String url;
     private String logPrefix = "";
@@ -29,7 +29,7 @@ public abstract class YatspecHttpCommand {
     }
 
     public void execute() throws Exception{
-        HttpURLConnection conn = openConnection(url, testState.interestingGivens());
+        HttpURLConnection conn = openConnection(url);
         try {
             addRequestDetails(conn, httpDetails);
             httpDetails.captureRequestDetails(conn);
@@ -54,14 +54,13 @@ public abstract class YatspecHttpCommand {
 
     protected abstract void addRequestDetails(HttpURLConnection connection, HttpUrlConnectionWrapper httpDetails) throws IOException;
 
-    private HttpURLConnection openConnection(String url, InterestingGivens givens) throws IOException {
+    private HttpURLConnection openConnection(String url) throws IOException {
         URL location = new URL(url);
-        givens.add("Url", location.toExternalForm());
+        testState.interestingGivens().add("Url", location.toExternalForm());
         return (HttpURLConnection) location.openConnection();
     }
 
     private HttpUrlConnectionWrapper fetchCurrentHttpDetailsFromYatspec() {
-//        return inputAndOutput.getType(getLogKeyName(LOG_KEY_SUFFIX_FOR_HTTP), HttpUrlConnectionWrapper.class);
         return testState.getType(getLogKeyName(LOG_KEY_SUFFIX_FOR_HTTP), HttpUrlConnectionWrapper.class);
     }
 
