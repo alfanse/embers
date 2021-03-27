@@ -35,7 +35,7 @@ public class PuttingItAllTogetherTest extends EmbersAcceptanceTestBase {
     private GetAndLogTables getAndLogTables;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         getAndLogTables = new GetAndLogTables(super.interactions, embersServer.getEmbersDatabase().getDataSource());
     }
 
@@ -63,13 +63,13 @@ public class PuttingItAllTogetherTest extends EmbersAcceptanceTestBase {
                                 " order by 2 desc ")
                 .withQueryDescription(description)
                 .build();
-        httpPost.setLogPrefix("Create Query - ");
+        httpPost.setLogPrefix("Create Query");
         httpPost.execute();
     }
 
     private void thenTheUserCanRunTheQuery() throws Exception {
         YatspecHttpGetCommand httpGet = new YatspecHttpGetCommand(super.interactions);
-        httpGet.setLogPrefix("Get Query - ");
+        httpGet.setLogPrefix("Get Query");
         httpGet.setUrl(embersServer.embersQueryPath() + "/" + encodeString(QUERY_MOST_RENTED_ITEMS));
         httpGet.execute();
     }
@@ -86,7 +86,7 @@ public class PuttingItAllTogetherTest extends EmbersAcceptanceTestBase {
                                 " order by 2 asc ")
                 .withQueryDescription(description)
                 .build();
-        httpPost.setLogPrefix("Updated Query - ");
+        httpPost.setLogPrefix("Updated Query");
         httpPost.execute();
     }
 

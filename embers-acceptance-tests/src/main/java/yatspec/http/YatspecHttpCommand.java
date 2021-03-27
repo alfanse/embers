@@ -9,19 +9,19 @@ import java.net.URL;
 import java.util.Map;
 
 public abstract class YatspecHttpCommand {
-    public static final String LOG_KEY_SUFFIX_FOR_HTTP_REQUEST = "http request from Client to Embers";
-    public static final String LOG_KEY_SUFFIX_FOR_HTTP_RESPONSE = "http response from Embers to Client";
-    protected final TestState testState;
-    private String url;
-    private String logPrefix = "";
-    private final HttpUrlConnectionWrapper httpDetails = new HttpUrlConnectionWrapper();
+    //honoring the yatspec sequence diagram template: X from Y to Z
+    public static final String LOG_KEY_SUFFIX_FOR_HTTP_REQUEST = "request from Client to Embers";
+    public static final String LOG_KEY_SUFFIX_FOR_HTTP_RESPONSE = "response from Embers to Client";
 
-    public YatspecHttpCommand(TestState testState) {
-        this.testState = testState;
+    protected final TestState yatspec;
+    private final HttpUrlConnectionWrapper httpDetails = new HttpUrlConnectionWrapper();
+    private String logPrefix = "";
+
+    public YatspecHttpCommand(TestState yatspec) {
+        this.yatspec = yatspec;
     }
 
     public void setUrl(String url) {
-        this.url = url;
         httpDetails.setRequestUrl(url);
     }
 
@@ -30,41 +30,36 @@ public abstract class YatspecHttpCommand {
     }
 
     public void execute() throws Exception{
-        HttpURLConnection conn = openConnection(url);
+        HttpURLConnection conn = openConnection();
         try {
             addRequestDetails(conn, httpDetails);
             httpDetails.captureRequestDetails(conn);
             httpDetails.captureResponseDetails(conn);
         } finally {
-            testState.log(getLogKeyName(LOG_KEY_SUFFIX_FOR_HTTP_REQUEST), httpDetails.getHttpRequestWrapper());
-            testState.log(getLogKeyName(LOG_KEY_SUFFIX_FOR_HTTP_RESPONSE), httpDetails.getHttpResponseWrapper());
+            yatspec.log(getLogKeyName(LOG_KEY_SUFFIX_FOR_HTTP_REQUEST), httpDetails.getHttpRequestWrapper());
+            yatspec.log(getLogKeyName(LOG_KEY_SUFFIX_FOR_HTTP_RESPONSE), httpDetails.getHttpResponseWrapper());
             conn.disconnect();
         }
     }
 
     public Integer responseCode() {
-        return fetchCurrentHttpDetailsFromYatspec().getResponseCode();
+        return httpDetails.getResponseCode();
     }
 
     public String responseBody() {
-        return fetchCurrentHttpDetailsFromYatspec().getResponseBody();
+        return httpDetails.getResponseBody();
     }
 
     public Map<String, Object> responseHeaders() {
-        return fetchCurrentHttpDetailsFromYatspec().getResponseHeaders();
+        return httpDetails.getResponseHeaders();
     }
 
     protected abstract void addRequestDetails(HttpURLConnection connection, HttpUrlConnectionWrapper httpDetails) throws IOException;
 
-    private HttpURLConnection openConnection(String url) throws IOException {
-        URL location = new URL(url);
-        testState.interestingGivens().add("Url", location.toExternalForm());
+    private HttpURLConnection openConnection() throws IOException {
+        URL location = new URL(httpDetails.getRequestUrl());
+        yatspec.interestingGivens().add("Url", location.toExternalForm());
         return (HttpURLConnection) location.openConnection();
-    }
-
-    private HttpUrlConnectionWrapper fetchCurrentHttpDetailsFromYatspec() {
-//        return testState.getType(getLogKeyName(LOG_KEY_SUFFIX_FOR_HTTP_REQUEST), HttpUrlConnectionWrapper.class);
-        return httpDetails;
     }
 
     private String getLogKeyName(String logKeySuffix) {

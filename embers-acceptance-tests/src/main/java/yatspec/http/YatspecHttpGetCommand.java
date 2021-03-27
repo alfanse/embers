@@ -14,6 +14,6 @@ public class YatspecHttpGetCommand extends YatspecHttpCommand {
 
     @Override
     protected void addRequestDetails(HttpURLConnection connection, HttpUrlConnectionWrapper httpDetails) throws IOException {
-        //none required for get
+        connection.setRequestMethod("GET");
     }
 }

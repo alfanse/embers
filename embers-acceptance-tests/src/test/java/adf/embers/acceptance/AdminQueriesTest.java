@@ -77,7 +77,7 @@ public class AdminQueriesTest extends EmbersAcceptanceTestBase {
 
     private void whenTheQueryIsDeleted() throws Exception {
         httpDelete = new YatspecHttpDeleteCommand(super.interactions);
-        httpDelete.setLogPrefix("Delete Query - ");
+        httpDelete.setLogPrefix("Delete Query");
         httpDelete.setUrl(embersServer.embersAdminPath() + "/" + encodeString(QUERY_NAME));
         httpDelete.execute();
     }
@@ -91,7 +91,7 @@ public class AdminQueriesTest extends EmbersAcceptanceTestBase {
                 .withQuerySql(postedSql)
                 .withQueryDescription(postedDescription)
                 .build();
-        httpPost.setLogPrefix("Update Query - ");
+        httpPost.setLogPrefix("Update Query");
         httpPost.execute();
 
     }
@@ -110,13 +110,13 @@ public class AdminQueriesTest extends EmbersAcceptanceTestBase {
                 .withQuerySql(postedSql)
                 .withQueryDescription(postedDescription)
                 .build();
-        httpPost.setLogPrefix("Create Query - ");
+        httpPost.setLogPrefix("Create Query");
         httpPost.execute();
     }
 
     private void whenTheNewQueryIsCalled() throws Exception {
         this.httpGet = new YatspecHttpGetCommand(super.interactions);
-        httpGet.setLogPrefix("Run Query - ");
+        httpGet.setLogPrefix("Run Query");
         httpGet.setUrl(embersServer.embersQueryPath() + "/" + encodeString(QUERY_NAME));
         httpGet.execute();
     }
