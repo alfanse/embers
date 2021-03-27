@@ -1,34 +1,34 @@
 package adf.embers.acceptance;
 
 import adf.embers.tools.EmbersServer;
-import com.googlecode.yatspec.junit.SpecResultListener;
-import com.googlecode.yatspec.junit.SpecRunner;
-import com.googlecode.yatspec.junit.WithCustomResultListeners;
-import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
+import com.googlecode.yatspec.junit.SequenceDiagramExtension;
+import com.googlecode.yatspec.junit.WithParticipants;
+import com.googlecode.yatspec.sequence.Participant;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.runner.RunWith;
-import yatspec.renderers.HttpConnectionRenderer;
-import yatspec.renderers.HttpUrlConnectionWrapper;
-import yatspec.renderers.ResultSetRenderer;
-import yatspec.renderers.ResultSetWrapper;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.ArrayList;
+import java.util.List;
 
-@RunWith(SpecRunner.class)
-public abstract class EmbersAcceptanceTestBase extends TestState implements WithCustomResultListeners{
+@ExtendWith(SequenceDiagramExtension.class)
+public abstract class EmbersAcceptanceTestBase implements WithParticipants {
 
     public static EmbersServer embersServer;
 
-    @BeforeClass
+    public TestState interactions = new TestState();
+    private List<Participant> participants = new ArrayList<>();
+
+    @BeforeAll
     public static void startServerOnlyOnce() throws Throwable {
         if(embersServer == null ){
             startServer();
         }
     }
 
-    @Before
+    @BeforeEach
     public void resetDatabase(){
         embersServer.getEmbersDatabase().clearEmbersTables();
     }
@@ -40,13 +40,21 @@ public abstract class EmbersAcceptanceTestBase extends TestState implements With
         }
     }
 
+//    @Override
+//    public Iterable<SpecResultListener> getResultListeners() throws Exception {
+//        return new ArrayList<SpecResultListener>() {{
+//            add(new HtmlResultRenderer()
+//                    .withCustomRenderer(ResultSetWrapper.class, new ResultSetRenderer())
+//                    .withCustomRenderer(HttpUrlConnectionWrapper.class, new HttpConnectionRenderer()));
+//        } };
+//    }
+
     @Override
-    public Iterable<SpecResultListener> getResultListeners() throws Exception {
-        return new ArrayList<SpecResultListener>() {{
-            add(new HtmlResultRenderer()
-                    .withCustomRenderer(ResultSetWrapper.class, new ResultSetRenderer())
-                    .withCustomRenderer(HttpUrlConnectionWrapper.class, new HttpConnectionRenderer()));
-        } };
+    public List<Participant> participants() {
+        return participants;
     }
 
+    public void then(Object actual, org.hamcrest.Matcher matcher) {
+        MatcherAssert.assertThat(actual, matcher);
+    }
 }

@@ -2,7 +2,6 @@ package adf.embers.tools;
 
 import adf.embers.cache.persistence.QueryResultCacheDao;
 import adf.embers.query.persistence.QueryDao;
-import com.googlecode.yatspec.state.givenwhenthen.StateExtractor;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.skife.jdbi.v2.DBI;
 import org.skife.jdbi.v2.Handle;
@@ -24,8 +23,8 @@ public class GetAndLogTables {
         this.dataSource = dataSource;
     }
 
-    public StateExtractor<ResultSetWrapper> queriesTable() {
-        return inputAndOutputs -> getAndLogRowsOnQueriesTable();
+    public ResultSetWrapper queriesTable() {
+        return getAndLogRowsOnQueriesTable();
     }
 
     public ResultSetWrapper getAndLogRowsOnQueriesTable() {
@@ -36,8 +35,8 @@ public class GetAndLogTables {
         return rowsOnQueriesTable;
     }
 
-    public StateExtractor<ResultSetWrapper> queryStatisticsTable(String logKeyPrefix) {
-        return inputAndOutputs -> getAndLogQueryStatistics(logKeyPrefix);
+    public ResultSetWrapper queryStatisticsTable(String logKeyPrefix) {
+        return getAndLogQueryStatistics(logKeyPrefix);
     }
 
     public ResultSetWrapper getAndLogQueryStatistics(String logKeyPrefix) {
@@ -48,8 +47,8 @@ public class GetAndLogTables {
     }
 
 
-    public StateExtractor<ResultSetWrapper> queryResultCacheTable(String logKeyPrefix) {
-        return inputAndOutputs -> getAndLogRowsOnQueryResultCacheTable(logKeyPrefix);
+    public ResultSetWrapper queryResultCacheTable(String logKeyPrefix) {
+        return getAndLogRowsOnQueryResultCacheTable(logKeyPrefix);
     }
 
     public ResultSetWrapper getAndLogRowsOnQueryResultCacheTable(String logKeyPrefix) {

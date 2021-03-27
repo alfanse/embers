@@ -3,12 +3,10 @@ package adf.embers.acceptance;
 import adf.embers.tools.GetAndLogTables;
 import adf.embers.tools.YatspecQueryInserter;
 import com.googlecode.yatspec.junit.Notes;
-import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
-import com.googlecode.yatspec.state.givenwhenthen.StateExtractor;
 import org.fest.assertions.data.MapEntry;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import yatspec.http.YatspecHttpGetCommand;
 import yatspec.renderers.ResultSetWrapper;
 
@@ -22,23 +20,23 @@ import static org.fest.assertions.api.Assertions.assertThat;
 @Notes("Performance of Embers Queries is audited to a database table.")
 public class QueryStatisticsTest extends EmbersAcceptanceTestBase {
 
-    private YatspecQueryInserter yatspecQueryInserter = new YatspecQueryInserter(this, embersServer.getEmbersDatabase().getDataSource());
-    private YatspecHttpGetCommand http = new YatspecHttpGetCommand(this);
+    private YatspecQueryInserter yatspecQueryInserter = new YatspecQueryInserter(super.interactions, embersServer.getEmbersDatabase().getDataSource());
+    private YatspecHttpGetCommand http = new YatspecHttpGetCommand(super.interactions);
 
     @Test
     public void auditAnExistingQueryThatRespondsWithData() throws Exception {
-        given(yatspecQueryInserter.allQueries());
-        when(httpGetRequestFor(ALL_QUERIES));
+        yatspecQueryInserter.allQueries();
+        whenHttpGetRequestFor(ALL_QUERIES);
         then(thePerformanceAudit(), showsUsefulStatisticsAboutTheExecutedQuery());
     }
 
-    private ActionUnderTest httpGetRequestFor(String query) {
+    private void whenHttpGetRequestFor(String query) throws Exception {
         http.setUrl(embersServer.embersQueryPath() + "/" + query);
-        return http;
+        http.execute();
     }
 
-    private StateExtractor<ResultSetWrapper> thePerformanceAudit() {
-        return new GetAndLogTables(this, embersServer.getEmbersDatabase().getDataSource()).queryStatisticsTable("Database Table - " + TABLE_QUERIES_STATISTICS);
+    private ResultSetWrapper thePerformanceAudit() {
+        return new GetAndLogTables(super.interactions, embersServer.getEmbersDatabase().getDataSource()).queryStatisticsTable("Database Table - " + TABLE_QUERIES_STATISTICS);
     }
 
     private TypeSafeDiagnosingMatcher<ResultSetWrapper> showsUsefulStatisticsAboutTheExecutedQuery() {

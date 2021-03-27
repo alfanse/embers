@@ -1,7 +1,7 @@
 package adf.embers.cache.persistence;
 
 import org.fest.assertions.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Calendar;
 import java.util.Collections;

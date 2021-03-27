@@ -1,7 +1,7 @@
 package yatspec.http;
 
 import com.googlecode.yatspec.state.givenwhenthen.CapturedInputAndOutputs;
-import com.googlecode.yatspec.state.givenwhenthen.TestLogger;
+import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import yatspec.renderers.HttpUrlConnectionWrapper;
 
 import java.io.IOException;
@@ -12,13 +12,13 @@ import java.nio.charset.StandardCharsets;
 public class YatspecHttpPostCommand extends YatspecHttpCommand {
     private RequestBodyProducer requestBodyProducer;
 
-    public YatspecHttpPostCommand(TestLogger testLogger, String url, RequestBodyProducer requestBodyProducer) {
+    public YatspecHttpPostCommand(TestState testLogger, String url, RequestBodyProducer requestBodyProducer) {
         super(testLogger);
         super.setUrl(url);
         this.requestBodyProducer = requestBodyProducer;
     }
 
-    protected void addRequestDetails(CapturedInputAndOutputs capturedInputAndOutputs, HttpURLConnection connection, HttpUrlConnectionWrapper httpDetails) throws IOException {
+    protected void addRequestDetails(HttpURLConnection connection, HttpUrlConnectionWrapper httpDetails) throws IOException {
         final String charset = StandardCharsets.UTF_8.name();
         connection.setRequestMethod("POST");
         connection.setDoOutput(true);

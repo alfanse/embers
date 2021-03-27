@@ -9,7 +9,7 @@ import com.googlecode.yatspec.rendering.Renderer;
 public class HttpConnectionRenderer implements Renderer<HttpUrlConnectionWrapper> {
 
     @Override
-    public String render(HttpUrlConnectionWrapper httpUrlConnectionWrapper) throws Exception {
+    public String render(HttpUrlConnectionWrapper httpUrlConnectionWrapper) {
         String exceptions = "";
         if(!httpUrlConnectionWrapper.getExceptions().isEmpty()) {
             exceptions = "<br/>" +

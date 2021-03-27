@@ -4,12 +4,10 @@ import adf.embers.query.persistence.QueryDao;
 import adf.embers.tools.GetAndLogTables;
 import adf.embers.tools.YatspecHttpPostCommandBuilder;
 import com.googlecode.yatspec.junit.Notes;
-import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
-import com.googlecode.yatspec.state.givenwhenthen.StateExtractor;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Description;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import yatspec.http.YatspecHttpDeleteCommand;
 import yatspec.http.YatspecHttpGetCommand;
 import yatspec.http.YatspecHttpPostCommand;
@@ -43,13 +41,13 @@ public class AdminQueriesTest extends EmbersAcceptanceTestBase {
 
     @Test
     public void usersCanAddNewReports() throws Exception {
-        when(aNewQueryIsCreated());
+        whenANewQueryIsCreated();
         then(httpPost.responseCode(), is(HTTP_OK));
         then(httpPost.responseBody(), CoreMatchers.containsString("Successfully added query"));
 
         then(theQueriesTable(), hasTheQuery());
 
-        when(theNewQueryIsCalled());
+        whenTheNewQueryIsCalled();
         then(httpGet.responseCode(), is(HTTP_OK));
         then(httpGet.responseBody(), CoreMatchers.containsString("today,now"));
     }
@@ -58,7 +56,7 @@ public class AdminQueriesTest extends EmbersAcceptanceTestBase {
     public void usersCanUpdateExistingReports() throws Exception {
         givenAnExistingReport();
 
-        when(anUpdateToTheQueryIsPosted());
+        whenAnUpdateToTheQueryIsPosted();
         then(httpPost.responseCode(), is(HTTP_OK));
         then(httpPost.responseBody(), CoreMatchers.containsString("Successfully updated query"));
 
@@ -70,61 +68,61 @@ public class AdminQueriesTest extends EmbersAcceptanceTestBase {
         givenAnExistingReport();
         then(theQueriesTable(), hasTheQuery());
 
-        when(theQueryIsDeleted());
+        whenTheQueryIsDeleted();
         then(httpDelete.responseCode(), is(HTTP_OK));
         then(httpDelete.responseBody(), CoreMatchers.containsString("Successfully deleted query"));
 
         then(theQueriesTable(), isMissingTheQuery());
     }
 
-    private ActionUnderTest theQueryIsDeleted() {
-        httpDelete = new YatspecHttpDeleteCommand(this);
+    private void whenTheQueryIsDeleted() throws Exception {
+        httpDelete = new YatspecHttpDeleteCommand(super.interactions);
         httpDelete.setLogPrefix("Delete Query - ");
         httpDelete.setUrl(embersServer.embersAdminPath() + "/" + encodeString(QUERY_NAME));
-        return httpDelete;
+        httpDelete.execute();
     }
 
-    private ActionUnderTest anUpdateToTheQueryIsPosted() {
+    private void whenAnUpdateToTheQueryIsPosted() throws Exception {
         postedSql = UPDATED_SQL;
         postedDescription = UPDATED_DESC;
-        httpPost = new YatspecHttpPostCommandBuilder(this)
+        httpPost = new YatspecHttpPostCommandBuilder(super.interactions)
                 .withUrl(embersServer.embersAdminPath())
                 .withQueryName(QUERY_NAME)
                 .withQuerySql(postedSql)
                 .withQueryDescription(postedDescription)
                 .build();
         httpPost.setLogPrefix("Update Query - ");
-        return httpPost;
+        httpPost.execute();
 
     }
 
     private void givenAnExistingReport() throws Exception {
-        when(aNewQueryIsCreated());
+        whenANewQueryIsCreated();
         httpPost = null;
     }
 
-    private ActionUnderTest aNewQueryIsCreated() {
+    private void whenANewQueryIsCreated() throws Exception {
         postedSql = ADDED_SQL;
         postedDescription = ADDED_DESC;
-        httpPost = new YatspecHttpPostCommandBuilder(this)
+        httpPost = new YatspecHttpPostCommandBuilder(super.interactions)
                 .withUrl(embersServer.embersAdminPath())
                 .withQueryName(QUERY_NAME)
                 .withQuerySql(postedSql)
                 .withQueryDescription(postedDescription)
                 .build();
         httpPost.setLogPrefix("Create Query - ");
-        return httpPost;
+        httpPost.execute();
     }
 
-    private ActionUnderTest theNewQueryIsCalled() {
-        this.httpGet = new YatspecHttpGetCommand(this);
+    private void whenTheNewQueryIsCalled() throws Exception {
+        this.httpGet = new YatspecHttpGetCommand(super.interactions);
         httpGet.setLogPrefix("Run Query - ");
         httpGet.setUrl(embersServer.embersQueryPath() + "/" + encodeString(QUERY_NAME));
-        return httpGet;
+        httpGet.execute();
     }
 
-    private StateExtractor<ResultSetWrapper> theQueriesTable() {
-        return new GetAndLogTables(this, embersServer.getEmbersDatabase().getDataSource()).queriesTable();
+    private ResultSetWrapper theQueriesTable() {
+        return new GetAndLogTables(super.interactions, embersServer.getEmbersDatabase().getDataSource()).queriesTable();
     }
 
     private BaseMatcher<ResultSetWrapper> hasTheQuery() {

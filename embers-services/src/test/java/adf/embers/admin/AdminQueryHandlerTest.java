@@ -3,7 +3,7 @@ package adf.embers.admin;
 import adf.embers.query.persistence.Query;
 import adf.embers.query.persistence.QueryDao;
 import org.fest.assertions.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 import javax.ws.rs.core.Response;

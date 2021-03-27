@@ -8,7 +8,7 @@ import adf.embers.query.QueryRequest;
 import adf.embers.query.QueryResult;
 import adf.embers.query.persistence.Query;
 import adf.embers.query.persistence.QueryDao;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.BDDMockito;
 

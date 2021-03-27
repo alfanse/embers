@@ -4,9 +4,9 @@ import adf.embers.cache.persistence.CachedQuery;
 import adf.embers.cache.persistence.QueryResultCacheDao;
 import adf.embers.query.QueryRequest;
 import adf.embers.tools.EmbersDatabase;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.skife.jdbi.v2.DBI;
 
 import java.time.Duration;
@@ -22,14 +22,14 @@ public class QueryResultCacheDaoIntegrationTest {
     private static EmbersDatabase embersDatabase;
     private QueryResultCacheDao queryResultCacheDao;
 
-    @BeforeClass
+    @BeforeAll
     public static void setupDB() throws Exception {
         embersDatabase = new EmbersDatabase("jdbc:hsqldb:mem:daoTest");
         embersDatabase.startInMemoryDatabase();
         embersDatabase.createTableQueryResultCache();
     }
 
-    @Before
+    @BeforeEach
     public void setupDao() {
         DBI dbi = new DBI(embersDatabase.getDataSource());
         queryResultCacheDao = dbi.open(QueryResultCacheDao.class);

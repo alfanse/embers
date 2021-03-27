@@ -1,7 +1,8 @@
 package adf.embers.cache.persistence;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,7 +21,7 @@ public class CacheExpiryDateCalculatorTest {
     private final ZoneId london = ZoneId.of("Europe/London");
     private Date startingDate;
 
-    @Before
+    @BeforeEach
     public void safeDateThatWontCrossDST() {
         startingDate = createLocalDate(2016, Month.APRIL, 30);
     }
@@ -78,11 +79,11 @@ public class CacheExpiryDateCalculatorTest {
         didItWork(startingDate, millisToAdd);
     }
 
-    @Test (expected = RuntimeException.class)
+    @Test
     //cache limit = max int in days
     public void blowTheCacheableLimit() {
         long millisToAdd = Long.MAX_VALUE;
-        new CacheExpiryDateCalculator(startingDate, millisToAdd).invoke();
+        Assertions.assertThrows(RuntimeException.class, () -> new CacheExpiryDateCalculator(startingDate, millisToAdd).invoke());
     }
 
     private SimpleDateFormat setupSDF(ZoneId zoneId) {

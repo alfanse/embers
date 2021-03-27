@@ -5,6 +5,7 @@ test {
     def yatspecOutputDirectory = "${buildDir}/reports/acceptance"
     systemProperty "yatspec.output.dir", yatspecOutputDirectory
     println 'Acceptance Test Reports: ' + yatspecOutputDirectory
+    useJUnitPlatform()
 }
 
 test.mustRunAfter ":embers-services:build"

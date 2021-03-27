@@ -4,9 +4,9 @@ import adf.embers.query.persistence.Query;
 import adf.embers.query.persistence.QueryStatistics;
 import adf.embers.query.persistence.QueryStatisticsDao;
 import adf.embers.tools.EmbersDatabase;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.skife.jdbi.v2.DBI;
 import org.skife.jdbi.v2.Handle;
 
@@ -21,14 +21,14 @@ public class QueryStatisticsDaoIntegrationTest {
     private static EmbersDatabase embersDatabase;
     private QueryStatisticsDao auditQueryDao;
 
-    @BeforeClass
+    @BeforeAll
     public static void setupDB() throws Exception {
         embersDatabase = new EmbersDatabase("jdbc:hsqldb:mem:daoTest");
         embersDatabase.startInMemoryDatabase();
         embersDatabase.createTableQueriesStatistics();
     }
 
-    @Before
+    @BeforeEach
     public void setupDao() {
         DBI dbi = new DBI(embersDatabase.getDataSource());
         auditQueryDao = dbi.open(QueryStatisticsDao.class);

@@ -25,25 +25,25 @@ public class YatspecHttpPostCommandBuilder {
     }
 
     public YatspecHttpPostCommandBuilder withUrl(String url) {
-        testLogger.interestingGivens.add("Url", url);
+        testLogger.interestingGivens().add("Url", url);
         this.url = url;
         return this;
     }
 
     public YatspecHttpPostCommandBuilder withQueryName(String queryName) {
-        testLogger.interestingGivens.add(PARAM_QUERY_NAME, queryName);
+        testLogger.interestingGivens().add(PARAM_QUERY_NAME, queryName);
         this.queryName = queryName;
         return this;
     }
 
     public YatspecHttpPostCommandBuilder withQuerySql(String sql) {
-        testLogger.interestingGivens.add(PARAM_SQL, sql);
+        testLogger.interestingGivens().add(PARAM_SQL, sql);
         this.sql = sql;
         return this;
     }
 
     public YatspecHttpPostCommandBuilder withQueryDescription(String description) {
-        testLogger.interestingGivens.add(PARAM_DESCRIPTION, description);
+        testLogger.interestingGivens().add(PARAM_DESCRIPTION, description);
         this.description = description;
         return this;
     }

@@ -3,7 +3,7 @@ package adf.embers.query.impl;
 import adf.embers.query.QueryExecutor;
 import adf.embers.query.QueryResult;
 import adf.embers.query.persistence.QueryDao;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
