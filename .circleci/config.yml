@@ -12,7 +12,7 @@ jobs:
         # for diagnostics, show me the version, includes JVM, and Gradle.
         command: ./gradlew --version
     # Build
-    - run: ./gradlew build codeCoverageReport
+    - run: make build
     - store_test_results:
         path: embers-services/build/test-results
     - store_test_results:
