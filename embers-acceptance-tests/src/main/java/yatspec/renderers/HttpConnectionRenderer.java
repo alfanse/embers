@@ -1,6 +1,7 @@
 package yatspec.renderers;
 
 import com.googlecode.yatspec.rendering.Renderer;
+import com.mitchellbosecke.pebble.extension.escaper.SafeString;
 
 /**
  * Yatspec renderer for List<Map<String, Object>>
@@ -18,7 +19,7 @@ public class HttpConnectionRenderer implements Renderer<HttpUrlConnectionWrapper
                     "</div>";
         }
 
-        return "<div>" +
+        return new SafeString("<div>" +
                     "<div>" +
                         "<span>Request URL: "+httpUrlConnectionWrapper.getRequestUrl()+"</span><br/>" +
                         "<span>Request Method: "+httpUrlConnectionWrapper.getRequestMethod()+"</span><br/>" +
@@ -32,7 +33,7 @@ public class HttpConnectionRenderer implements Renderer<HttpUrlConnectionWrapper
                         "<span>Response Body: "+httpUrlConnectionWrapper.getResponseBody()+"</span>" +
                     "</div>" +
                     exceptions +
-               "</div>";
+               "</div>").toString();
     }
 
 }
