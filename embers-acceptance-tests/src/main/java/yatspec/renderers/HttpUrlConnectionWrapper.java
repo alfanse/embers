@@ -100,4 +100,18 @@ public class HttpUrlConnectionWrapper {
         return sb.toString();
     }
 
+    public HttpRequestWrapper getHttpRequestWrapper() {
+        HttpRequestWrapper httpRequestWrapper = new HttpRequestWrapper(requestUrl, requestMethod);
+        httpRequestWrapper.setRequestBody(requestBody);
+        httpRequestWrapper.setRequestProperties(requestProperties);
+        return httpRequestWrapper;
+    }
+
+    public HttpResponseWrapper getHttpResponseWrapper() {
+        HttpResponseWrapper httpResponseWrapper = new HttpResponseWrapper(responseCode);
+        httpResponseWrapper.setResponseBody(responseBody);
+        httpResponseWrapper.setResponseHeaders(responseHeaders);
+        httpResponseWrapper.setExceptions(exceptions);
+        return httpResponseWrapper;
+    }
 }

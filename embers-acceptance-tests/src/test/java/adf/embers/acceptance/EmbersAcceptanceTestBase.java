@@ -13,8 +13,10 @@ import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
-import yatspec.renderers.HttpConnectionRenderer;
-import yatspec.renderers.HttpUrlConnectionWrapper;
+import yatspec.renderers.HttpRequestRenderer;
+import yatspec.renderers.HttpRequestWrapper;
+import yatspec.renderers.HttpResponseRenderer;
+import yatspec.renderers.HttpResponseWrapper;
 import yatspec.renderers.ResultSetRenderer;
 import yatspec.renderers.ResultSetWrapper;
 
@@ -31,7 +33,6 @@ public abstract class EmbersAcceptanceTestBase implements WithParticipants, With
     public static EmbersServer embersServer;
 
     public TestState interactions = new TestState();
-    private List<Participant> participants = new ArrayList<>();
 
     @BeforeAll
     public static void startServerOnlyOnce() throws Throwable {
@@ -57,7 +58,8 @@ public abstract class EmbersAcceptanceTestBase implements WithParticipants, With
         return new ArrayList<SpecResultListener>() {{
             add(new HtmlResultRenderer()
                     .withCustomRenderer(ResultSetWrapper.class, (result) -> new ResultSetRenderer())
-                    .withCustomRenderer(HttpUrlConnectionWrapper.class, (result) -> new HttpConnectionRenderer()));
+                    .withCustomRenderer(HttpRequestWrapper.class, (result) -> new HttpRequestRenderer())
+                    .withCustomRenderer(HttpResponseWrapper.class, (result) -> new HttpResponseRenderer()));
         } };
     }
 
@@ -69,7 +71,7 @@ public abstract class EmbersAcceptanceTestBase implements WithParticipants, With
         }};
     }
 
-    public void then(Object actual, Matcher matcher) {
+    public <T> void then(T actual, Matcher<? super T> matcher) {
         MatcherAssert.assertThat(actual, matcher);
     }
 }

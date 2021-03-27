@@ -9,7 +9,8 @@ import java.net.URL;
 import java.util.Map;
 
 public abstract class YatspecHttpCommand {
-    public static final String LOG_KEY_SUFFIX_FOR_HTTP = "http request from Client to Embers";
+    public static final String LOG_KEY_SUFFIX_FOR_HTTP_REQUEST = "http request from Client to Embers";
+    public static final String LOG_KEY_SUFFIX_FOR_HTTP_RESPONSE = "http response from Embers to Client";
     protected final TestState testState;
     private String url;
     private String logPrefix = "";
@@ -35,7 +36,8 @@ public abstract class YatspecHttpCommand {
             httpDetails.captureRequestDetails(conn);
             httpDetails.captureResponseDetails(conn);
         } finally {
-            testState.log(getLogKeyName(LOG_KEY_SUFFIX_FOR_HTTP), httpDetails);
+            testState.log(getLogKeyName(LOG_KEY_SUFFIX_FOR_HTTP_REQUEST), httpDetails.getHttpRequestWrapper());
+            testState.log(getLogKeyName(LOG_KEY_SUFFIX_FOR_HTTP_RESPONSE), httpDetails.getHttpResponseWrapper());
             conn.disconnect();
         }
     }
@@ -61,7 +63,8 @@ public abstract class YatspecHttpCommand {
     }
 
     private HttpUrlConnectionWrapper fetchCurrentHttpDetailsFromYatspec() {
-        return testState.getType(getLogKeyName(LOG_KEY_SUFFIX_FOR_HTTP), HttpUrlConnectionWrapper.class);
+//        return testState.getType(getLogKeyName(LOG_KEY_SUFFIX_FOR_HTTP_REQUEST), HttpUrlConnectionWrapper.class);
+        return httpDetails;
     }
 
     private String getLogKeyName(String logKeySuffix) {
