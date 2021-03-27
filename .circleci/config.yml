@@ -34,15 +34,19 @@ jobs:
     #   If you break your build into multiple jobs with workflows, you will probably want to do the parts of this that are relevant in each
     # Save test results
     - store_test_results:
-        path: /tmp/circleci-test-results
+        path: embers-services/build/test-results
     # Save artifacts
     - store_artifacts:
-        path: /tmp/circleci-artifacts
-    - store_artifacts:
+        name: store embers-services reports
         path: embers-services/build/reports
     - store_artifacts:
+        name: store embers-spring reports
+        path: embers-spring/build/reports
+    - store_artifacts:
+        name: store embers-acceptance-tests reports
         path: embers-acceptance-tests/build/reports
+        destination: yatspec
     - store_artifacts:
+        name: store jacoco reports
         path: build/reports/jacoco
-    - store_artifacts:
-        path: /tmp/circleci-test-results
+        destination: jacoco
