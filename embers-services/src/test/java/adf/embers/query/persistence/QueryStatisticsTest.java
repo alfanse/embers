@@ -1,6 +1,6 @@
 package adf.embers.query.persistence;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;

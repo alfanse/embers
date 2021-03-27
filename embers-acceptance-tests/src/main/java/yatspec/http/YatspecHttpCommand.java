@@ -1,6 +1,6 @@
 package yatspec.http;
 
-import com.googlecode.yatspec.state.givenwhenthen.*;
+import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import yatspec.renderers.HttpUrlConnectionWrapper;
 
 import java.io.IOException;
@@ -8,19 +8,20 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 
-public abstract class YatspecHttpCommand implements ActionUnderTest {
-    public static final String LOG_KEY_SUFFIX_FOR_HTTP = "Http Details";
-    protected final TestLogger testLogger;
-    private String url;
-    private String logPrefix = "";
-    private final HttpUrlConnectionWrapper httpDetails = new HttpUrlConnectionWrapper();
+public abstract class YatspecHttpCommand {
+    //honoring the yatspec sequence diagram template: X from Y to Z
+    public static final String LOG_KEY_SUFFIX_FOR_HTTP_REQUEST = "request from Client to Embers";
+    public static final String LOG_KEY_SUFFIX_FOR_HTTP_RESPONSE = "response from Embers to Client";
 
-    public YatspecHttpCommand(TestLogger testLogger) {
-        this.testLogger = testLogger;
+    protected final TestState yatspec;
+    private final HttpUrlConnectionWrapper httpDetails = new HttpUrlConnectionWrapper();
+    private String logPrefix = "";
+
+    public YatspecHttpCommand(TestState yatspec) {
+        this.yatspec = yatspec;
     }
 
     public void setUrl(String url) {
-        this.url = url;
         httpDetails.setRequestUrl(url);
     }
 
@@ -28,42 +29,37 @@ public abstract class YatspecHttpCommand implements ActionUnderTest {
         this.logPrefix = logPrefix;
     }
 
-    public CapturedInputAndOutputs execute(InterestingGivens givens, CapturedInputAndOutputs capturedInputAndOutputs) throws Exception{
-        HttpURLConnection conn = openConnection(url, givens);
+    public void execute() throws Exception{
+        HttpURLConnection conn = openConnection();
         try {
-            addRequestDetails(capturedInputAndOutputs, conn, httpDetails);
+            addRequestDetails(conn, httpDetails);
             httpDetails.captureRequestDetails(conn);
             httpDetails.captureResponseDetails(conn);
         } finally {
-            testLogger.log(getLogKeyName(LOG_KEY_SUFFIX_FOR_HTTP), httpDetails);
+            yatspec.log(getLogKeyName(LOG_KEY_SUFFIX_FOR_HTTP_REQUEST), httpDetails.getHttpRequestWrapper());
+            yatspec.log(getLogKeyName(LOG_KEY_SUFFIX_FOR_HTTP_RESPONSE), httpDetails.getHttpResponseWrapper());
             conn.disconnect();
         }
-
-        return capturedInputAndOutputs;
     }
 
-    public StateExtractor<Integer> responseCode() {
-        return inputAndOutput -> fetchCurrentHttpDetailsFromYatspec(inputAndOutput).getResponseCode();
+    public Integer responseCode() {
+        return httpDetails.getResponseCode();
     }
 
-    public StateExtractor<String> responseBody() {
-        return inputAndOutput -> fetchCurrentHttpDetailsFromYatspec(inputAndOutput).getResponseBody();
+    public String responseBody() {
+        return httpDetails.getResponseBody();
     }
 
-    public StateExtractor<Map<String, Object>> responseHeaders() {
-        return inputAndOutput -> fetchCurrentHttpDetailsFromYatspec(inputAndOutput).getResponseHeaders();
+    public Map<String, Object> responseHeaders() {
+        return httpDetails.getResponseHeaders();
     }
 
-    protected abstract void addRequestDetails(CapturedInputAndOutputs capturedInputAndOutputs, HttpURLConnection connection, HttpUrlConnectionWrapper httpDetails) throws IOException;
+    protected abstract void addRequestDetails(HttpURLConnection connection, HttpUrlConnectionWrapper httpDetails) throws IOException;
 
-    private HttpURLConnection openConnection(String url, InterestingGivens givens) throws IOException {
-        URL location = new URL(url);
-        givens.add("Url", location.toExternalForm());
+    private HttpURLConnection openConnection() throws IOException {
+        URL location = new URL(httpDetails.getRequestUrl());
+        yatspec.interestingGivens().add("Url", location.toExternalForm());
         return (HttpURLConnection) location.openConnection();
-    }
-
-    private HttpUrlConnectionWrapper fetchCurrentHttpDetailsFromYatspec(CapturedInputAndOutputs inputAndOutput) {
-        return inputAndOutput.getType(getLogKeyName(LOG_KEY_SUFFIX_FOR_HTTP), HttpUrlConnectionWrapper.class);
     }
 
     private String getLogKeyName(String logKeySuffix) {

@@ -8,6 +8,10 @@ dependencies {
     testCompile libs.json_assert
 }
 
+test {
+    useJUnitPlatform()
+}
+
 jar {
     manifest {
         attributes 'Implementation-Title': 'Embers',

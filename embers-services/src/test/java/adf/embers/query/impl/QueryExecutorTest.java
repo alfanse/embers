@@ -1,7 +1,7 @@
 package adf.embers.query.impl;
 
 import adf.embers.query.persistence.Query;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.skife.jdbi.v2.DBI;
 import org.skife.jdbi.v2.Handle;
 

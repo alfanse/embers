@@ -1,6 +1,6 @@
 package adf.embers.cache.persistence;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.skife.jdbi.v2.StatementContext;
 

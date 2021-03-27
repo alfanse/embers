@@ -3,9 +3,9 @@ package adf.embers.integration.persistence;
 import adf.embers.query.persistence.Query;
 import adf.embers.query.persistence.QueryDao;
 import adf.embers.tools.EmbersDatabase;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.skife.jdbi.v2.DBI;
 
 import java.time.Duration;
@@ -17,14 +17,14 @@ public class QueryDaoIntegrationTest {
     private static EmbersDatabase embersDatabase;
     private QueryDao queryDao;
 
-    @BeforeClass
+    @BeforeAll
     public static void setupDB() throws Exception {
         embersDatabase = new EmbersDatabase("jdbc:hsqldb:mem:daoTest");
         embersDatabase.startInMemoryDatabase();
         embersDatabase.createTableQueries();
     }
 
-    @Before
+    @BeforeEach
     public void setupDao() {
         DBI dbi = new DBI(embersDatabase.getDataSource());
         queryDao = dbi.open(QueryDao.class);

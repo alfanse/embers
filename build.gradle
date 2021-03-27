@@ -24,8 +24,6 @@ allprojects {
     repositories {
         mavenCentral()
         mavenLocal()
-
-        maven { url 'http://repo.bodar.com/' }
     }
 
     ext {
@@ -62,10 +60,10 @@ codeCoverageReport.dependsOn {
 
 check.dependsOn jacocoTestReport
 
-
 subprojects {
 
     def jaxb = '2.3.0'
+    def junitJupiter = '5.7.1'
 
     extensions.add("libs", [
             core: [
@@ -79,13 +77,14 @@ subprojects {
                 'org.jdbi:jdbi:2.78'
             ],
             unit_tests: [
-                'junit:junit:4.12',
+                "org.junit.jupiter:junit-jupiter:$junitJupiter",
                 'org.easytesting:fest-assert-core:2.0M10',
-                'org.mockito:mockito-core:2.28.2'
+                'org.mockito:mockito-core:3.8.0',
+                'org.mockito:mockito-junit-jupiter:3.8.0'
             ],
             acceptance_tests: [
 //            the bdd framework, makes pretty html reports from Junit tests
-                'com.googlecode.yatspec:yatspec:217'
+                'com.github.nickmcdowall:yatspec:2021.0.4'
             ],
             jersey: [
 //            implements javax.ws.rs

@@ -1,7 +1,7 @@
 package yatspec.renderers;
 
 import org.fest.assertions.data.MapEntry;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,7 +28,7 @@ public class HttpUrlConnectionWrapperTest {
     }
 
     @Test
-    public void preserveExecptionWhenResponseCodeErrors() throws IOException {
+    public void preserveExceptionWhenResponseCodeErrors() throws IOException {
         IOException thrown = new IOException("bad things happened");
         when(httpURLConnection.getResponseCode()).thenThrow(thrown);
 
@@ -52,7 +52,7 @@ public class HttpUrlConnectionWrapperTest {
         assertThat(wrapper.getResponseHeaders()).contains(MapEntry.entry("Content-Type", value));
     }
 
-    private void whenTheConnectionResponseIsScraped() throws IOException {
+    private void whenTheConnectionResponseIsScraped() {
         wrapper.captureResponseDetails(httpURLConnection);
     }
 }

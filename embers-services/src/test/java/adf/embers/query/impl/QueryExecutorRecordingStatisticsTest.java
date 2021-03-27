@@ -4,7 +4,7 @@ import adf.embers.query.QueryExecutor;
 import adf.embers.query.persistence.Query;
 import adf.embers.query.persistence.QueryStatistics;
 import adf.embers.query.persistence.QueryStatisticsDao;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 import java.util.Collections;
