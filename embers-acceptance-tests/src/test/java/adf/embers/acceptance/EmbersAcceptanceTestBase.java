@@ -22,6 +22,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static com.googlecode.yatspec.sequence.Participants.ACTOR;
+import static com.googlecode.yatspec.sequence.Participants.PARTICIPANT;
+
 @ExtendWith(SequenceDiagramExtension.class)
 public abstract class EmbersAcceptanceTestBase implements WithParticipants, WithCustomResultListeners {
 
@@ -60,7 +63,10 @@ public abstract class EmbersAcceptanceTestBase implements WithParticipants, With
 
     @Override
     public List<Participant> participants() {
-        return participants;
+        return new ArrayList<Participant>(){{
+            add(ACTOR.create("Client"));
+            add(PARTICIPANT.create("Embers"));
+        }};
     }
 
     public void then(Object actual, Matcher matcher) {
