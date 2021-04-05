@@ -84,7 +84,7 @@ subprojects {
             ],
             acceptance_tests: [
 //            the bdd framework, makes pretty html reports from Junit tests
-                'com.github.nickmcdowall:yatspec:2021.0.4'
+                'com.github.nickmcdowall:yatspec:2021.1.1'
             ],
             jersey: [
 //            implements javax.ws.rs
