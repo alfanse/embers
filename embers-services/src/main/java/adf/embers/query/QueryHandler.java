@@ -34,6 +34,6 @@ public class QueryHandler {
                     .build();
         }
 
-        return Response.ok(queryResult.getResult()).build();
+        return Response.ok(queryResult.getResult()).type("text/csv").build();
     }
 }

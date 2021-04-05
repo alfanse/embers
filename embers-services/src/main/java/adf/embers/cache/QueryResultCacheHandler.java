@@ -40,6 +40,7 @@ public class QueryResultCacheHandler {
         return Response
                 .ok(queryResult.getResult())
                 .header(HEADER_WHEN_CHACHED, queryResult.getCachedOn())
+                .type("text/csv")
                 .build();
     }
 
