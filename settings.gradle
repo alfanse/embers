@@ -1,3 +1,4 @@
+rootProject.name = 'embers'
 include 'embers-services'
 include 'embers-acceptance-tests'
 include 'embers-spring'

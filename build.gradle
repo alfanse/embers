@@ -19,7 +19,7 @@ allprojects {
     apply plugin: 'jacoco'
     apply plugin: 'com.adarshr.test-logger'
 
-    sourceCompatibility = 1.8
+    sourceCompatibility = 11
 
     repositories {
         mavenCentral()

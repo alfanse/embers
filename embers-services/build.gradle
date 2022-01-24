@@ -1,11 +1,11 @@
 description = "Build jar for the embers sql reporting services."
 
 dependencies {
-    compile libs.core
-    compile libs.gson
-    testCompile libs.unit_tests
-    testCompile libs.jersey
-    testCompile libs.json_assert
+    implementation libs.core
+    implementation libs.gson
+    testImplementation libs.unit_tests
+    testImplementation libs.jersey
+    testImplementation libs.json_assert
 }
 
 test {
