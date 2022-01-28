@@ -26,7 +26,7 @@ import static org.hamcrest.CoreMatchers.is;
         "So that users can instantly use the changed query.")
 public class AdminQueriesTest extends EmbersAcceptanceTestBase {
 
-    /*This query Name has a space in it to force the need for encoding*/
+    /*QUERY_NAME has a space in it to force the need for encoding*/
     public static final String QUERY_NAME = "new Query";
     public static final String ADDED_SQL = "SELECT CURRENT_DATE AS today, CURRENT_TIME AS now FROM (VALUES(0))";
     public static final String ADDED_DESC = "this query returns the date,time";

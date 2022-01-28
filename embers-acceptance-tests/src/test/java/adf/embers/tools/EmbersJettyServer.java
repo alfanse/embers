@@ -1,62 +1,91 @@
 package adf.embers.tools;
 
+import adf.embers.admin.AdminQueryHandler;
+import adf.embers.cache.QueryResultCacheHandler;
 import adf.embers.configuration.EmbersHandlerConfiguration;
 import adf.embers.configuration.EmbersProcessorConfiguration;
 import adf.embers.configuration.EmbersRepositoryConfiguration;
-import org.eclipse.jetty.server.Handler;
+import adf.embers.query.QueryHandler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.servlet.Servlet;
 import javax.sql.DataSource;
 
 public class EmbersJettyServer {
 
-    private final Server server;
+    private static final Logger LOG = LoggerFactory.getLogger(EmbersJettyServer.class);
+
+    private final int port;
+    private Server server;
 
     public EmbersJettyServer(int port) {
-        this.server = new Server(port);
+        this.port = port;
     }
 
     public void startHttpServer(DataSource dataSource) throws Exception {
-        System.out.println("Starting the Embers Server");
+        LOG.info("Starting the Embers Server on port: " + port);
 
-        EmbersRepositoryConfiguration embersRepositoryConfiguration = new EmbersRepositoryConfiguration(dataSource);
-        EmbersProcessorConfiguration embersProcessorConfiguration = new EmbersProcessorConfiguration(embersRepositoryConfiguration);
-        EmbersHandlerConfiguration embersConfiguration = new EmbersHandlerConfiguration(embersProcessorConfiguration);
+        // Configure Jetty
+        final ResourceConfig config = new ResourceConfig();
+        config.register(new EmbersBinder(dataSource));
 
-        Servlet jerseyServlet = createJerseyServletWithEmbersHandlers(embersConfiguration);
+//        server = JettyHttpContainerFactory.createServer(
+//            URI.create("http://localhost:" + port + "/" + EmbersServer.CONTEXT_PATH_ROOT), config);
 
-        server.setHandler(createEmbersHandler(jerseyServlet));
+        server = new Server(port);
+        ServletContextHandler ctx = new ServletContextHandler(
+            ServletContextHandler.NO_SESSIONS);
+        ctx.setContextPath("/embers");
+        server.setHandler(ctx);
+        ServletHolder servlet = new ServletHolder(new ServletContainer(config));
+        servlet.setInitOrder(1);
+        ctx.addServlet(servlet, "/*");
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                System.out.println("Shutting down the application...");
+                server.stop();
+                System.out.println("Done, exit.");
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }));
+
         server.start();
     }
 
     public void stopHttpServer() {
-        System.out.println("Stopping the Embers server");
+        LOG.info("Stopping the Embers server");
         try {
             server.stop();
         } catch (Exception e) {
-            System.err.println("Exception stopping jetty server: "+e.getMessage());
+            LOG.error("Exception stopping jetty server: " + e.getMessage());
         }
     }
 
-    private Servlet createJerseyServletWithEmbersHandlers(EmbersHandlerConfiguration embersConfiguration) {
-        ResourceConfig resourceConfig = new ResourceConfig();
-        resourceConfig.register(embersConfiguration.getQueryHandler());
-        resourceConfig.register(embersConfiguration.getAdminQueryHandler());
-        resourceConfig.register(embersConfiguration.getQueryResultCacheHandler());
-        return new ServletContainer(resourceConfig);
-    }
+    public static class EmbersBinder extends AbstractBinder {
 
-    private Handler createEmbersHandler(Servlet embersServlet) {
-        ServletContextHandler handler = new ServletContextHandler();
-        handler.addServlet(new ServletHolder(embersServlet), "/");
-        //setting context path separately works
-        handler.setContextPath("/" + EmbersServer.CONTEXT_PATH_ROOT);
+        private final EmbersHandlerConfiguration embersConfiguration;
 
-        return handler;
+        public EmbersBinder(DataSource dataSource) {
+            super();
+            EmbersRepositoryConfiguration embersRepositoryConfiguration = new EmbersRepositoryConfiguration(dataSource);
+            EmbersProcessorConfiguration embersProcessorConfiguration = new EmbersProcessorConfiguration(embersRepositoryConfiguration);
+            embersConfiguration = new EmbersHandlerConfiguration(embersProcessorConfiguration);
+        }
+
+        @Override
+        protected void configure() {
+            LOG.info("Binding embers handlers");
+            bind(embersConfiguration.getAdminQueryHandler()).to(AdminQueryHandler.class);
+            bind(embersConfiguration.getQueryHandler()).to(QueryHandler.class);
+            bind(embersConfiguration.getQueryResultCacheHandler()).to(QueryResultCacheHandler.class);
+        }
     }
 }

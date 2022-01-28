@@ -9,13 +9,13 @@ A java library that exposes a restful api for the management and consumption of 
 * **embers/cached/<query name>** - fetch a cached result, or run and cache if cache miss.
 
 ### Requirements:
-Embed embers in a http container that works with `javax.ws.rs`.
+Embed embers in a http container that works with `jakarta.ws.rs`.
 
 You'll need to wire it up and give it a servlet:
 * A Jetty example: [EmbersJettyServer](embers-acceptance-tests/src/test/java/adf/embers/tools/EmbersJettyServer.java)
 * A Spring example: [EmbersSpringConfiguration](embers-spring/src/main/java/adf/embers/examples/spring/EmbersSpringConfiguration.java)
 
-And inject a `javax.sql.DataSource` into `adf.embers.configuration.EmbersRepositoryConfiguration`
+And inject a `jakarta.sql.DataSource` into `adf.embers.configuration.EmbersRepositoryConfiguration`
 
 The datasource should have access to the 3 tables required by embers, and have read access to the tables the sql reports are to be run against.
 

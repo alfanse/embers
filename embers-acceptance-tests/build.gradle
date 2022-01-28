@@ -16,10 +16,11 @@ dependencies {
     implementation libs.core
     implementation libs.database
     implementation libs.acceptance_tests
+    implementation libs.logs
 
     testImplementation libs.unit_tests
     testImplementation libs.acceptance_tests
-    testImplementation libs.jersey
+//    testImplementation libs.jersey
     testImplementation libs.jaxson
     testImplementation libs.jetty
 }
