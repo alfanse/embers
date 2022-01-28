@@ -31,22 +31,19 @@ public class EmbersJettyServer {
     public void startHttpServer(DataSource dataSource) throws Exception {
         LOG.info("Starting the Embers Server on port: " + port);
 
-        // Configure Jetty
-        final ResourceConfig config = new ResourceConfig();
-        config.register(new EmbersBinder(dataSource));
-
-//        server = JettyHttpContainerFactory.createServer(
-//            URI.create("http://localhost:" + port + "/" + EmbersServer.CONTEXT_PATH_ROOT), config);
 
         server = new Server(port);
-        ServletContextHandler ctx = new ServletContextHandler(
-            ServletContextHandler.NO_SESSIONS);
+
+        ServletContextHandler ctx = new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
         ctx.setContextPath("/embers");
         server.setHandler(ctx);
-        ServletHolder servlet = new ServletHolder(new ServletContainer(config));
-        servlet.setInitOrder(1);
-        ctx.addServlet(servlet, "/*");
+        ctx.addServlet(embersServletHolder(dataSource), "/*");
+        adShutdownHook();
 
+        server.start();
+    }
+
+    private void adShutdownHook() {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
                 System.out.println("Shutting down the application...");
@@ -56,8 +53,17 @@ public class EmbersJettyServer {
                 throw new RuntimeException(e);
             }
         }));
+    }
 
-        server.start();
+    /** Configure Jetty with jersey & Embers handler instances */
+    private ServletHolder embersServletHolder(DataSource dataSource) {
+        final ResourceConfig config = new ResourceConfig();
+        config.packages("jersey.config.server.provider.packages", "adf.embers");
+        config.register(new EmbersBinder(dataSource));
+
+        ServletHolder servlet = new ServletHolder(new ServletContainer(config));
+        servlet.setInitOrder(1);
+        return servlet;
     }
 
     public void stopHttpServer() {
