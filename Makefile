@@ -1,6 +1,6 @@
 NAME=embers
 
-## Makefile so I don't have to remember those import command line commands.
+## Makefile so I don't have to remember the difference between gradle or maven etc.
 
 .PHONY: help verify build docs
 
@@ -16,3 +16,6 @@ build: verify ## circle ci runs this
 docs: verify ## copy the yatspec output to the docs folder
 	cp embers-acceptance-tests/build/yatspec/adf/embers/acceptance/** docs/
 	cp embers-acceptance-tests/build/yatspec/adf/embers/e2e/*.html docs/
+
+dep: ## how to do dependencies per project
+	./gradlew :embers-spring:dependencies

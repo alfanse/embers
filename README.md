@@ -15,23 +15,30 @@ You'll need to wire it up and give it a servlet:
 * A Jetty example: [EmbersJettyServer](embers-acceptance-tests/src/test/java/adf/embers/tools/EmbersJettyServer.java)
 * A Spring example: [EmbersSpringConfiguration](embers-spring/src/main/java/adf/embers/examples/spring/EmbersSpringConfiguration.java)
 
-And inject a `jakarta.sql.DataSource` into `adf.embers.configuration.EmbersRepositoryConfiguration`
+And inject a `javax.sql.DataSource` into `adf.embers.configuration.EmbersRepositoryConfiguration`
 
 The datasource should have access to the 3 tables required by embers, and have read access to the tables the sql reports are to be run against.
 
 Embers Database tables:
 
-* **queries** - Holds details of the queries that embers/query can run.
-* **queries_statistics** - Audit information about calls made to embers/query.
-* **query_result_cache** - Caches results for embers/cache service to re-use.
+* **queries** - Holds details of the queries that `embers/query` can run.
+* **queries_statistics** - Audit information about calls made to `embers/query`.
+* **query_result_cache** - Caches results for `embers/cache` service to re-use.
 
 Example of DDL for tables: [EmbersDatabase](embers-acceptance-tests/src/main/java/adf/embers/tools/EmbersDatabase.java)
 
 ## Build
-To run the build, it requires a java jdk 11+. Its compiled source targets java 1.8.
+To run the build, it requires;
+
+~~As of August 2019: java jdk 11+. Compiled source targets java 1.8.~~
+
+As of 2022 January: java jdk 17. Compiled source targets java 17.
+
 ```shell
-./gradlew clean build
+make verify
 ```
+
+I use a Makefile to document the different command devs / CI use. Help embedded by typing: `make`
 
 The acceptance tests produce html documentation with sequence diagrams, thanks to [Yatspec](https://github.com/nickmcdowall/yatspec).
 
@@ -64,3 +71,4 @@ These links don't live long, but you can try:
 # Backlog
 
 ?? what would you like to see here ??
+javax.ws.rs -> jakarta.ws.rs - DONE.

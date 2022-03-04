@@ -14,13 +14,13 @@ test.mustRunAfter ":embers-services:build"
 dependencies {
     implementation project(":embers-services")
     implementation libs.core
-    implementation libs.database
-    implementation libs.acceptance_tests
-    implementation libs.logs
+    implementation test_libs.database
+    implementation test_libs.acceptance_tests
+    implementation test_libs.log_api
 
-    testImplementation libs.unit_tests
-    testImplementation libs.acceptance_tests
+    implementation test_libs.log_binding
+    testImplementation test_libs.unit_tests
 //    testImplementation libs.jersey
-    testImplementation libs.jaxson
-    testImplementation libs.jetty
+    testImplementation test_libs.jaxson
+    testImplementation test_libs.jetty
 }

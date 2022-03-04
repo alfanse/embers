@@ -3,9 +3,9 @@ description = "Build jar for the embers sql reporting services."
 dependencies {
     implementation libs.core
     implementation libs.gson
-    testImplementation libs.unit_tests
-    testImplementation libs.jersey
-    testImplementation libs.json_assert
+    testImplementation test_libs.unit_tests
+    testImplementation test_libs.jersey
+    testImplementation test_libs.json_assert
 }
 
 test {

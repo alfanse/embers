@@ -4,10 +4,9 @@ Hosted on github: https://github.com/alfanse/embers.git"""
 
 buildscript {
     repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
+        maven { url "https://plugins.gradle.org/m2/" }
     }
+
     dependencies {
         classpath "com.adarshr:gradle-test-logger-plugin:1.7.0"
     }
@@ -18,8 +17,6 @@ allprojects {
     apply plugin: 'idea'
     apply plugin: 'jacoco'
     apply plugin: 'com.adarshr.test-logger'
-
-//    sourceCompatibility = 17
 
     repositories {
         mavenCentral()
@@ -32,7 +29,7 @@ allprojects {
 
     java {
         toolchain {
-            languageVersion = JavaLanguageVersion.of(17)
+            languageVersion = JavaLanguageVersion.of(11)
         }
     }
 
@@ -79,6 +76,11 @@ subprojects {
                 'jakarta.inject:jakarta.inject-api:2.0.1',
                 'org.jdbi:jdbi:2.78'
             ],
+            gson: [ // serialise java to json
+                'com.google.code.gson:gson:2.8.9'
+            ]
+        ])
+    extensions.add("test_libs", [
             jersey: [//implements jakarta.ws.rs
                 "org.glassfish.jersey.media:jersey-media-json-jackson:$jersey",
                 "org.glassfish.jersey.core:jersey-server:$jersey",
@@ -87,9 +89,6 @@ subprojects {
             ],
             jaxson: [// handles json serialisation
                 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.13.1'
-            ],
-            gson: [ // serialise java to json
-                'com.google.code.gson:gson:2.8.9'
             ],
             json_assert: [
                 'org.skyscreamer:jsonassert:1.2.3'
@@ -104,8 +103,10 @@ subprojects {
                  "org.glassfish.jersey.media:jersey-media-json-jackson:$jersey",
                  'jakarta.servlet:jakarta.servlet-api:5.0.0'
             ],
-            logs: [
-                'org.slf4j:slf4j-api:1.7.35',
+            log_api: [
+                'org.slf4j:slf4j-api:1.7.35'
+            ],
+            log_binding: [
                 'org.slf4j:slf4j-simple:1.7.35'
             ],
             database: [

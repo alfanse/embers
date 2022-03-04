@@ -5,16 +5,13 @@ import adf.embers.cache.QueryResultCacheHandler;
 import adf.embers.query.QueryHandler;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
 import java.net.URI;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(
         classes = {SpringDataSourceConfiguration.class, Application.class},
         webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,

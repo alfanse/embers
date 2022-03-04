@@ -1,22 +1,58 @@
-plugins {
-    id 'org.springframework.boot' version '2.1.8.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+buildscript {
+    ext {
+        springBootVersion = '3.0.0-M1'
+    }
+    repositories {
+        mavenCentral()
+//        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.spring.io/milestone" }
+//        maven { url "https://repo.spring.io/libs-milestone-local" }
+        maven { url "https://repo.spring.io/ui/native/milestone" }
+        maven { url "https://repo.spring.io/libs-release" }
+        maven { url "https://repo.spring.io/libs-milestone" }
+        maven { url "https://repo.spring.io/libs-snapshot" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
 }
 
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
 description = """Example project showing how to mix embers into a spring-boot application."""
+
+repositories {
+    mavenCentral()
+//    maven { url "https://repo.spring.io/snapshot" }
+//    maven { url "https://repo.spring.io/milestone" }
+//    maven { url "https://repo.spring.io/libs-milestone-local" }
+    maven { url "https://repo.spring.io/milestone" }
+//    maven { url "https://repo.spring.io/ui/native/milestone" }
+}
 
 dependencies {
 
     implementation project(":embers-services")
     implementation 'org.springframework.boot:spring-boot-starter-jersey'
     implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation test_libs.log_api
+    implementation test_libs.log_binding
+
+    runtimeOnly('jakarta.ws.rs:jakarta.ws.rs-api:3.0.0')
 
     testImplementation project(":embers-acceptance-tests")
-    testImplementation libs.database
-    testImplementation libs.unit_tests
+    testImplementation test_libs.database
+    testImplementation test_libs.unit_tests
     testImplementation 'io.rest-assured:rest-assured:3.3.0'
     testImplementation "org.springframework.boot:spring-boot-starter-test"
 
+}
+
+configurations.implementation {
+    //logback classic conflicts with slf4j, so remove.
+    exclude group: 'ch.qos.logback', module: 'logback-classic'
 }
 
 test {
