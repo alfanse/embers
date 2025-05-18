@@ -13,12 +13,12 @@ test.mustRunAfter ":embers-services:build"
 
 dependencies {
     implementation project(":embers-services")
-    implementation ext.get('acceptance_tests')
-    implementation ext.get('database')
+    implementation libs.bundles.acceptance.tests
+    implementation libs.bundles.database
 
-    testImplementation unit_tests
-    testImplementation acceptance_tests
-    testImplementation jersey
-    testImplementation jaxson
-    testImplementation jetty
+    testImplementation libs.bundles.unit.tests
+    testImplementation libs.bundles.acceptance.tests
+    testImplementation libs.bundles.jersey
+    testImplementation libs.jaxson
+    testImplementation libs.bundles.jetty
 }

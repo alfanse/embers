@@ -12,9 +12,9 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-web"
 
     testImplementation project(":embers-acceptance-tests")
-    testImplementation database
-    testImplementation unit_tests
-    testImplementation 'io.rest-assured:rest-assured:3.3.0'
+    testImplementation libs.bundles.database
+    testImplementation libs.bundles.unit.tests
+    testImplementation "io.rest-assured:rest-assured:3.3.0"
     testImplementation "org.springframework.boot:spring-boot-starter-test"
 
 }
