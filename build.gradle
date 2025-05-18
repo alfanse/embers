@@ -9,7 +9,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "com.adarshr:gradle-test-logger-plugin:1.7.0"
+        classpath "com.adarshr:gradle-test-logger-plugin:4.0.0"
     }
 }
 
@@ -19,7 +19,8 @@ allprojects {
     apply plugin: 'jacoco'
     apply plugin: 'com.adarshr.test-logger'
 
-    sourceCompatibility = 1.8
+    sourceCompatibility = 17
+    targetCompatibility = 17
 
     repositories {
         mavenCentral()
@@ -47,9 +48,11 @@ task codeCoverageReport(type: JacocoReport) {
     }
 
     reports {
-        html.enabled true
-        html.destination file("${buildDir}/reports/jacoco")
-        println "code coverage reports: " + html.destination
+        html {
+            setEnabled(true)
+            outputLocation = file("${buildDir}/reports/jacoco")
+//            println "code coverage reports: " + html.destination
+        }
     }
 }
 
@@ -65,8 +68,8 @@ subprojects {
     def jaxb = '2.3.0'
     def junitJupiter = '5.7.1'
 
-    extensions.add("libs", [
-            core: [
+    ext {
+        core = [
                 //the only libraries the production jar depends on
                 'javax.ws.rs:javax.ws.rs-api:2.1',
                 'javax.inject:javax.inject:1',
@@ -75,41 +78,34 @@ subprojects {
                 "com.sun.xml.bind:jaxb-core:$jaxb",
                 "com.sun.xml.bind:jaxb-impl:$jaxb",
                 'org.jdbi:jdbi:2.78'
-            ],
-            unit_tests: [
+        ]
+        unit_tests = [
                 "org.junit.jupiter:junit-jupiter:$junitJupiter",
                 'org.easytesting:fest-assert-core:2.0M10',
                 'org.mockito:mockito-core:3.8.0',
                 'org.mockito:mockito-junit-jupiter:3.8.0'
-            ],
-            acceptance_tests: [
-//            the bdd framework, makes pretty html reports from Junit tests
-                'com.github.nickmcdowall:yatspec:2021.1.1'
-            ],
-            jersey: [
-//            implements javax.ws.rs
-                'org.glassfish.jersey.core:jersey-server:2.2',
-                'org.glassfish.jersey.containers:jersey-container-servlet:2.2'
-            ],
-            jaxson: [
-//              handles json serialisation
-                'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.5.2'
-            ],
-            gson: [
+        ]
+        acceptance_tests = [
+            // The bdd framework, makes pretty html reports from Junit tests
+            'com.github.nickmcdowall:yatspec:2021.1.1']
+        jersey = [
+            // implements javax.ws.rs
+            'org.glassfish.jersey.core:jersey-server:2.2',
+            'org.glassfish.jersey.containers:jersey-container-servlet:2.2']
+        jaxson = [
+            //handles json serialisation
+            'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.5.2']
+        gson = [
                 //serialise java to json
-                'com.google.code.gson:gson:2.8.2'
-            ],
-            json_assert: [
-                'org.skyscreamer:jsonassert:1.2.3'
-            ],
-            jetty: [
-//              beloved server
-                'org.eclipse.jetty:jetty-server:9.3.0.M1',
-                'org.eclipse.jetty:jetty-servlet:9.3.0.M1'
-            ],
-            database: [
-//              beloved in-memory DB for testing.
-                'org.hsqldb:hsqldb:2.3.2'
-            ]
-    ])
+                'com.google.code.gson:gson:2.8.2']
+        json_assert = ['org.skyscreamer:jsonassert:1.2.3']
+        jetty = [
+            // beloved server
+            'org.eclipse.jetty:jetty-server:9.3.0.M1',
+            'org.eclipse.jetty:jetty-servlet:9.3.0.M1'
+        ]
+        database = [
+            // beloved in-memory DB for testing.
+            'org.hsqldb:hsqldb:2.3.2']
+    }
 }
