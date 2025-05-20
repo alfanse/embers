@@ -9,6 +9,7 @@ dependencies {
 }
 
 test {
+    jvmArgs '--add-opens', 'java.base/java.util=ALL-UNNAMED'
     useJUnitPlatform()
 }
 
