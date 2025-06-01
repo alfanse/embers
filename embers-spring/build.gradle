@@ -21,9 +21,9 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind'
     implementation 'com.fasterxml.jackson.jakarta.rs:jackson-jakarta-rs-json-provider'
     
-    // Jakarta EE API dependencies - using versions compatible with Spring Boot 3.x
-    implementation 'jakarta.ws.rs:jakarta.ws.rs-api:3.1.0'
-    implementation 'jakarta.annotation:jakarta.annotation-api:2.1.1'
+    // Jakarta EE API dependencies - using versions from version catalog
+    implementation libs.jakarta.ws.rs
+    implementation libs.jakarta.annotation.api
 
     // Testing
     testImplementation project(":embers-acceptance-tests")

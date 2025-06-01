@@ -4,9 +4,13 @@ mockito = "3.8.0"
 
 [libraries]
 
+# Core Libraries
 gson = { module = "com.google.code.gson:gson", version = "2.8.2" }
+
+# Jakarta EE
 json_assert = { module = "org.skyscreamer:jsonassert", version = "1.2.3" }
 
+jakarta_annotation_api = { module = "jakarta.annotation:jakarta.annotation-api", version = "2.1.1" }
 jakarta_ws_rs = { module = "jakarta.ws.rs:jakarta.ws.rs-api", version = "3.1.0" }
 jakarta_servlet = { module = "jakarta.servlet:jakarta.servlet-api", version = "6.0.0" }
 jakarta_inject = { module = "jakarta.inject:jakarta.inject-api", version = "2.0.1" }
