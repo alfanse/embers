@@ -6,11 +6,6 @@ plugins {
 
 description = """Example project showing how to mix embers into a spring-boot application."""
 
-configurations.configureEach {
-    // Exclude commons-logging as we're using spring-jcl
-    exclude group: 'commons-logging', module: 'commons-logging'
-}
-
 dependencies {
     implementation project(":embers-services")
     implementation 'org.springframework.boot:spring-boot-starter-jersey'
@@ -18,7 +13,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     
     // Jackson for JSON processing
-    implementation 'com.fasterxml.jackson.core:jackson-databind'
     implementation 'com.fasterxml.jackson.jakarta.rs:jackson-jakarta-rs-json-provider'
     
     // Jakarta EE API dependencies - using versions from version catalog
@@ -30,9 +24,7 @@ dependencies {
     testImplementation libs.bundles.database
     testImplementation libs.bundles.unit.tests
     testImplementation 'io.rest-assured:rest-assured:5.3.0'  // For Jakarta EE 9+ compatibility
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 test {
