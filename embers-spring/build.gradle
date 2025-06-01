@@ -6,7 +6,7 @@ plugins {
 
 description = """Example project showing how to mix embers into a spring-boot application."""
 
-configurations.all {
+configurations.configureEach {
     // Exclude commons-logging as we're using spring-jcl
     exclude group: 'commons-logging', module: 'commons-logging'
 }
