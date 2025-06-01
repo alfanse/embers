@@ -2,11 +2,10 @@ package adf.embers.admin;
 
 import adf.embers.query.persistence.Query;
 import adf.embers.query.persistence.QueryDao;
+import jakarta.ws.rs.core.Response;
 import org.fest.assertions.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-
-import javax.ws.rs.core.Response;
 import java.net.HttpURLConnection;
 
 import static org.fest.assertions.api.Assertions.assertThat;

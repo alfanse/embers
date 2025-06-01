@@ -3,13 +3,12 @@ package adf.embers.cache;
 import adf.embers.query.QueryProcessor;
 import adf.embers.query.QueryRequest;
 import adf.embers.query.QueryResult;
+import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import javax.ws.rs.core.Response;
 
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 import static org.fest.assertions.api.Assertions.assertThat;

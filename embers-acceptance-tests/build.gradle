@@ -20,7 +20,11 @@ dependencies {
 
     testImplementation libs.bundles.unit.tests
     testImplementation libs.bundles.acceptance.tests
+    testImplementation libs.bundles.jakarta.web.server
     testImplementation libs.bundles.jersey
-    testImplementation libs.jaxson
     testImplementation libs.bundles.jetty
+    testImplementation libs.jaxson
+
+    // Platform BOMs for dependency management
+    testImplementation platform('org.eclipse.jetty:jetty-bom:12.0.7')
 }

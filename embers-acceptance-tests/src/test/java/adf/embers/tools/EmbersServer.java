@@ -18,8 +18,24 @@ public class EmbersServer {
     private EmbersJettyServer embersJettyServer;
 
     public void before() throws Throwable {
-        startDatabase();
-        startJettyServer(embersDatabase.getDataSource());
+        System.out.println("Starting Embers server...");
+        try {
+            startDatabase();
+            System.out.println("Database started successfully");
+            
+            System.out.println("Starting Jetty server with data source: " + embersDatabase.getDataSource());
+            startJettyServer(embersDatabase.getDataSource());
+            
+            // Add a small delay to ensure server is fully started
+            Thread.sleep(1000);
+            System.out.println("Embers server started successfully on port " + PORT);
+            System.out.println("Query path: " + embersQueryPath());
+            System.out.println("Admin path: " + embersAdminPath());
+        } catch (Throwable t) {
+            System.err.println("Error starting Embers server: " + t.getMessage());
+            t.printStackTrace();
+            throw t;
+        }
     }
 
     @SuppressWarnings("unused") //Keeping it as a might be needed to fix re-using server bugs
