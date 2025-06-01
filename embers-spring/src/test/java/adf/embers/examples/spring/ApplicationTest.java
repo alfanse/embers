@@ -10,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.logging.Logger;
 
@@ -33,7 +32,7 @@ public class ApplicationTest {
     }
 
     @Test
-    public void query_accessible() throws IOException, InterruptedException {
+    public void query_accessible() {
         String responseBody =
             RestAssured.when()
                 .get(embersUri(QueryHandler.PATH + "/unknownQuery"))
@@ -45,7 +44,7 @@ public class ApplicationTest {
     }
 
     @Test
-    public void admin_accessible() throws IOException, InterruptedException {
+    public void admin_accessible() {
         String responseBody = RestAssured.when()
                 .delete(embersUri(AdminQueryHandler.PATH + "/unknownQuery"))
                 .then().statusCode(200)
@@ -55,7 +54,7 @@ public class ApplicationTest {
     }
 
     @Test
-    public void cached_accessible() throws IOException, InterruptedException {
+    public void cached_accessible() {
         String responseBody = RestAssured.when()
                 .get(embersUri(QueryResultCacheHandler.PATH + "/unknownQuery"))
                 .then().statusCode(404)

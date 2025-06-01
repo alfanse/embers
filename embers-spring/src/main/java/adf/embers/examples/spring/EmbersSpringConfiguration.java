@@ -60,14 +60,9 @@ public class EmbersSpringConfiguration {
     @Bean
     public ServletRegistrationBean<ServletContainer> servletRegistrationBean(
             @org.springframework.beans.factory.annotation.Qualifier(EMBERS) ResourceConfig resourceConfig) {
-        // Create a new ResourceConfig that wraps our existing one
-        ResourceConfig config = new ResourceConfig()
-            .registerResources(resourceConfig.getConfiguration())
-            .property(ServerProperties.RESPONSE_SET_STATUS_OVER_SEND_ERROR, true)
-            .property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true);
             
         // Create and configure the servlet
-        ServletContainer servletContainer = new ServletContainer(config);
+        ServletContainer servletContainer = new ServletContainer(resourceConfig);
         ServletRegistrationBean<ServletContainer> registration = new ServletRegistrationBean<>(
             servletContainer, "/" + EMBERS + "/*");
         registration.setName("jersey-servlet");
