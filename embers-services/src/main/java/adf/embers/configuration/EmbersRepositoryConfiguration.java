@@ -12,7 +12,7 @@ import javax.sql.DataSource;
 public class EmbersRepositoryConfiguration {
 
     private final DBI dbi;
-    private DataSource dataSource;
+    private final DataSource dataSource;
 
     public EmbersRepositoryConfiguration(DataSource dataSource) {
         this.dataSource = dataSource;

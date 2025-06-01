@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "embers-request-collection",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

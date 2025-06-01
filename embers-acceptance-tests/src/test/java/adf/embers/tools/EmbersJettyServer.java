@@ -32,12 +32,14 @@ public class EmbersJettyServer {
 
         server.setHandler(createEmbersHandler(jerseyServlet));
         server.start();
+        System.out.println("Started the Embers Server");
     }
 
     public void stopHttpServer() {
         System.out.println("Stopping the Embers server");
         try {
             server.stop();
+            System.out.println("Stopped the Embers server");
         } catch (Exception e) {
             System.err.println("Exception stopping jetty server: "+e.getMessage());
         }
