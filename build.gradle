@@ -36,29 +36,36 @@ allprojects {
 }
 
 task codeCoverageReport(type: JacocoReport) {
-//swiped from http://csiebler.github.io/blog/2014/02/09/multi-project-code-coverage-using-gradle-and-jacoco/
+    //swiped from http://csiebler.github.io/blog/2014/02/09/multi-project-code-coverage-using-gradle-and-jacoco/
+
+    // Enable the report to be generated
+    dependsOn subprojects*.test
 
     // Gather execution data from all subprojects
-    // (change this if you e.g. want to calculate unit test/integration test coverage separately)
-    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+    executionData fileTree(project.rootDir).include("**/build/jacoco/*.exec")
 
-    // Add all relevant sourcesets from the subprojects
-    subprojects.each {
-        sourceSets it.sourceSets.main
-    }
-
+    
+    // Configure source and class directories from all subprojects
+    sourceDirectories.setFrom(files(subprojects.sourceSets.main.allSource.srcDirs))
+    classDirectories.setFrom(files(subprojects.sourceSets.main.output))
+    
+    // Enable XML report for CI tools if needed
     reports {
-        html {
-            setEnabled(true)
-            outputLocation = file("${buildDir}/reports/jacoco")
-//            println "code coverage reports: " + html.destination
-        }
+        html.required = true
+        xml.required = false
+        csv.required = false
+        
+        html.outputLocation = layout.buildDirectory.dir('reports/jacoco')
+        println "Code coverage reports will be generated at: ${html.outputLocation.get()}"
+//        xml.outputLocation = layout.buildDirectory.file('reports/jacoco/jacocoTestReport.xml')
+
     }
 }
 
-// always run the tests before generating the report
-codeCoverageReport.dependsOn {
-    subprojects*.test
+// Configure the test task to generate execution data
+tasks.withType(Test).configureEach {
+    finalizedBy codeCoverageReport
+    doLast {
+        logger.lifecycle("Test execution completed. Generating JaCoCo report...")
+    }
 }
-
-check.dependsOn jacocoTestReport
