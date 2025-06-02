@@ -1,0 +1,24 @@
+meta {
+  name: POST Admin - create query
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8001/embers/admin
+  body: json
+  auth: inherit
+}
+
+headers {
+  Accept-Charset: UTF-8
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name":"new Query", 
+    "sql":"SELECT CURRENT_DATE AS today, CURRENT_TIME AS now FROM (VALUES(0))", 
+    "description":"this query returns the date,time"
+  }
+}

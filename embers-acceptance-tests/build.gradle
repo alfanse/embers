@@ -12,13 +12,19 @@ test {
 test.mustRunAfter ":embers-services:build"
 
 dependencies {
-    compile project(":embers-services")
-    compile libs.acceptance_tests
-    compile libs.database
+    implementation project(":embers-services")
+    implementation libs.bundles.core
+    implementation libs.gson
+    implementation libs.bundles.acceptance.tests
+    implementation libs.bundles.database
 
-    testCompile libs.unit_tests
-    testCompile libs.acceptance_tests
-    testCompile libs.jersey
-    testCompile libs.jaxson
-    testCompile libs.jetty
+    testImplementation libs.bundles.unit.tests
+    testImplementation libs.bundles.acceptance.tests
+    testImplementation libs.bundles.jakarta.web.server
+    testImplementation libs.bundles.jersey
+    testImplementation libs.bundles.jetty
+    testImplementation libs.jaxson
+
+    // Platform BOMs for dependency management
+    testImplementation platform('org.eclipse.jetty:jetty-bom:12.0.7')
 }

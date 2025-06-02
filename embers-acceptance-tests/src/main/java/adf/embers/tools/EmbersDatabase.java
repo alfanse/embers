@@ -29,6 +29,7 @@ public class EmbersDatabase {
         this.jdbcUrl = jdbcUrl;
     }
 
+
     public void startInMemoryDatabase() throws Exception {
         System.out.println("Starting the Embers database");
         DriverManager.registerDriver(jdbcDriver.driverInstance);

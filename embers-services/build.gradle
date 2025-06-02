@@ -1,14 +1,15 @@
 description = "Build jar for the embers sql reporting services."
 
 dependencies {
-    compile libs.core
-    compile libs.gson
-    testCompile libs.unit_tests
-    testCompile libs.jersey
-    testCompile libs.json_assert
+    implementation libs.bundles.core
+    implementation libs.gson
+    testImplementation libs.bundles.unit.tests
+    testImplementation libs.bundles.jersey
+    testImplementation libs.json.assert
 }
 
 test {
+    jvmArgs '--add-opens', 'java.base/java.util=ALL-UNNAMED'
     useJUnitPlatform()
 }
 

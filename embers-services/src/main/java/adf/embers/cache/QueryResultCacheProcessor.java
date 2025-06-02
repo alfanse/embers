@@ -11,6 +11,7 @@ import adf.embers.query.impl.formatters.CsvFormatter;
 import adf.embers.query.persistence.Query;
 import adf.embers.query.persistence.QueryDao;
 
+import jakarta.inject.Inject;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ public class QueryResultCacheProcessor implements QueryProcessor {
     private QueryDao queryDao;
     private QueryExecutor queryExecutor;
 
+    @Inject
     public QueryResultCacheProcessor(QueryResultCacheDao queryResultCacheDao, QueryDao queryDao, QueryExecutor queryExecutor) {
         this.queryResultCacheDao = queryResultCacheDao;
         this.queryDao = queryDao;

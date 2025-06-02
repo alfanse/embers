@@ -1,22 +1,30 @@
 plugins {
-    id 'org.springframework.boot' version '2.1.8.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'org.springframework.boot' version '3.2.0'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id 'java'
 }
 
 description = """Example project showing how to mix embers into a spring-boot application."""
 
 dependencies {
-
     implementation project(":embers-services")
     implementation 'org.springframework.boot:spring-boot-starter-jersey'
-    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    
+    // Jackson for JSON processing
+    implementation 'com.fasterxml.jackson.jakarta.rs:jackson-jakarta-rs-json-provider'
+    
+    // Jakarta EE API dependencies - using versions from version catalog
+    implementation libs.jakarta.ws.rs
+    implementation libs.jakarta.annotation.api
 
+    // Testing
     testImplementation project(":embers-acceptance-tests")
-    testImplementation libs.database
-    testImplementation libs.unit_tests
-    testImplementation 'io.rest-assured:rest-assured:3.3.0'
-    testImplementation "org.springframework.boot:spring-boot-starter-test"
-
+    testImplementation libs.bundles.database
+    testImplementation libs.bundles.unit.tests
+    testImplementation 'io.rest-assured:rest-assured:5.3.0'  // For Jakarta EE 9+ compatibility
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 test {
