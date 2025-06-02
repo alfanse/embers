@@ -1,29 +1,63 @@
-version: 2
+version: 2.1
+
+orbs:
+  # Using the gradle orb for better caching and setup
+  gradle: circleci/gradle@2.2.0
+
 jobs:
   build:
     working_directory: ~/alfanse/embers
     parallelism: 1
     docker:
-    - image: circleci/openjdk:11-jdk
+      - image: cimg/openjdk:17.0.10
     steps:
-    - checkout
-    - run:
-        working_directory: ~/alfanse/embers
-        # for diagnostics, show me the version, includes JVM, and Gradle.
-        command: ./gradlew --version
-    # Build
-    - run: make build
-    - store_test_results:
-        path: embers-services/build/test-results
-    - store_test_results:
-        path: embers-acceptance-tests/build/test-results
-    - store_test_results:
-        path: embers-spring/build/test-results
-    - store_artifacts:
-        name: store embers-acceptance-tests reports
-        path: embers-acceptance-tests/build/yatspec
-        destination: yatspec
-    - store_artifacts:
-        name: store jacoco reports
-        path: build/reports/jacoco
-        destination: jacoco
+      - checkout
+      
+      # Restore Gradle dependencies cache
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "build.gradle" }}
+            - v1-dependencies-
+      
+      # Show versions for diagnostics
+      - run:
+          name: Show versions
+          command: |
+            java -version
+            ./gradlew --version
+
+      # Build with Gradle
+      - run:
+          name: Build and test
+          command: ./gradlew build --no-daemon --stacktrace
+          environment:
+            # Configure Gradle to use more memory
+            GRADLE_OPTS: '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8'
+      
+      # Save Gradle dependencies cache
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: v1-dependencies-{{ checksum "build.gradle" }}
+      
+      # Store test results for CircleCI test insights
+      - store_test_results:
+          path: embers-services/build/test-results
+      - store_test_results:
+          path: embers-acceptance-tests/build/test-results
+      - store_test_results:
+          path: embers-spring/build/test-results
+      
+      # Store artifacts for later inspection
+      - store_artifacts:
+          name: Store acceptance test reports
+          path: embers-acceptance-tests/build/yatspec
+          destination: yatspec
+      - store_artifacts:
+          name: Store JaCoCo reports
+          path: build/reports/jacoco
+          destination: jacoco
+      - store_artifacts:
+          name: Store test results
+          path: build/reports/tests
+          destination: test-reports
