@@ -57,7 +57,3 @@ jobs:
           name: Store JaCoCo reports
           path: build/reports/jacoco
           destination: jacoco
-      - store_artifacts:
-          name: Store test results
-          path: build/reports/tests
-          destination: test-reports
