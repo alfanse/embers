@@ -1,4 +1,4 @@
 include 'embers-services'
 include 'embers-acceptance-tests'
 include 'embers-spring'
-
+include 'embers-http4k'
