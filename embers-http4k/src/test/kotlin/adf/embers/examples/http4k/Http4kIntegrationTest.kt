@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.http4k.client.JavaHttpClient
 import org.http4k.core.Method
 import org.http4k.core.Request
+import org.http4k.core.body.form
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -11,7 +12,6 @@ import org.junit.jupiter.api.Test
 class Http4kIntegrationTest {
     companion object {
         private val client = JavaHttpClient()
-        private lateinit var server: AutoCloseable
         private const val BASE_URL = "http://localhost:8002"
 
         @JvmStatic

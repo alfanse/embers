@@ -23,6 +23,10 @@ dependencies {
     implementation("com.h2database:h2:2.2.220")
     implementation("org.jdbi:jdbi3-core:3.41.3")
     
+    // Jakarta REST API for response conversion
+    implementation("jakarta.ws.rs:jakarta.ws.rs-api:3.1.0")
+    implementation("org.glassfish.jersey.core:jersey-common:3.1.2")
+    
     // Testing
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")
     testImplementation("org.assertj:assertj-core:3.24.2")

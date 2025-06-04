@@ -41,9 +41,9 @@ public class EmbersSpringConfiguration {
         ResourceConfig resourceConfig = new ResourceConfig();
         
         // Register the handlers
-        resourceConfig.register(handlerConfiguration.getQueryHandler());
-        resourceConfig.register(handlerConfiguration.getAdminQueryHandler());
-        resourceConfig.register(handlerConfiguration.getQueryResultCacheHandler());
+        resourceConfig.register(handlerConfiguration.queryHandler());
+        resourceConfig.register(handlerConfiguration.adminQueryHandler());
+        resourceConfig.register(handlerConfiguration.queryResultCacheHandler());
         
         // Configure Jersey
         resourceConfig.packages("adf.embers");

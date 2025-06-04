@@ -26,16 +26,15 @@ public class EmbersHandlerConfiguration {
         this(embersProcessorConfiguration.queryDao(), embersProcessorConfiguration.queryProcessor(), embersProcessorConfiguration.cachedQueryProcessor());
     }
 
-    public QueryHandler getQueryHandler() {
+    public QueryHandler queryHandler() {
         return new QueryHandler(queryProcessor);
     }
 
-    public AdminQueryHandler getAdminQueryHandler() {
+    public AdminQueryHandler adminQueryHandler() {
         return new AdminQueryHandler(queryDao);
     }
 
-    public QueryResultCacheHandler getQueryResultCacheHandler() {
+    public QueryResultCacheHandler queryResultCacheHandler() {
         return new QueryResultCacheHandler(cachedQueryProcessor);
     }
-
 }

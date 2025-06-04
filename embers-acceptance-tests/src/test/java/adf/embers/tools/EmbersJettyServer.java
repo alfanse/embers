@@ -12,7 +12,6 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.util.component.LifeCycle;
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.hk2.utilities.ServiceLocatorUtilities;
-import org.glassfish.jersey.inject.hk2.Hk2InjectionManagerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
 
@@ -59,9 +58,9 @@ public class EmbersJettyServer {
                 "org.glassfish.jersey.media.multipart.MultiPartFeature");
                 
             // Register resources
-            resourceConfig.register(embersConfiguration.getQueryHandler());
-            resourceConfig.register(embersConfiguration.getAdminQueryHandler());
-            resourceConfig.register(embersConfiguration.getQueryResultCacheHandler());
+            resourceConfig.register(embersConfiguration.queryHandler());
+            resourceConfig.register(embersConfiguration.adminQueryHandler());
+            resourceConfig.register(embersConfiguration.queryResultCacheHandler());
             
             // Create servlet container with HK2
             ServletContainer servletContainer = new ServletContainer(resourceConfig);
@@ -99,9 +98,9 @@ public class EmbersJettyServer {
 
     private Servlet createJerseyServletWithEmbersHandlers(EmbersHandlerConfiguration embersConfiguration) {
         ResourceConfig resourceConfig = new ResourceConfig();
-        resourceConfig.register(embersConfiguration.getQueryHandler());
-        resourceConfig.register(embersConfiguration.getAdminQueryHandler());
-        resourceConfig.register(embersConfiguration.getQueryResultCacheHandler());
+        resourceConfig.register(embersConfiguration.queryHandler());
+        resourceConfig.register(embersConfiguration.adminQueryHandler());
+        resourceConfig.register(embersConfiguration.queryResultCacheHandler());
         return new ServletContainer(resourceConfig);
     }
 
