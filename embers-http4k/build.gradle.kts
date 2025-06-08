@@ -8,6 +8,7 @@ description = "Example project showing how to integrate embers with http4k"
 
 dependencies {
     implementation(project(":embers-services"))
+    implementation(project(":embers-acceptance-tests"))
     
     // Kotlin
     implementation("org.jetbrains.kotlin:kotlin-reflect")

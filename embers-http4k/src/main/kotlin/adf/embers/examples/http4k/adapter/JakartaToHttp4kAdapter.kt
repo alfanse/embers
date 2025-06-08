@@ -27,7 +27,7 @@ fun JaxRsResponse.toHttp4kResponse(): Http4kResponse {
         }
         http4kResponse = http4kResponse.body(body)
     }
-    
+
     return http4kResponse
 }
 

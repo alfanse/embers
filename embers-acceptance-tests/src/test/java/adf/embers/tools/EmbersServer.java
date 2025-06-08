@@ -21,7 +21,6 @@ public class EmbersServer {
         System.out.println("Starting Embers server...");
         try {
             startDatabase();
-            System.out.println("Database started successfully");
             
             System.out.println("Starting Jetty server with data source: " + embersDatabase.getDataSource());
             startJettyServer(embersDatabase.getDataSource());
@@ -47,9 +46,8 @@ public class EmbersServer {
     private void startDatabase() throws Exception {
         embersDatabase = new EmbersDatabase(EmbersDatabase.JDBC_URL);
         embersDatabase.startInMemoryDatabase();
-        embersDatabase.createTableQueries();
-        embersDatabase.createTableQueriesStatistics();
-        embersDatabase.createTableQueryResultCache();
+        embersDatabase.createEmbersDdl();
+        System.out.println("Embers in-memory database started successfully");
     }
 
     private void startJettyServer(DataSource dataSource) throws Exception {

@@ -41,6 +41,14 @@ public class EmbersDatabase {
         this.dataSource.setLoginTimeout(5);
     }
 
+    public void createEmbersDdl() {
+        createTableQueries();
+        createTableQueriesStatistics();
+        createTableQueryResultCache();
+        System.out.println("created Embers DDL successfully");
+
+    }
+
     public void shutdownInMemoryDatabase() {
         System.out.println("Stopping the Embers database");
         try (Connection connection = getDataSource().getConnection()) {

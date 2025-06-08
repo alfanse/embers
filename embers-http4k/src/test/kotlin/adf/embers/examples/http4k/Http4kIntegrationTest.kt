@@ -1,5 +1,6 @@
 package adf.embers.examples.http4k
 
+import adf.embers.tools.EmbersDatabase
 import org.assertj.core.api.Assertions.assertThat
 import org.http4k.client.JavaHttpClient
 import org.http4k.core.Method
@@ -9,27 +10,30 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 
+private const val QUERY_NAME = "test_query"
+
 class Http4kIntegrationTest {
     companion object {
         private val client = JavaHttpClient()
         private const val BASE_URL = "http://localhost:8002"
+        private lateinit var embersDb: EmbersDatabase
 
         @JvmStatic
         @BeforeAll
         fun setup() {
-            // Start the server in a separate thread
-            Thread {
-                main()
-            }.start()
+            // Initialize the database
+            embersDb = EmbersDatabase("jdbc:hsqldb:mem:testdb;")
+            embersDb.startInMemoryDatabase()
+            embersDb.createEmbersDdl()
             
-            // Give the server some time to start
-            Thread.sleep(1000)
+            // Start the application with the test database
+            startApplication(embersDb.dataSource)
         }
 
         @JvmStatic
         @AfterAll
         fun tearDown() {
-            // Server will be stopped when the JVM exits
+            embersDb.shutdownInMemoryDatabase()
         }
     }
 
@@ -38,7 +42,7 @@ class Http4kIntegrationTest {
         // Add a query
         val addResponse = client(
             Request(Method.POST, "$BASE_URL/admin/query")
-                .form("name", "test_query")
+                .form("name", QUERY_NAME)
                 .form("sql", "SELECT 'Hello, http4k!' as message")
                 .form("description", "Test query for http4k integration")
         )
