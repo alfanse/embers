@@ -43,7 +43,7 @@ class Http4kIntegrationTest {
         val addResponse = client(
             Request(Method.POST, "$BASE_URL/admin/query")
                 .form("name", QUERY_NAME)
-                .form("sql", "SELECT 'Hello, http4k!' as message")
+                .form("sql", "SELECT 'Hello, http4k!' as message FROM (VALUES(0))")
                 .form("description", "Test query for http4k integration")
         )
         
@@ -77,6 +77,6 @@ class Http4kIntegrationTest {
             Request(Method.GET, "$BASE_URL/query/test_query")
         )
         
-        assertThat(notFoundResponse.status.code).isEqualTo(400)
+        assertThat(notFoundResponse.status.code).isEqualTo(404)
     }
 }
