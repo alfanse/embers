@@ -45,6 +45,7 @@ class Http4kIntegrationTest {
                 .form("name", QUERY_NAME)
                 .form("sql", "SELECT 'Hello, http4k!' as message FROM (VALUES(0))")
                 .form("description", "Test query for http4k integration")
+                .form("cacheableDuration", "300000") // 5 minutes in milliseconds
         )
         
         assertThat(addResponse.status.code).isEqualTo(200)

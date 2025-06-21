@@ -8,7 +8,7 @@ public class UrlTools {
 
     public static String decodeString(String encodedString) {
         try {
-            return URLDecoder.decode(encodedString, StandardCharsets.UTF_8.name());
+            return URLDecoder.decode(encodedString, StandardCharsets.UTF_8);
         } catch (Exception e) {
             throw new RuntimeException("Failed to decode: " + encodedString, e);
         }
@@ -16,7 +16,7 @@ public class UrlTools {
 
     public static String encodeString(String plainString){
         try {
-            return URLEncoder.encode(plainString, StandardCharsets.UTF_8.name());
+            return URLEncoder.encode(plainString, StandardCharsets.UTF_8);
         } catch (Exception e) {
             throw new RuntimeException("Failed to encode: " + plainString, e);
         }

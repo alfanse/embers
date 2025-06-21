@@ -38,14 +38,14 @@ public class AdminQueryHandler {
             strategy= "updated";
         }
 
-        return Response.ok("Successfully " + strategy + " query").build();
+        return Response.ok(String.format("Successfully %s query: %s", strategy, query.getName())).build();
     }
 
     @DELETE
     @Path("{" + PATH_PARAM_QUERY_NAME + "}")
     public Response deleteQuery(@PathParam(PATH_PARAM_QUERY_NAME) String queryName){
         queryDao.delete(decodeString(queryName));
-        return Response.ok("Successfully deleted query").build();
+        return Response.ok(String.format("Successfully deleted query: %s", queryName)).build();
     }
 
     private Query createDecodedQuery(Query query) {

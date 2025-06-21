@@ -50,7 +50,7 @@ public class ApplicationTest {
                 .then().statusCode(200)
                 .extract().response().body().asString();
 
-        assertThat(responseBody).isEqualTo("Successfully deleted query");
+        assertThat(responseBody).isEqualTo("Successfully deleted query: unknownQuery");
     }
 
     @Test

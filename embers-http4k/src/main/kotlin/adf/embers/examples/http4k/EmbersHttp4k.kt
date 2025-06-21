@@ -16,6 +16,7 @@ import org.http4k.routing.routes
 import org.http4k.server.Http4kServer
 import org.http4k.server.Jetty
 import org.http4k.server.asServer
+import java.time.Duration.ofMillis
 import javax.sql.DataSource
 
 class EmbersHttp4k(
@@ -56,7 +57,10 @@ class EmbersHttp4k(
                             Query(
                                 form.getFirst("name"),
                                 form.getFirst("description"),
-                                form.getFirst("sql")
+                                form.getFirst("sql"),
+                                form.getFirst("cacheableDuration")
+                                    ?.toLongOrNull()
+                                    ?.let { ofMillis(it) }
                             )
                         ).toHttp4kResponse()
                     }
