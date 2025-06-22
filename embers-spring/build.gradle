@@ -28,5 +28,7 @@ dependencies {
 }
 
 test {
+    // Only open java.lang to unnamed modules for ClassLoader.defineClass access
+    jvmArgs = ['--add-opens', 'java.base/java.lang=ALL-UNNAMED']
     useJUnitPlatform()
 }

@@ -9,7 +9,11 @@ dependencies {
 }
 
 test {
-    jvmArgs '--add-opens', 'java.base/java.util=ALL-UNNAMED'
+    // Open necessary Java packages for reflection access
+    jvmArgs = [
+        '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
+        '--add-opens', 'java.base/java.util=ALL-UNNAMED'
+    ]
     useJUnitPlatform()
 }
 
