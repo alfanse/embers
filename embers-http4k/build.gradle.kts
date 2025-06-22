@@ -1,7 +1,6 @@
 plugins {
-    kotlin("jvm") version "1.9.21"
-    id("org.jetbrains.kotlin.plugin.spring") version "1.9.21"
-    id("io.spring.dependency-management") version "1.1.3"
+    kotlin("jvm") version "2.1.0"
+    id("org.jetbrains.kotlin.plugin.spring") version "2.1.0"
 }
 
 description = "Example project showing how to integrate embers with http4k"
@@ -15,7 +14,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     
     // http4k
-    val http4kVersion = "5.10.2.0" // Updated to include security fixes for Netty vulnerabilities
+    val http4kVersion = "6.15.0.1" // Latest http4k version
     implementation("org.http4k:http4k-core:$http4kVersion")
     implementation("org.http4k:http4k-server-netty:$http4kVersion")
     implementation("org.http4k:http4k-format-jackson:$http4kVersion")
