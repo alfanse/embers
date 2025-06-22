@@ -22,8 +22,7 @@ dependencies {
     // Database
     implementation("com.h2database:h2:2.2.220")
     implementation("org.jdbi:jdbi3-core:3.41.3")
-    implementation("org.apache.commons:commons-compress:1.25.0")
-    
+
     // Jakarta REST API for response conversion
     implementation("jakarta.ws.rs:jakarta.ws.rs-api:3.1.0")
     implementation("org.glassfish.jersey.core:jersey-common:3.1.2")
