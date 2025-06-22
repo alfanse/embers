@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class CachedQuery {
 
-    private String queryName;
+    private final String queryName;
     private long liveDurationMs;
     private Timestamp timestampWhenCached;
     private List<Map<String, Object>> result;
@@ -71,10 +71,10 @@ public class CachedQuery {
     }
 
     private boolean hasCacheExpired() {
-        return new Date().after(caclulateCacheExpirationTime());
+        return new Date().after(calculateCacheExpirationTime());
     }
 
-    private Date caclulateCacheExpirationTime() {
+    private Date calculateCacheExpirationTime() {
         return new CacheExpiryDateCalculator(timestampWhenCached, liveDurationMs).invoke();
     }
 

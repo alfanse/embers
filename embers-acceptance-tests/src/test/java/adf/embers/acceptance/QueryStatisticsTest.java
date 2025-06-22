@@ -20,8 +20,8 @@ import static org.fest.assertions.api.Assertions.assertThat;
 @Notes("Performance of Embers Queries is audited to a database table.")
 public class QueryStatisticsTest extends EmbersAcceptanceTestBase {
 
-    private YatspecQueryInserter yatspecQueryInserter = new YatspecQueryInserter(super.interactions, embersServer.getEmbersDatabase().getDataSource());
-    private YatspecHttpGetCommand http = new YatspecHttpGetCommand(super.interactions);
+    private final YatspecQueryInserter yatspecQueryInserter = new YatspecQueryInserter(super.interactions, embersServer.getEmbersDatabase().getDataSource());
+    private final YatspecHttpGetCommand http = new YatspecHttpGetCommand(super.interactions);
 
     @Test
     public void auditAnExistingQueryThatRespondsWithData() throws Exception {
