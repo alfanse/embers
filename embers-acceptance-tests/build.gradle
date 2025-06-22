@@ -3,7 +3,7 @@ Demonstrating hosting embers services on jetty, with jersey and in-memory databa
 Using yatspec to show the interactions, with sequence diagrams and database views."""
 
 test {
-    def yatspecOutputDirectory = "${buildDir}/yatspec"
+    def yatspecOutputDirectory = layout.buildDirectory.dir('yatspec').get().asFile.absolutePath
     systemProperty "yatspec.output.dir", yatspecOutputDirectory
     println 'Acceptance Test Reports: ' + yatspecOutputDirectory
     
