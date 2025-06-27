@@ -19,19 +19,12 @@ dependencies {
     implementation("org.http4k:http4k-server-netty:$http4kVersion")
     implementation("org.http4k:http4k-format-jackson:$http4kVersion")
     
-    // Database
-    implementation("com.h2database:h2:2.2.220")
-    implementation("org.jdbi:jdbi3-core:3.41.3")
-
     // Jakarta REST API for response conversion
-    implementation("jakarta.ws.rs:jakarta.ws.rs-api:3.1.0")
-    implementation("org.glassfish.jersey.core:jersey-common:3.1.2")
-    
+    implementation(libs.jakarta.ws.rs)
+    implementation(libs.bundles.jersey)
+
     // Testing
-    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
-    testImplementation("org.assertj:assertj-core:3.24.2")
-    testImplementation("org.testcontainers:junit-jupiter:1.19.3")
-    testImplementation("org.testcontainers:postgresql:1.19.3")
+    testImplementation(libs.bundles.unit.tests)
 }
 
 tasks.test {

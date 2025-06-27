@@ -1,6 +1,7 @@
 [versions]
 jaxb = "2.3.0"
 mockito = "3.8.0"
+jetty = "12.0.7"
 
 [libraries]
 
@@ -14,6 +15,11 @@ jakarta_annotation_api = { module = "jakarta.annotation:jakarta.annotation-api",
 jakarta_ws_rs = { module = "jakarta.ws.rs:jakarta.ws.rs-api", version = "3.1.0" }
 jakarta_servlet = { module = "jakarta.servlet:jakarta.servlet-api", version = "6.0.0" }
 jakarta_inject = { module = "jakarta.inject:jakarta.inject-api", version = "2.0.1" }
+
+# Jakarta EE 10 dependencies
+jakarta_websocket_api = { module = "jakarta.websocket:jakarta.websocket-api", version = "2.1.1" }
+jakarta_websocket_client_api = { module = "jakarta.websocket:jakarta.websocket-client-api", version = "2.1.1" }
+
 javax_xml_bind = { module = "javax.xml.bind:jaxb-api", version.ref = "jaxb" }
 jaxb_core = { module = "com.sun.xml.bind:jaxb-core", version.ref = "jaxb" }
 jaxb_impl = { module = "com.sun.xml.bind:jaxb-impl", version.ref = "jaxb" }
@@ -21,33 +27,29 @@ jdbi = { module = "org.jdbi:jdbi", version = "2.78" }
 
 jaxson = { module = "com.fasterxml.jackson.jakarta.rs:jackson-jakarta-rs-json-provider", version = "2.16.1" }
 
-jersey_server = { module = "org.glassfish.jersey.core:jersey-server", version = "3.1.3" }
-jersey_container = { module = "org.glassfish.jersey.containers:jersey-container-servlet", version = "3.1.3" }
+# Jersey
+jersey_container_servlet = { module = "org.glassfish.jersey.containers:jersey-container-servlet", version = "3.1.3" }
+jersey_hk2 = { module = "org.glassfish.jersey.inject:jersey-hk2", version = "3.1.3" }
 jersey_media_json = { module = "org.glassfish.jersey.media:jersey-media-json-jackson", version = "3.1.3" }
+jersey_server = { module = "org.glassfish.jersey.core:jersey-server", version = "3.1.3" }
 
-jetty_server = { module = "org.eclipse.jetty.ee10:jetty-ee10-servlet", version = "12.0.7" }
-jetty_http = { module = "org.eclipse.jetty:jetty-http", version = "12.0.7" }
-jetty_io = { module = "org.eclipse.jetty:jetty-io", version = "12.0.7" }
-jetty_util = { module = "org.eclipse.jetty:jetty-util", version = "12.0.7" }
+jetty_server = { module = "org.eclipse.jetty.ee10:jetty-ee10-servlet", version.ref = "jetty" }
+jetty_http = { module = "org.eclipse.jetty:jetty-http", version.ref = "jetty" }
+jetty_io = { module = "org.eclipse.jetty:jetty-io", version.ref = "jetty" }
+jetty_util = { module = "org.eclipse.jetty:jetty-util", version.ref = "jetty" }
+
+# Using an older version of JSTL that's more stable with our setup
+jstl = { module = "org.glassfish.web:jakarta.servlet.jsp.jstl", version = "2.0.0" }
 
 hsqldb = { module = "org.hsqldb:hsqldb", version = "2.7.4" }
 
-junit_jupiter = { module = "org.junit.jupiter:junit-jupiter", version = "5.7.1" }
+junit_jupiter = { module = "org.junit.jupiter:junit-jupiter", version = "5.10.1" }
+assertj = { module = "org.assertj:assertj-core", version = "3.24.2" }
 fest_assert = { module = "org.easytesting:fest-assert-core", version = "2.0M10" }
 mockito_core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
 mockito_junit_jupiter = { module = "org.mockito:mockito-junit-jupiter", version.ref = "mockito" }
 
 yatspec = { module = "com.github.nickmcdowall:yatspec", version = "2021.1.1" }
-
-# Jakarta EE 10 dependencies
-jakarta_websocket_api = { module = "jakarta.websocket:jakarta.websocket-api", version = "2.1.1" }
-jakarta_websocket_client_api = { module = "jakarta.websocket:jakarta.websocket-client-api", version = "2.1.1" }
-# Using an older version of JSTL that's more stable with our setup
-jstl = { module = "org.glassfish.web:jakarta.servlet.jsp.jstl", version = "2.0.0" }
-
-# Jersey and HK2 integration
-jersey_container_servlet = { module = "org.glassfish.jersey.containers:jersey-container-servlet", version = "3.1.3" }
-jersey_hk2 = { module = "org.glassfish.jersey.inject:jersey-hk2", version = "3.1.3" }
 
 # HK2 (Hundred-Kilobyte Kernel) dependencies
 hk2_api = { module = "org.glassfish.hk2:hk2-api", version = "3.0.5" }
@@ -62,7 +64,7 @@ core = [
 ]
 
 unit_tests = [
-    "junit_jupiter", "fest_assert", "mockito_core", "mockito_junit_jupiter"
+    "assertj", "junit_jupiter", "fest_assert", "mockito_core", "mockito_junit_jupiter"
 ]
 
 acceptance_tests = [
